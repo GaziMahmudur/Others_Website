@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flip Card</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Modal -->
+    <div class="modal" id="nameModal">
+        <div class="modal-content">
+            <h2>Write your name</h2>
+            <input type="text" id="nameInput" placeholder="Your name" />
+            <br />
+            <button onclick="submitName()">Okay</button>
+        </div>
+    </div>
+
+    <!-- Flip Card -->
+    <div class="flip-card" onclick="flipCard(this)">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">Press_Me</div>
+            <div class="flip-card-back">
+                <div class="name-display" id="nameDisplay"></div>
+                <div class="emoji-display">❤</div>
+                <div class="you-text">You</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
