@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Funny Code Pages</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -49,8 +50,9 @@
             border-radius: 20px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             text-align: center;
+            width: 90%;
             max-width: 450px;
-            width: 100%;
+            margin: 0 auto;
         }
 
         h1 {
@@ -134,7 +136,20 @@
             background: rgba(0, 0, 0, 0.15);
         }
 
-        @media (max-width: 480px) {
+        body.light .toggle-btn {
+            color: #333;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light .toggle-btn:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
             .card {
                 padding: 25px 20px;
             }
