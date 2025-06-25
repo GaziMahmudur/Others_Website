@@ -1,0 +1,91 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    scroll-behavior: smooth;
+    background-image: url('./img/bg_img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /* backdrop-filter:  blur(10px); */
+    
+}
+
+.friend-card {
+    opacity: 0;
+    transition: transform 1s ease, opacity 1.1s ease;
+    will-change: transform, opacity;
+    min-height: 180px;
+
+}
+
+.friend-card.visible {
+    opacity: 1;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.friend-card.visible {
+    animation: fadeInUp 1s ease forwards;
+}
+
+.profile-img {
+    width: 300px;
+    height: auto;
+    border-radius: 24px;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    border-width: 3px;
+    border-style: solid;
+    /* Default border color, override with inline style if needed */
+    border-color: #06b6d4;
+    /* cyan-500 as default */
+    background: #fff;
+    display: block;
+}
+
+.friend-card:nth-child(1) .profile-img {
+    border-color: #06b6d4;
+}
+
+/* cyan-500 */
+.friend-card:nth-child(2) .profile-img {
+    border-color: #a21caf;
+}
+
+/* purple-500 */
+.friend-card:nth-child(3) .profile-img {
+    border-color: #ec4899;
+}
+
+/* pink-400 */
+.friend-card:nth-child(4) .profile-img {
+    border-color: #22c55e;
+}
+
+/* green-500 */
+.friend-card:nth-child(5) .profile-img {
+    border-color: #ef4444;
+}
+
+/* red-500 */
+.friend-card:nth-child(6) .profile-img {
+    border-color: #fde047;
+}
+
+/* yellow-400 */

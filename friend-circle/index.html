@@ -1,0 +1,172 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Friends Circle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="text-white min-h-screen overflow-x-hidden">
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 bg-white/5 backdrop-blur-md shadow-md py-4 px-6 flex justify-between items-center">
+        <h1 class="text-xl font-semibold text-white">My Friend Circle</h1>
+        <button id="hexaBtn"
+            class="text-lg font-semibold text-white bg-cyan-600 hover:bg-cyan-700 transition px-4 py-2 rounded-lg shadow">
+            HexaForce
+        </button>
+    </header>
+
+    <!-- Modal for options -->
+    <div id="hexaModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 bg-opacity-10 rounded-xl p-8 shadow-lg flex flex-col items-center space-y-4 backdrop-blur-md">
+            <h2 class="text-xl font-bold mb-2 text-white">Choose an Option</h2>
+            <button id="whatsappOpt"
+                class="w-48 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded mb-2 transition flex items-center justify-center space-x-2">
+                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                <span class="sr-only">WhatsApp</span>
+            </button>
+            <button id="messengerOpt"
+                class="w-48 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded transition flex items-center justify-center space-x-2">
+                <i class="fa-brands fa-facebook-messenger text-2xl"></i>
+                <span class="sr-only">Messenger</span>
+            </button>
+            <button id="telegramOpt"
+                class="w-48 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded transition flex items-center justify-center space-x-2">
+                <i class="fa-brands fa-telegram text-2xl"></i>
+                <span class="sr-only">Telegram</span>
+            </button>
+            <button id="instagramOpt"
+                class="w-48 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded transition flex items-center justify-center space-x-2">
+                <i class="fa-brands fa-instagram text-2xl"></i>
+                <span class="sr-only">Instagram</span>
+            </button>
+            <button id="closeModal" class="mt-4 text-gray-300 hover:text-white text-sm">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="p-6 max-w-4xl mx-auto space-y-10">
+        <div class="grid md:grid-cols-2 gap-8">
+
+            <!-- Friend Card Template -->
+            <div class="friend-card backdrop-blur-md bg-white/10 rounded-2xl shadow-lg p-6 flex items-center space-x-6">
+                <a href="https://www.facebook.com/sami.578362" target="_blank" rel="noopener">
+                    <img src="./img/nahim.jpg" class="profile-img" />
+                </a>
+                <div>
+                    <h2 class="text-xl font-bold">Nahim</h2>
+                    <p class="text-sm text-gray-300">Loves: Gaming, Anime</p>
+                    <p class="mt-2 italic text-cyan-400">"Headshots at night, anime in my dreams – that’s my lifestyle."
+                    </p>
+                </div>
+            </div>
+
+            <div class="friend-card backdrop-blur-md bg-white/10 rounded-2xl shadow-lg p-6 flex items-center space-x-6">
+                <a href="https://www.facebook.com/si.rifat.9372" target="_blank" rel="noopener">
+                    <img src="./img/siaful.jpg" class="profile-img" />
+                </a>
+                <div>
+                    <h2 class="text-xl font-bold">Saiful</h2>
+                    <p class="text-sm text-gray-300">Loves: Football, Travelling</p>
+                    <p class="mt-2 italic text-purple-300">"Chasing goals on the field and adventures on the map."</p>
+                </div>
+            </div>
+
+            <div class="friend-card backdrop-blur-md bg-white/10 rounded-2xl shadow-lg p-6 flex items-center space-x-6">
+                <a href="https://www.facebook.com/sHaRiYaIfTeKhAr" target="_blank" rel="noopener">
+                    <img src="./img/shariya.jpg" class="profile-img" />
+                </a>
+                <div>
+                    <h2 class="text-xl font-bold">Shariya</h2>
+                    <p class="text-sm text-gray-300">Loves: Learning, Giving Advice</p>
+                    <p class="mt-2 italic text-pink-300">"Giving advice recharges my soul."</p>
+                </div>
+            </div>
+
+            <div class="friend-card backdrop-blur-md bg-white/10 rounded-2xl shadow-lg p-6 flex items-center space-x-6">
+                <a href="https://www.facebook.com/xtr.burhan" target="_blank" rel="noopener">
+                    <img src="./img/borhan.jpg" class="profile-img" />
+                </a>
+                <div>
+                    <h2 class="text-xl font-bold">Borhan</h2>
+                    <p class="text-sm text-gray-300">Loves: Travelling, Smoking</p>
+                    <p class="mt-2 italic text-green-300">"Lost in the wind and a cloud of thoughts."</p>
+                </div>
+            </div>
+
+            <div class="friend-card backdrop-blur-md bg-white/10 rounded-2xl shadow-lg p-6 flex items-center space-x-6">
+                <a href="https://www.facebook.com/g.mahmudur" target="_blank" rel="noopener">
+                    <img src="./img/shuvo.jpg" class="profile-img" />
+                </a>
+                <div>
+                    <h2 class="text-xl font-bold">Shuvo</h2>
+                    <p class="text-sm text-gray-300">Loves: Gaming, Bike Ride</p>
+                    <p class="mt-2 italic text-red-300">"Free Fire on screen, wind on my face – I ride fast, I shoot
+                        faster."</p>
+                </div>
+            </div>
+
+            <div class="friend-card backdrop-blur-md bg-white/10 rounded-2xl shadow-lg p-6 flex items-center space-x-6">
+                <a href="https://www.facebook.com/nashir.uddin.296901" target="_blank" rel="noopener">
+                    <img src="./img/nasir.jpg" class="profile-img" />
+                </a>
+                <div>
+                    <h2 class="text-xl font-bold">Nasir</h2>
+                    <p class="text-sm text-gray-300">Loves: Books, Gaming</p>
+                    <p class="mt-2 italic text-yellow-300">"One hand on a book, the other on a controller – I play both
+                        worlds."</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="./script.js"></script>
+    <script>
+        const hexaBtn = document.getElementById('hexaBtn');
+        const hexaModal = document.getElementById('hexaModal');
+        const whatsappOpt = document.getElementById('whatsappOpt');
+        const messengerOpt = document.getElementById('messengerOpt');
+        const closeModal = document.getElementById('closeModal');
+        const telegramOpt = document.getElementById('telegramOpt');
+        const instagramOpt = document.getElementById('instagramOpt');
+
+        hexaBtn.addEventListener('click', () => {
+            hexaModal.classList.remove('hidden');
+        });
+
+        closeModal.addEventListener('click', () => {
+            hexaModal.classList.add('hidden');
+        });
+
+        whatsappOpt.addEventListener('click', () => {
+            window.location.href = 'https://chat.whatsapp.com/KiWhQrX5tIH0gCuPGBOdfV';
+        });
+
+        messengerOpt.addEventListener('click', () => {
+            window.location.href = 'https://m.me/j/AbYwp9AFz9sOW0ht/';
+        });
+
+        telegramOpt.addEventListener('click', () => {
+            window.location.href = 'https://t.me/+kFvmwhF53XthOGU9';
+        });
+
+        instagramOpt.addEventListener('click', () => {
+            window.location.href = 'https://ig.me/j/AbYL0jFLHJu4ochs/';
+        });
+
+        // Optional: close modal when clicking outside the modal box
+        hexaModal.addEventListener('click', (e) => {
+            if (e.target === hexaModal) {
+                hexaModal.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
