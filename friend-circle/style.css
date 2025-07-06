@@ -13,7 +13,10 @@ body {
     display: flex;
     flex-direction: column;
     /* backdrop-filter:  blur(10px); */
-    
+}
+
+header {
+    backdrop-filter: blur(10px);
 }
 
 .friend-card {
@@ -21,6 +24,7 @@ body {
     transition: transform 1s ease, opacity 1.1s ease;
     will-change: transform, opacity;
     min-height: 180px;
+    backdrop-filter: blur(10px);
 
 }
 
