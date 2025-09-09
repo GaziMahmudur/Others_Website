@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body>
+    <div class="overlay">
+        <h2>Meal Management</h2>
+
+        <div class="container">
+            <!-- Step 1: Meals -->
+            <div class="form-step active" id="step1">
+                <div class="step-header">
+                    <button class="back-btn" onclick="goBack(0)" disabled>
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <button class="clear-btn" onclick="clearInputs()">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+
+                <h3>Step 1: Enter Meals</h3>
+
+                <div class="input-group">
+                    <input type="number" id="ashikMeals" placeholder=" " />
+                    <label for="ashikMeals">Ashik's Meals</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="gaziMeals" placeholder=" " />
+                    <label for="gaziMeals">Gazi's Meals</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="ibrahimMeals" placeholder=" " />
+                    <label for="ibrahimMeals">Ibrahim's Meals</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="shuvoMeals" placeholder=" " />
+                    <label for="shuvoMeals">Shuvo's Meals</label>
+                </div>
+
+                <button class="next-btn" onclick="goToStep(2)">Next</button>
+            </div>
+
+            <!-- Step 2: Bazar -->
+            <div class="form-step" id="step2">
+                <div class="step-header">
+                    <button class="back-btn" onclick="goBack(1)">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <button class="clear-btn" onclick="clearInputs()">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+
+                <h3>Step 2: Enter Bazar</h3>
+
+                <div class="input-group">
+                    <input type="number" id="ashikBazar" placeholder=" " />
+                    <label for="ashikBazar">Ashik's Bazar</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="gaziBazar" placeholder=" " />
+                    <label for="gaziBazar">Gazi's Bazar</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="ibrahimBazar" placeholder=" " />
+                    <label for="ibrahimBazar">Ibrahim's Bazar</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="shuvoBazar" placeholder=" " />
+                    <label for="shuvoBazar">Shuvo's Bazar</label>
+                </div>
+
+                <button class="finish-btn" onclick="calculate()">Finish</button>
+            </div>
+
+            <!-- Step 3: Result -->
+            <div class="form-step" id="step3">
+                <div class="step-header">
+                    <button class="back-btn" onclick="goBack(2)">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <button class="clear-btn" onclick="clearInputs()">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+
+                <h3>Result</h3>
+                <div class="result" id="result"></div>
+                <button onclick="location.reload()">Start Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

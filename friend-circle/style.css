@@ -30,6 +30,7 @@ header {
 
 .friend-card.visible {
     opacity: 1;
+    animation: fadeInUp 1s ease forwards;
 }
 
 @keyframes fadeInUp {
@@ -42,10 +43,6 @@ header {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.friend-card.visible {
-    animation: fadeInUp 1s ease forwards;
 }
 
 .profile-img {
