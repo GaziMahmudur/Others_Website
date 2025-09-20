@@ -63,7 +63,9 @@ function calculate() {
     let mealRate = totalMeals > 0 ? (totalBazar / totalMeals) : 0;
 
     let html = `<p><b>Total Meals:</b> ${totalMeals}<br>
+                <div class="gap"></div>
               <b>Total Bazar:</b> ${totalBazar} Tk<br>
+                <div class="gap"></div>
               <b>Meal Rate:</b> ${mealRate.toFixed(2)} Tk</p>`;
 
     html += `<table>
