@@ -1,11 +1,9 @@
 :root {
-    --bg-color: #EEF5FF;
-    --container-color: #FFFFFF;
     --text-color: #ffffff;
-    --button-color: #013DB5;
+    --button-color: #0865FE;
     --button-hover: #002E8C;
-    --positive-color: #00e89d;
-    --negative-color: #ff4d6d;
+    --positive-color: #40BB46;
+    --negative-color: #DE2333;
     --input-box: rgba(255, 255, 255, 0.001);
 }
 
@@ -41,7 +39,6 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: var(--bg-color);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,7 +55,7 @@ h2 {
 }
 
 .container {
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.7);
     color: var(--text-color);
     padding: 20px;
