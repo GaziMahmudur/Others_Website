@@ -3,137 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Birthday Celebration</title>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
-    .modal-content {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 1rem;
-      text-align: center;
-      width: 300px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      animation: pop 0.5s ease;
-    }
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .modal-content h2 { margin-bottom: 1rem; }
-    .modal-content input {
-      width: 100%;
-      padding: 0.6rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-    }
-    .modal-content button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 0.5rem;
-      background: #ff6ec7;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .modal-content button:hover {
-      background: #ff2d95;
-    }
-
-    /* Main */
-    .container {
-      text-align: center;
-      color: #fff;
-      display: none;
-      z-index: 1;
-    }
-    .container h1 {
-      font-size: 2.5rem;
-      margin-top: 1rem;
-      text-shadow: 0 0 10px #ff6ec7;
-    }
-    .container p {
-      font-size: 1.2rem;
-      margin-top: 0.5rem;
-    }
-
-    /* Cake */
-    .cake {
-      position: relative;
-      width: 200px;
-      height: 150px;
-      margin: 2rem auto;
-    }
-    .cake .layer {
-      position: absolute;
-      width: 100%;
-      height: 50px;
-      background: #f9d29d;
-      border-radius: 10px;
-    }
-    .cake .layer:nth-child(1) { bottom: 0; background: #fbc2eb; }
-    .cake .layer:nth-child(2) { bottom: 50px; background: #a6c1ee; width: 85%; left: 7.5%; }
-    .cake .layer:nth-child(3) { bottom: 100px; background: #ff9a9e; width: 70%; left: 15%; }
-
-    /* Candle */
-    .candle {
-      position: absolute;
-      top: -60px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 12px;
-      height: 60px;
-      background: #fff5d7;
-      border-radius: 4px;
-    }
-    .flame {
-      position: absolute;
-      top: -20px; left: 50%;
-      transform: translateX(-50%);
-      width: 18px; height: 18px;
-      background: radial-gradient(circle, #ffdd33 0%, #ff8800 70%, transparent 100%);
-      border-radius: 50%;
-      animation: flicker 0.3s infinite alternate;
-    }
-    @keyframes flicker {
-      from { transform: translateX(-50%) scale(1); opacity: 0.9; }
-      to { transform: translateX(-50%) scale(1.2); opacity: 0.7; }
-    }
-
-    /* Confetti canvas */
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-  </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <!-- Modal -->
@@ -141,7 +11,7 @@
     <div class="modal-content">
       <h2>🎂 Enter Your Details</h2>
       <input type="text" id="name" placeholder="Your Name" required>
-      <input type="date" id="dob" required>
+      <input type="text" id="dob" placeholder="Your Date of Birth (YYYY-MM-DD)" required>
       <button onclick="startCelebration()">Celebrate</button>
     </div>
   </div>
@@ -149,6 +19,7 @@
   <!-- Main Birthday Page -->
   <div class="container" id="container">
     <div class="cake">
+      <div class="layer"></div>
       <div class="layer"></div>
       <div class="layer"></div>
       <div class="layer"></div>
