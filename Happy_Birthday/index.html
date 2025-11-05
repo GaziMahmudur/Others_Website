@@ -1,124 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Birthday Celebration</title>
-  <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎉 Happy Birthday!</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <!-- Modal -->
-  <div class="modal" id="modal">
+  <!-- Birthday Header -->
+  <header class="header">
+    <h1>🎉 Happy Birthday, <span id="name">Friend!</span> 🎂</h1>
+    <p class="subtitle">Wishing you a day filled with happiness and surprises!</p>
+  </header>
+
+  <!-- Confetti Animation -->
+  <div class="confetti"></div>
+
+  <!-- Main Section -->
+  <main class="main-content">
+
+    <button id="openModal" class="btn">🎁 Open Your Surprise</button>
+  </main>
+
+  <!-- Modal Popup -->
+  <div id="modal" class="modal">
     <div class="modal-content">
-      <h2>🎂 Enter Your Details</h2>
-      <input type="text" id="name" placeholder="Your Name" required>
-      <input type="text" id="dob" placeholder="Your Date of Birth (YYYY-MM-DD)" required>
-      <button onclick="startCelebration()">Celebrate</button>
+      <span class="close">&times;</span>
+      <h2>🎉 Surprise! 🎉</h2>
+      <p>Wishing you endless happiness, laughter, and success this year. 💖</p>
+      <img src="./birthday-cake.jpg" alt="Gifts" />
     </div>
   </div>
 
-  <!-- Main Birthday Page -->
-  <div class="container" id="container">
-    <div class="cake">
-      <div class="layer"></div>
-      <div class="layer"></div>
-      <div class="layer"></div>
-      <div class="layer"></div>
-      <div class="candle">
-        <div class="flame"></div>
-      </div>
-    </div>
-    <h1 id="greeting">Happy Birthday!</h1>
-    <p id="age"></p>
-  </div>
-
-  <!-- Confetti -->
-  <canvas id="confetti"></canvas>
+  <footer class="footer">
+    <p>Made with ❤️ for your special day.</p>
+  </footer>
 
   <script>
-    function startCelebration() {
-      const name = document.getElementById("name").value || "Friend";
-      const dob = document.getElementById("dob").value;
-      if (!dob) return;
+    // Modal script
+    const modal = document.getElementById("modal");
+    const openModal = document.getElementById("openModal");
+    const closeModal = document.querySelector(".close");
 
-      // Calculate age
-      let today = new Date();
-      let birthDate = new Date(dob);
-      let age = today.getFullYear() - birthDate.getFullYear();
-      let m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-
-      // Update text
-      document.getElementById("greeting").innerText = `Happy Birthday, ${name}! 🎂`;
-      document.getElementById("age").innerText = `You are ${age} years old 🎉`;
-
-      // Hide modal, show main
-      document.getElementById("modal").style.display = "none";
-      document.getElementById("container").style.display = "block";
-
-      // Start confetti
-      startConfetti();
-    }
-
-    // Confetti Animation
-    const confettiCanvas = document.getElementById("confetti");
-    const ctx = confettiCanvas.getContext("2d");
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-
-    let confettiParticles = [];
-    function randomColor() {
-      return `hsl(${Math.random() * 360}, 100%, 50%)`;
-    }
-
-    function createConfetti() {
-      for (let i = 0; i < 200; i++) {
-        confettiParticles.push({
-          x: Math.random() * confettiCanvas.width,
-          y: Math.random() * confettiCanvas.height - confettiCanvas.height,
-          r: Math.random() * 6 + 4,
-          d: Math.random() * 150,
-          color: randomColor(),
-          tilt: Math.random() * 10 - 10,
-          tiltAngleIncrement: Math.random() * 0.07 + 0.05,
-          tiltAngle: 0
-        });
-      }
-    }
-
-    function drawConfetti() {
-      ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-      confettiParticles.forEach(p => {
-        ctx.beginPath();
-        ctx.lineWidth = p.r;
-        ctx.strokeStyle = p.color;
-        ctx.moveTo(p.x + p.tilt + p.r / 4, p.y);
-        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 4);
-        ctx.stroke();
-      });
-      updateConfetti();
-    }
-
-    function updateConfetti() {
-      confettiParticles.forEach(p => {
-        p.tiltAngle += p.tiltAngleIncrement;
-        p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
-        p.tilt = Math.sin(p.tiltAngle - p.d / 3) * 15;
-        if (p.y > confettiCanvas.height) {
-          p.x = Math.random() * confettiCanvas.width;
-          p.y = -20;
-        }
-      });
-    }
-
-    function startConfetti() {
-      createConfetti();
-      (function animate() {
-        requestAnimationFrame(animate);
-        drawConfetti();
-      })();
-    }
+    openModal.onclick = () => modal.style.display = "flex";
+    closeModal.onclick = () => modal.style.display = "none";
+    window.onclick = e => { if (e.target == modal) modal.style.display = "none"; };
   </script>
 </body>
+
 </html>
