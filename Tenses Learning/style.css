@@ -4,8 +4,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -18,6 +16,137 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     color: #eaf2ff;
+}
+
+.animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    filter: blur(30px) saturate(120%);
+    will-change: transform;
+}
+
+.ball {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    animation: floatBall 15s infinite;
+}
+
+.ball:nth-child(1) {
+    top: 10%;
+    left: 10%;
+    background: radial-gradient(circle at 30% 30%, rgba(98, 228, 200, 0.3), rgba(98, 228, 200, 0.1));
+    animation-delay: 0s;
+}
+
+.ball:nth-child(2) {
+    top: 70%;
+    left: 20%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at 30% 30%, rgba(116, 235, 213, 0.3), rgba(116, 235, 213, 0.1));
+    animation-delay: -2s;
+}
+
+.ball:nth-child(3) {
+    top: 40%;
+    left: 60%;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle at 30% 30%, rgba(72, 214, 189, 0.3), rgba(72, 214, 189, 0.1));
+    animation-delay: -4s;
+}
+
+.ball:nth-child(4) {
+    top: 80%;
+    left: 80%;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle at 30% 30%, rgba(40, 150, 130, 0.3), rgba(40, 150, 130, 0.1));
+    animation-delay: -6s;
+}
+
+.ball:nth-child(5) {
+    top: 20%;
+    left: 70%;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle at 30% 30%, rgba(230, 241, 255, 0.3), rgba(230, 241, 255, 0.1));
+    animation-delay: -8s;
+}
+
+.ball:nth-child(6) {
+    top: 50%;
+    left: 30%;
+    width: 170px;
+    height: 170px;
+    background: radial-gradient(circle at 30% 30%, rgba(150, 200, 255, 0.3), rgba(150, 200, 255, 0.1));
+    animation-delay: -10s;
+}
+
+.ball:nth-child(7) {
+    top: 30%;
+    left: 40%;
+    width: 130px;
+    height: 130px;
+    background: radial-gradient(circle at 30% 30%, rgba(100, 180, 255, 0.3), rgba(100, 180, 255, 0.1));
+    animation-delay: -12s;
+}
+
+.ball:nth-child(8) {
+    top: 60%;
+    left: 50%;
+    width: 190px;
+    height: 190px;
+    background: radial-gradient(circle at 30% 30%, rgba(200, 220, 255, 0.3), rgba(200, 220, 255, 0.1));
+    animation-delay: -14s;
+}
+
+.ball:nth-child(9) {    
+    top: 15%;
+    left: 85%;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 150, 150, 0.3), rgba(255, 150, 150, 0.1));
+    animation-delay: -16s;
+}
+
+.ball:nth-child(10) {    
+    top: 75%;
+    left: 5%;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 200, 100, 0.3), rgba(255, 200, 100, 0.1));
+    animation-delay: -18s;
+}
+
+@keyframes floatBall {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(100px, 50px);
+    }
+
+    50% {
+        transform: translate(50px, -100px);
+    }
+
+    75% {
+        transform: translate(-50px, 50px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
 }
 
 /* Glass card */
@@ -38,28 +167,36 @@ body {
 }
 
 h1 {
-    margin-bottom: 0.4rem;
+    margin-bottom: .4rem;
     font-size: 2.2rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -.02em;
     color: #f7fbff;
     text-shadow: 0 6px 28px rgba(2, 10, 24, 0.5);
     animation: fadeIn 900ms ease both;
 }
 
-p {
+#levelDisplay {
     margin-bottom: 1rem;
     font-size: 1rem;
-    color: rgba(230, 241, 255, 0.9);
+    color: #c0eaff;
 }
 
+#question {
+    margin-bottom: .6rem;
+    font-size: 1rem;
+    color: rgba(230, 241, 255, 0.95);
+}
+
+/* inputs & buttons */
 input {
-    padding: 0.85rem 1rem;
+    padding: .85rem 1rem;
     width: 82%;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     margin-bottom: 1rem;
-    transition: box-shadow 200ms ease, transform 200ms ease;
+    margin-top: 1rem;
+    transition: box-shadow .2s, transform .2s;
     outline: none;
     background: rgba(255, 255, 255, 0.02);
     color: #eaf2ff;
@@ -67,18 +204,19 @@ input {
 
 input:focus {
     border-color: rgba(116, 235, 213, 0.65);
-    box-shadow: 0 6px 28px rgba(72, 214, 189, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    box-shadow: 0 6px 28px rgba(72, 214, 189, 0.12);
     transform: translateY(-1px);
 }
 
 button {
-    padding: 0.7rem 1.6rem;
+    padding: .4rem 1rem;
     border: none;
     border-radius: 10px;
     background: linear-gradient(180deg, #62e4c8, #3cc9b5);
     color: #022024;
     cursor: pointer;
     font-weight: 700;
+    margin: 0.2rem;
     transition: transform 160ms ease, box-shadow 160ms ease;
     box-shadow: 0 6px 18px rgba(40, 150, 130, 0.12);
 }
@@ -92,63 +230,18 @@ button:active {
     transform: translateY(-1px);
 }
 
+/* ripple (kept) */
 button {
     position: relative;
-    overflow: hidden;
+    overflow: hidden
 }
 
-/* ripple */
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    pointer-events: none;
-    background: rgba(255, 255, 255, 0.28);
-    width: 10px;
-    height: 10px;
-    animation: ripple 700ms ease-out forwards;
+.message.correct {
+    color: #00ff7f
 }
 
-@keyframes ripple {
-    to {
-        transform: translate(-50%, -50%) scale(30);
-        opacity: 0;
-    }
-}
-
-.message {
-    margin-top: 1rem;
-    font-weight: 700;
-    color: #ffdddd;
-    min-height: 1.2em;
-    display: inline-block;
-    transition: opacity 300ms ease, transform 300ms ease;
-    opacity: 1;
-}
-
-.message.hidden {
-    opacity: 0;
-    transform: translateY(-6px);
-}
-
-.correct {
-    color: green;
-}
-
-.fade {
-    animation: fadeIn 1s;
-}
-
-.level-box {
-    margin-top: 1rem;
-}
-
-.level-box button {
-    margin: 0.2rem;
-}
-
-.example-box {
-    margin-top: 1rem;
+/* practice box */
+.practice-box {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
     padding: 1rem;
     border-radius: 10px;
@@ -156,45 +249,42 @@ button {
     font-size: 0.95rem;
     color: rgba(230, 241, 255, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.03);
+    display: none;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(18px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.practice-question {
+    font-weight: 700;
+    margin-bottom: .6rem;
+    color: #e6f1ff
 }
 
-@keyframes shake {
-    0% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-6px);
-    }
-
-    50% {
-        transform: translateX(6px);
-    }
-
-    75% {
-        transform: translateX(-6px);
-    }
-
-    100% {
-        transform: translateX(0);
-    }
+.practice-label {
+    display: block;
+    margin-bottom: .25rem;
+    color: rgba(220, 235, 255, 0.9)
 }
 
-/* Background particle layer */
-/* Background particle layer */
+#practiceStructure,
+#practiceExample {
+    width: 100%;
+    padding: .6rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    color: #eaf2ff
+}
+
+/* layout */
+.level-box {
+    margin-top: 1rem
+}
+
+.level-box button {
+    padding: .4rem .8rem;
+    font-size: .85rem
+}
+
+/* background particles layer kept unchanged */
 #bg {
     position: fixed;
     inset: 0;
@@ -202,7 +292,7 @@ button {
     overflow: hidden;
     z-index: 0;
     filter: blur(12px) saturate(120%);
-    will-change: transform;
+    will-change: transform
 }
 
 .particle {
@@ -210,38 +300,21 @@ button {
     border-radius: 50%;
     transform-origin: center;
     mix-blend-mode: screen;
-    opacity: 0.45;
+    opacity: .45;
     pointer-events: none;
     filter: blur(6px);
     will-change: transform, opacity;
-    transition: transform 800ms linear;
+    transition: transform 800ms linear
 }
 
-.accent {
-    position: absolute;
-    left: 50%;
-    top: -40px;
-    transform: translateX(-50%);
-    width: 220px;
-    height: 6px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, rgba(98, 228, 200, 0.85), rgba(60, 201, 181, 0.65));
-    filter: blur(18px) opacity(0.9);
-}
-
-/* Reduce visual noise on small screens */
-@media (max-width: 480px) {
-    .particle {
-        filter: blur(4px);
-        opacity: 0.35;
-    }
-
+/* small screens */
+@media (max-width:480px) {
     #app {
         padding: 1.2rem;
-        border-radius: 12px;
+        border-radius: 12px
     }
 
     h1 {
-        font-size: 1.4rem;
+        font-size: 1.4rem
     }
 }
