@@ -250,6 +250,7 @@ button {
     color: rgba(230, 241, 255, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.03);
     display: none;
+    box-shadow: 0 8px 32px rgba(2, 10, 24, 0.4);
 }
 
 .practice-question {
@@ -316,5 +317,9 @@ button {
 
     h1 {
         font-size: 1.4rem
+    }
+
+    .practice-box {
+        text-align: center;
     }
 }
