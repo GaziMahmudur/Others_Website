@@ -2,15 +2,23 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Meal Management</title>
+
+    <!-- Your stylesheet -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Font Awesome (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- html2canvas for export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
-    <iframe src="./background/index.html" class="bg"></iframe>
+    <!-- Background iframe (your existing background) -->
+    <iframe src="./background/index.html" class="bg" aria-hidden="true"></iframe>
 
     <div class="overlay">
         <h2>Meal Management</h2>
@@ -19,30 +27,32 @@
             <!-- Step 1: Meals -->
             <div class="form-step active" id="step1">
                 <div class="step-header">
-                    <button class="back-btn" onclick="goBack(0)" disabled>
-                        <i class="fa fa-arrow-left"></i>
-                    </button>
-                    <button class="clear-btn" onclick="clearInputs()">
-                        <i class="fa-solid fa-eraser"></i>
-                    </button>
+                    <button class="icon-btn back-btn" onclick="goBack(0)" disabled title="Back">
+            <i class="fa fa-arrow-left"></i>
+          </button>
+                    <div class="right-icons">
+                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
+              <i class="fa-solid fa-eraser"></i>
+            </button>
+                    </div>
                 </div>
 
                 <h3>Step 1: Enter Meals</h3>
 
                 <div class="input-group">
-                    <input type="number" id="ashikMeals" placeholder=" " />
+                    <input type="number" id="ashikMeals" placeholder=" " inputmode="numeric" />
                     <label for="ashikMeals">Ashik's Meals</label>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="gaziMeals" placeholder=" " />
+                    <input type="number" id="gaziMeals" placeholder=" " inputmode="numeric" />
                     <label for="gaziMeals">Gazi's Meals</label>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="ibrahimMeals" placeholder=" " />
+                    <input type="number" id="ibrahimMeals" placeholder=" " inputmode="numeric" />
                     <label for="ibrahimMeals">Ibrahim's Meals</label>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="shuvoMeals" placeholder=" " />
+                    <input type="number" id="shuvoMeals" placeholder=" " inputmode="numeric" />
                     <label for="shuvoMeals">Shuvo's Meals</label>
                 </div>
 
@@ -52,30 +62,32 @@
             <!-- Step 2: Bazar -->
             <div class="form-step" id="step2">
                 <div class="step-header">
-                    <button class="back-btn" onclick="goBack(1)">
-                        <i class="fa fa-arrow-left"></i>
-                    </button>
-                    <button class="clear-btn" onclick="clearInputs()">
-                        <i class="fa-solid fa-eraser"></i>
-                    </button>
+                    <button class="icon-btn back-btn" onclick="goBack(1)" title="Back">
+            <i class="fa fa-arrow-left"></i>
+          </button>
+                    <div class="right-icons">
+                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
+              <i class="fa-solid fa-eraser"></i>
+            </button>
+                    </div>
                 </div>
 
                 <h3>Step 2: Enter Bazar</h3>
 
                 <div class="input-group">
-                    <input type="number" id="ashikBazar" placeholder=" " />
+                    <input type="number" id="ashikBazar" placeholder=" " inputmode="numeric" />
                     <label for="ashikBazar">Ashik's Bazar</label>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="gaziBazar" placeholder=" " />
+                    <input type="number" id="gaziBazar" placeholder=" " inputmode="numeric" />
                     <label for="gaziBazar">Gazi's Bazar</label>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="ibrahimBazar" placeholder=" " />
+                    <input type="number" id="ibrahimBazar" placeholder=" " inputmode="numeric" />
                     <label for="ibrahimBazar">Ibrahim's Bazar</label>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="shuvoBazar" placeholder=" " />
+                    <input type="number" id="shuvoBazar" placeholder=" " inputmode="numeric" />
                     <label for="shuvoBazar">Shuvo's Bazar</label>
                 </div>
 
@@ -85,17 +97,32 @@
             <!-- Step 3: Result -->
             <div class="form-step" id="step3">
                 <div class="step-header">
-                    <button class="back-btn" onclick="goBack(2)">
-                        <i class="fa fa-arrow-left"></i>
-                    </button>
-                    <button class="clear-btn" onclick="clearInputs()">
-                        <i class="fa-solid fa-eraser"></i>
-                    </button>
+                    <button class="icon-btn back-btn" onclick="goBack(2)" title="Back">
+            <i class="fa fa-arrow-left"></i>
+          </button>
+                    <div class="right-icons">
+                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
+              <i class="fa-solid fa-eraser"></i>
+            </button>
+                    </div>
                 </div>
 
                 <h3>Result</h3>
-                <div class="result" id="result"></div>
-                <button onclick="location.reload()">Start Again</button>
+
+                <!-- Result topbar (date + inline export icon) -->
+                <div class="result-topbar">
+                    <div></div>
+                    <div class="result-controls">
+                        <span id="resultDate" class="result-date" aria-hidden="true"></span>
+                        <button id="inlineExportBtn" class="icon-btn inline-export" title="Export HD image">
+              <i class="fa fa-download"></i>
+            </button>
+                    </div>
+                </div>
+
+                <div class="result" id="result" aria-live="polite"></div>
+
+                <button class="start-btn" onclick="location.reload()">Start Again</button>
             </div>
         </div>
     </div>
