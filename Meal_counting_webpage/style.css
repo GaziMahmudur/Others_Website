@@ -1,19 +1,15 @@
 :root {
-    --text-color: #ffffff;
-    --button-color: #002E8C;
-    --button-hover: #0865FE;
-    --positive-color: #40BB46;
-    --negative-color: #DE2333;
-    --input-box: rgba(255, 255, 255, 0.001);
+    --text: #fff;
+    --btn: #002E8C;
+    --btn-hover: #0865FE;
+    --pos: #40BB46;
+    --neg: #DE2333;
     --muted: rgba(255, 255, 255, 0.7);
 }
 
-
-/* Reset */
-
 * {
-    padding: 0;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
     font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
@@ -23,9 +19,6 @@ html,
 body {
     height: 100%;
 }
-
-
-/* Background iframe */
 
 .bg {
     position: fixed;
@@ -37,9 +30,6 @@ body {
     z-index: -1;
 }
 
-
-/* Overlay */
-
 .overlay {
     min-height: 100vh;
     display: flex;
@@ -50,27 +40,21 @@ body {
     gap: 14px;
 }
 
-
-/* Heading */
-
 h2 {
     margin-bottom: 6px;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 28px;
-    color: var(--text-color);
+    color: var(--text);
     -webkit-font-smoothing: antialiased;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
 }
-
-
-/* Container (your original look) */
 
 .container {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.7);
-    color: var(--text-color);
+    color: var(--text);
     padding: 20px;
     border-radius: 6px;
     display: flex;
@@ -81,9 +65,6 @@ h2 {
     max-width: 980px;
 }
 
-
-/* Improve text clarity across the UI without changing colors */
-
 .container,
 .container * {
     text-rendering: optimizeLegibility;
@@ -93,9 +74,6 @@ h2 {
     text-shadow: 0 0.6px 0 rgba(0, 0, 0, 0.35);
     -webkit-text-stroke: 0.02px rgba(0, 0, 0, 0.08);
 }
-
-
-/* Form step */
 
 .form-step {
     display: none;
@@ -108,9 +86,6 @@ h2 {
     gap: 25px;
 }
 
-
-/* Step header */
-
 .step-header {
     display: flex;
     justify-content: space-between;
@@ -121,31 +96,25 @@ h2 {
 .icon-btn {
     background: none;
     border: none;
-    color: var(--button-color);
+    color: var(--btn);
     cursor: pointer;
     font-size: 18px;
     padding: 6px;
     border-radius: 6px;
+    transition: all 0.18s;
 }
 
 .icon-btn:hover {
-    color: var(--button-hover);
+    color: var(--btn-hover);
     transform: translateX(-3px);
-    transition: all .18s;
 }
-
-
-/* Titles */
 
 h3 {
     margin: 6px 0 4px 0;
     font-size: 18px;
-    color: var(--text-color);
+    color: var(--text);
     font-weight: 700;
 }
-
-
-/* Input group / floating label */
 
 .input-group {
     position: relative;
@@ -157,8 +126,8 @@ h3 {
     padding: 14px 12px;
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    background: var(--input-box);
-    color: var(--text-color);
+    background: rgba(255, 255, 255, 0.001);
+    color: var(--text);
     font-size: 16px;
 }
 
@@ -176,7 +145,7 @@ h3 {
     font-size: 13px;
     color: #9aa7c9;
     pointer-events: none;
-    transition: all .12s;
+    transition: all 0.12s;
     background: transparent;
     padding: 0 4px;
 }
@@ -185,48 +154,31 @@ h3 {
 .input-group input:not(:placeholder-shown)+label {
     top: -10px;
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--text);
     left: -1px;
 }
-
-
-/* Buttons primary */
 
 .next-btn,
 .finish-btn,
 .start-btn {
     font-size: 16px;
-}
-
-button.next-btn,
-button.finish-btn,
-button[onclick*="location.reload"] {
     width: 100%;
     padding: 12px;
     border-radius: 6px;
     border: none;
-    background: var(--button-color);
+    background: var(--btn);
     color: #fff;
     font-weight: 700;
     cursor: pointer;
+    transition: all 0.12s;
+    display: block;
 }
 
-button.next-btn:hover,
-button.finish-btn:hover,
-button[onclick*="location.reload"]:hover {
-    background: var(--button-hover);
+.next-btn:hover,
+.finish-btn:hover,
+.start-btn:hover {
+    background: var(--btn-hover);
     transform: translateY(-2px);
-    transition: all .12s;
-}
-
-
-/* Result topbar (date + inline export) */
-
-.result-topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
 }
 
 .result-controls {
@@ -234,9 +186,6 @@ button[onclick*="location.reload"]:hover {
     align-items: center;
     gap: 8px;
 }
-
-
-/* Date text inside result area (top-right) */
 
 .result-date {
     font-size: 13px;
@@ -246,25 +195,20 @@ button[onclick*="location.reload"]:hover {
     -webkit-font-smoothing: antialiased;
 }
 
-
-/* Inline export icon within controls */
-
 .inline-export {
     font-size: 16px;
-    color: var(--button-color);
+    color: var(--btn);
     background: none;
     border: none;
     padding: 6px;
     cursor: pointer;
+    transition: all 0.12s;
 }
 
 .inline-export:hover {
-    color: var(--button-hover);
+    color: var(--btn-hover);
     transform: translateY(-2px);
 }
-
-
-/* Result card (your style preserved) */
 
 .result {
     backdrop-filter: blur(8px);
@@ -273,12 +217,9 @@ button[onclick*="location.reload"]:hover {
     background: rgba(255, 255, 255, 0.03);
     border-radius: 8px;
     padding: 14px;
-    color: var(--text-color);
+    color: var(--text);
     overflow: auto;
 }
-
-
-/* Table */
 
 table {
     width: 100%;
@@ -301,24 +242,18 @@ th {
 }
 
 td {
-    color: var(--text-color);
+    color: var(--text);
 }
 
-
-/* Balance styling */
-
 .positive {
-    color: var(--positive-color);
+    color: var(--pos);
     font-weight: 700;
 }
 
 .negative {
-    color: var(--negative-color);
+    color: var(--neg);
     font-weight: 700;
 }
-
-
-/* Floating export button bottom-right */
 
 .floating-export {
     position: fixed;
@@ -327,25 +262,22 @@ td {
     width: 54px;
     height: 54px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--button-color), var(--button-hover));
+    background: linear-gradient(135deg, var(--btn), var(--btn-hover));
     color: #fff;
     border: none;
     box-shadow: 0 8px 26px rgba(2, 40, 120, 0.32);
     cursor: pointer;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     font-size: 18px;
+    transition: all 0.14s;
 }
 
 .floating-export:hover {
     transform: translateY(-4px);
-    transition: all .14s;
 }
-
-
-/* small screen adjustments */
 
 @media (max-width:480px) {
     h2 {
@@ -368,9 +300,6 @@ td {
     }
 }
 
-
-/* medium screens */
-
 @media (min-width:768px) {
     .container {
         padding: 24px;
@@ -380,9 +309,6 @@ td {
     }
 }
 
-
-/* wide screens */
-
 @media (min-width:1200px) {
     .container {
         max-width: 1100px;
@@ -390,4 +316,57 @@ td {
     table {
         font-size: 15px;
     }
+}
+
+.summary-stats {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.summary-stats span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.result-table {
+    font-size: 16px;
+}
+
+.export-container {
+    background: linear-gradient(135deg, #0d5546, #162e7a, #541f7a);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 40px;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 99999;
+}
+
+.export-mast {
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.export-clone {
+    margin: 0 auto;
+    background: transparent;
+    padding: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+    overflow: auto;
 }
