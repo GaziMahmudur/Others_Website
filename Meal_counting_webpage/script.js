@@ -133,7 +133,7 @@ function exportResultImage() {
   headerCells.forEach((th) => {
     // Ensure text color on headers matches (override if needed)
     th.style.background = "#fff";
-    th.style.color = "#0d5546";
+    th.style.color = "#3f22ec";
     th.style.fontWeight = "700";
   });
 
@@ -145,7 +145,7 @@ function exportResultImage() {
   exportContainer.style.padding = "40px";
   exportContainer.style.zIndex = "-1";
   exportContainer.style.background =
-    "linear-gradient(135deg, #0d5546, #162e7a, #541f7a)";
+    "linear-gradient(135deg, #26f6634d, #268aff4d, #fc55ff4d), #000437";
   exportContainer.style.backgroundSize = "100% 100%";
   exportContainer.style.backgroundRepeat = "no-repeat";
   exportContainer.style.backgroundAttachment = "fixed";
