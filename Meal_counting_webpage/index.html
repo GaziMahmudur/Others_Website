@@ -17,26 +17,17 @@
 </head>
 
 <body>
-    <!-- Background iframe (your existing background) -->
     <iframe src="./background/index.html" class="bg" aria-hidden="true"></iframe>
-
     <div class="overlay">
         <h2>Meal Management</h2>
-
         <div class="container">
-            <!-- Step 1: Meals -->
             <div class="form-step active" id="step1">
                 <div class="step-header">
-                    <button class="icon-btn back-btn" onclick="goBack(0)" disabled title="Back">
-            <i class="fa fa-arrow-left"></i>
-          </button>
-                    <div class="right-icons">
-                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
-              <i class="fa-solid fa-eraser"></i>
-            </button>
-                    </div>
+                    <button class="icon-btn back-btn" onclick="goBack(0)" disabled title="Back"><i
+              class="fa fa-arrow-left"></i></button>
+                    <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear"><i
+              class="fa-solid fa-eraser"></i></button>
                 </div>
-
                 <h3>Step 1: Enter Meals</h3>
 
                 <div class="input-group">
@@ -58,20 +49,12 @@
 
                 <button class="next-btn" onclick="goToStep(2)">Next</button>
             </div>
-
-            <!-- Step 2: Bazar -->
             <div class="form-step" id="step2">
                 <div class="step-header">
-                    <button class="icon-btn back-btn" onclick="goBack(1)" title="Back">
-            <i class="fa fa-arrow-left"></i>
-          </button>
-                    <div class="right-icons">
-                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
-              <i class="fa-solid fa-eraser"></i>
-            </button>
-                    </div>
+                    <button class="icon-btn back-btn" onclick="goBack(1)" title="Back"><i class="fa fa-arrow-left"></i></button>
+                    <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear"><i
+              class="fa-solid fa-eraser"></i></button>
                 </div>
-
                 <h3>Step 2: Enter Bazar</h3>
 
                 <div class="input-group">
@@ -93,31 +76,17 @@
 
                 <button class="finish-btn" onclick="calculate()">Finish</button>
             </div>
-
-            <!-- Step 3: Result -->
             <div class="form-step" id="step3">
                 <div class="step-header">
-                    <button class="icon-btn back-btn" onclick="goBack(2)" title="Back">
-            <i class="fa fa-arrow-left"></i>
-          </button>
-                    <div class="right-icons">
-                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
-              <i class="fa-solid fa-eraser"></i>
-            </button>
-                    </div>
+                    <button class="icon-btn back-btn" onclick="goBack(2)" title="Back"><i class="fa fa-arrow-left"></i></button>
+                    <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear"><i
+              class="fa-solid fa-eraser"></i></button>
                 </div>
-
                 <h3>Result</h3>
-
-                <!-- Result topbar (date + inline export icon) -->
-                <div class="result-topbar">
-                    <div></div>
-                    <div class="result-controls">
-                        <span id="resultDate" class="result-date" aria-hidden="true"></span>
-                        <button id="inlineExportBtn" class="icon-btn inline-export" title="Export HD image">
-              <i class="fa fa-download"></i>
-            </button>
-                    </div>
+                <div class="result-controls">
+                    <span id="resultDate" class="result-date" aria-hidden="true"></span>
+                    <button id="inlineExportBtn" class="icon-btn inline-export" title="Export"><i
+              class="fa fa-download"></i></button>
                 </div>
 
                 <div class="result" id="result" aria-live="polite"></div>
