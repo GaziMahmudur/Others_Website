@@ -144,7 +144,10 @@ function exportResultImage() {
     const vh = Math.max(window.innerHeight, 640);
     exportContainer.style.width = `${vw}px`;
     exportContainer.style.height = `${vh}px`;
-    exportContainer.style.background = "rgba(0,0,0,0.85)";
+    exportContainer.style.background = "linear-gradient(135deg, #0d5546, #162e7a, #541f7a)";
+    exportContainer.style.backgroundSize = "100% 100%"; // FULL coverage
+    exportContainer.style.backgroundRepeat = "no-repeat"; // Prevent repeating
+    exportContainer.style.backgroundAttachment = "fixed"; // Smooth even fill
     exportContainer.style.padding = "40px 40px";
     exportContainer.style.color = "#fff";
     exportContainer.style.fontFamily = "'Poppins', sans-serif";
