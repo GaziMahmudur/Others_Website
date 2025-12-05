@@ -91,7 +91,7 @@ function calculate() {
     </p></div>`;
 
   html += `<table aria-describedby="mealSummary" style="font-size: 16px;"><thead>
-    <tr><th>Name</th><th>Meals</th><th>Bazar</th><th>Meal Cost</th><th>Balance</th></tr>
+    <tr class="result_th"><th>Name</th><th>Meals</th><th>Bazar</th><th>Meal Cost</th><th>Balance</th></tr>
   </thead><tbody>`;
 
   names.forEach((name, i) => {
@@ -126,35 +126,60 @@ function exportResultImage() {
     return;
   }
 
-  // Clone the result element
+  // Clone the result area
   const clone = result.cloneNode(true);
 
+  // ----- STYLE FIXING FOR EXPORT -----
+
+  // Make table headers blue + white background
   const headerCells = clone.querySelectorAll("thead th");
   headerCells.forEach((th) => {
-    // Ensure text color on headers matches (override if needed)
-    th.style.background = "#fff";
+    th.style.background = "#ffffff";
     th.style.color = "#3f22ec";
     th.style.fontWeight = "700";
   });
 
-  // Create export container offscreen
+  // Make all text WHITE + Bigger font
+  clone.querySelectorAll("*").forEach((el) => {
+    el.style.color = "#ffffff";
+    el.style.fontSize = "40px"; // 🎯 Bigger text (change if needed)
+    el.style.lineHeight = "2";
+  });
+
+  // Restore RED (negative)
+  clone.querySelectorAll(".negative").forEach((el) => {
+    el.style.color = "#DE2333";
+    el.style.fontWeight = "700";
+  });
+
+  // Restore BLUE (positive)
+  clone.querySelectorAll(".positive").forEach((el) => {
+    el.style.color = "#40BB46";
+    el.style.fontWeight = "700";
+  });
+
+  // Extra safety → Table headers must stay blue
+  clone.querySelectorAll("th").forEach((th) => {
+    th.style.color = "#3f22ec";
+  });
+
+  // ----- EXPORT CONTAINER -----
   const exportContainer = document.createElement("div");
   exportContainer.style.position = "fixed";
   exportContainer.style.top = "-9999px";
   exportContainer.style.left = "-9999px";
   exportContainer.style.padding = "40px";
   exportContainer.style.zIndex = "-1";
+  exportContainer.style.borderRadius = "12px";
+  exportContainer.style.boxSizing = "border-box";
+
+  // Gradient background
   exportContainer.style.background =
     "linear-gradient(135deg, #26f6634d, #268aff4d, #fc55ff4d), #000437";
   exportContainer.style.backgroundSize = "100% 100%";
   exportContainer.style.backgroundRepeat = "no-repeat";
-  exportContainer.style.backgroundAttachment = "fixed";
-  exportContainer.style.boxSizing = "border-box";
-  exportContainer.style.color = "#fff";
-  exportContainer.style.maxWidth = "800px";
-  exportContainer.style.borderRadius = "8px";
 
-  // Create date element
+  // Date element
   const dateEl = document.createElement("div");
   dateEl.textContent = new Date().toLocaleDateString(undefined, {
     year: "numeric",
@@ -163,25 +188,20 @@ function exportResultImage() {
   });
   dateEl.style.textAlign = "center";
   dateEl.style.fontWeight = "600";
+  dateEl.style.fontSize = "40px";
   dateEl.style.marginBottom = "20px";
-  dateEl.style.fontSize = "16px";
-  dateEl.style.color = "#fff";
+  dateEl.style.color = "#ffffff";
 
-  // Style the cloned result
-  clone.style.background = "transparent";
-  clone.style.padding = getComputedStyle(result).padding;
-  clone.style.color = "#fff";
-
-  // Append date and cloned result inside export container
+  // Append everything
   exportContainer.appendChild(dateEl);
   exportContainer.appendChild(clone);
-
   document.body.appendChild(exportContainer);
 
-  const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
+  // High DPI export (HD image)
+  const dpr = Math.max(2, Math.min(window.devicePixelRatio || 2, 3));
 
   html2canvas(exportContainer, {
-    scale: dpr,
+    scale: dpr, // HD quality
     backgroundColor: null,
     useCORS: true,
   })
@@ -189,7 +209,7 @@ function exportResultImage() {
       document.body.removeChild(exportContainer);
 
       const link = document.createElement("a");
-      link.download = `meal-management-result-${new Date()
+      link.download = `meal-result-${new Date()
         .toISOString()
         .slice(0, 10)}.png`;
       link.href = canvas.toDataURL("image/png");
@@ -197,10 +217,9 @@ function exportResultImage() {
     })
     .catch((err) => {
       document.body.removeChild(exportContainer);
-      alert("Error exporting image: " + err);
+      alert("Export failed: " + err);
     });
 }
-
 
 // connect export button when DOM ready
 document.addEventListener("DOMContentLoaded", () => {
