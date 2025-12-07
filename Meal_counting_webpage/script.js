@@ -136,7 +136,7 @@ function exportResultImage() {
   headerCells.forEach((th) => {
     th.style.background = "#ffffff";
     th.style.color = "#3f22ec";
-    th.style.fontWeight = "700";
+    th.style.fontWeight = "500";
   });
 
   // Make all text WHITE + Bigger font
@@ -149,13 +149,13 @@ function exportResultImage() {
   // Restore RED (negative)
   clone.querySelectorAll(".negative").forEach((el) => {
     el.style.color = "#DE2333";
-    el.style.fontWeight = "700";
+    el.style.fontWeight = "500";
   });
 
   // Restore BLUE (positive)
   clone.querySelectorAll(".positive").forEach((el) => {
     el.style.color = "#40BB46";
-    el.style.fontWeight = "700";
+    el.style.fontWeight = "500";
   });
 
   // Extra safety → Table headers must stay blue
@@ -176,7 +176,7 @@ function exportResultImage() {
   // Gradient background
   exportContainer.style.background =
     "linear-gradient(135deg, #26f6634d, #268aff4d, #fc55ff4d), #000437";
-  exportContainer.style.backgroundSize = "100% 100%";
+  exportContainer.style.backgroundSize = "covert";
   exportContainer.style.backgroundRepeat = "no-repeat";
 
   // Date element

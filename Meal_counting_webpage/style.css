@@ -12,6 +12,9 @@
     --tw-ring-opacity: 1;
     --tw-text-opacity: 1;
     --tw-border-opacity: 1;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 
@@ -22,13 +25,13 @@
     margin: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
-    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 html,
 body {
     min-height: 100vh;
     background: radial-gradient(200% 150% at 0px 100%, rgb(91, 197, 232) 0px, rgb(55, 128, 189) 24.76%, rgb(16, 58, 139) 55.66%, rgb(2, 24, 71) 100%) 0% 0% / 100% 100% no-repeat;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* Overlay */
@@ -67,8 +70,8 @@ h1 {
     text-align: center;
     min-width: 280px;
     width: 100%;
-    max-width: 980px;
-    background: linear-gradient(rgb(255, 255, 255), rgb(242, 242, 242));
+    max-width: 28.75rem;
+     background: linear-gradient(rgb(255, 255, 255), rgb(242, 242, 242));
     border-width: 0px;
     border-style: solid;
     border-color: rgb(229, 231, 235);
@@ -92,7 +95,7 @@ h2 {
 .container * {
     text-rendering: optimizelegibility;
     -webkit-font-smoothing: antialiased;
-    font-weight: 700;
+    font-weight: 500;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 0.6px 0px;
     -webkit-text-stroke: 0.02px rgba(0, 0, 0, 0.08);
 }
@@ -310,7 +313,7 @@ td {
 
 .result_th {
     color: rgb(255, 255, 255);
-    font-weight: 700;
+    font-weight: 500;
     background: linear-gradient(90deg, rgb(56, 147, 246), rgb(45, 222, 185));
 }
 
@@ -323,12 +326,12 @@ td {
 
 .positive {
     color: var(--positive-color);
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .negative {
     color: var(--negative-color);
-    font-weight: 700;
+    font-weight: 500;
 }
 
 
@@ -402,9 +405,6 @@ td {
 /* wide screens */
 
 @media (min-width:1200px) {
-    .container {
-        max-width: 1100px;
-    }
 
     table {
         font-size: 15px;
