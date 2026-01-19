@@ -2,128 +2,58 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Meal Management</title>
-
-    <!-- Your stylesheet -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Font Awesome (icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- html2canvas for export -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mess Manager</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="overlay">
-        <h1>Meal Management</h1>
+    <div id="app">
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Dynamic components will be injected here -->
+        </main>
 
-        <div class="container">
-            <!-- Step 1: Meals -->
-            <div class="form-step active" id="step1">
-                <div class="step-header">
-                    <button class="icon-btn back-btn" onclick="goBack(0)" disabled title="Back">
-            <i class="fa fa-arrow-left"></i>
-          </button>
-                    <div class="right-icons">
-                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
-              <i class="fa-solid fa-eraser"></i>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-target="dashboard">
+                <span class="material-icons-round">dashboard</span>
+                <span class="nav-label">Dashboard</span>
             </button>
-                    </div>
-                </div>
-
-                <h2>Step 1: Enter Meals</h2>
-
-                <div class="input-group">
-                    <input type="number" id="ashikMeals" placeholder=" " inputmode="numeric" />
-                    <label for="ashikMeals">Ashik's Meals</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="gaziMeals" placeholder=" " inputmode="numeric" />
-                    <label for="gaziMeals">Gazi's Meals</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="ibrahimMeals" placeholder=" " inputmode="numeric" />
-                    <label for="ibrahimMeals">Ibrahim's Meals</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="shuvoMeals" placeholder=" " inputmode="numeric" />
-                    <label for="shuvoMeals">Shuvo's Meals</label>
-                </div>
-
-                <button class="next-btn" onclick="goToStep(2)">Next</button>
-            </div>
-
-            <!-- Step 2: Bazar -->
-            <div class="form-step" id="step2">
-                <div class="step-header">
-                    <button class="icon-btn back-btn" onclick="goBack(1)" title="Back">
-            <i class="fa fa-arrow-left"></i>
-          </button>
-                    <div class="right-icons">
-                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
-              <i class="fa-solid fa-eraser"></i>
+            <button class="nav-item" data-target="daily">
+                <span class="material-icons-round">edit_calendar</span>
+                <span class="nav-label">Entry</span>
             </button>
-                    </div>
-                </div>
-
-                <h2>Step 2: Enter Bazar</h2>
-
-                <div class="input-group">
-                    <input type="number" id="ashikBazar" placeholder=" " inputmode="numeric" />
-                    <label for="ashikBazar">Ashik's Bazar</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="gaziBazar" placeholder=" " inputmode="numeric" />
-                    <label for="gaziBazar">Gazi's Bazar</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="ibrahimBazar" placeholder=" " inputmode="numeric" />
-                    <label for="ibrahimBazar">Ibrahim's Bazar</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="shuvoBazar" placeholder=" " inputmode="numeric" />
-                    <label for="shuvoBazar">Shuvo's Bazar</label>
-                </div>
-
-                <button class="finish-btn" onclick="calculate()">Finish</button>
-            </div>
-
-            <!-- Step 3: Result -->
-            <div class="form-step" id="step3">
-                <div class="step-header">
-                    <button class="icon-btn back-btn" onclick="goBack(2)" title="Back">
-            <i class="fa fa-arrow-left"></i>
-          </button>
-                    <div class="right-icons">
-                        <button class="icon-btn clear-btn" onclick="clearInputs()" title="Clear inputs">
-              <i class="fa-solid fa-eraser"></i>
+            <button class="nav-item" data-target="history">
+                <span class="material-icons-round">history</span>
+                <span class="nav-label">History</span>
             </button>
-                    </div>
-                </div>
-
-                <h2>Result</h2>
-
-                <!-- Result topbar (date + inline export icon) -->
-                <div class="result-topbar">
-                    <div></div>
-                    <div class="result-controls">
-                        <span id="resultDate" class="result-date" aria-hidden="true"></span>
-                        <button id="inlineExportBtn" class="icon-btn inline-export" title="Export HD image">
-              <i class="fa fa-download"></i>
+            <button class="nav-item" data-target="members">
+                <span class="material-icons-round">group</span>
+                <span class="nav-label">Members</span>
             </button>
-                    </div>
-                </div>
-
-                <div class="result" id="result" aria-live="polite"></div>
-
-                <button class="start-btn" onclick="location.reload()">Start Again</button>
-            </div>
-        </div>
+            <button class="nav-item" data-target="settings">
+                <span class="material-icons-round">settings</span>
+                <span class="nav-label">Settings</span>
+            </button>
+        </nav>
     </div>
+
+    <!-- Hidden Export Container -->
+    <div id="export-container"></div>
 
     <script src="script.js"></script>
 </body>
