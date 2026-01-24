@@ -161,11 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    if(STATE.members.length === 0) {
-        renderPage('members');
-    } else {
-        renderPage('dashboard');
-    }
+    renderPage('dashboard');
     updateTheme();
 });
 
@@ -259,6 +255,15 @@ function setupNavigation() {
 }
 
 function renderPage(page) {
+    // Sync navigation items active state
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        if (btn.dataset.target === page) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
     const content = document.getElementById('main-content');
     content.innerHTML = '';
     content.style.opacity = 0;
