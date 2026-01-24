@@ -483,7 +483,15 @@ function renderDailyEntry(container) {
         <h2 class="section-title">Monthly Entry</h2>
         <div class="glass glass-card input-group">
              <label>Select Month</label>
-             <input type="month" value="${currentMonthStr}" class="input-field" id="entryDate">
+             <div class="input-with-icon" onclick="openMonthPicker()">
+                 <!-- Display Input (Read Only) -->
+                 <input type="text" value="${STATE.currentMonth.toLocaleDateString('en-US', {month: 'long', year: 'numeric'})}" 
+                        class="input-field with-icon-right" id="entryDateDisplay" readonly style="cursor: pointer;">
+                 <span class="material-icons-round input-icon right">expand_more</span>
+                 
+                 <!-- Hidden Actual Value Input for Save Logic -->
+                 <input type="hidden" value="${currentMonthStr}" id="entryDate">
+             </div>
         </div>
         
         <div id="members-entry-list">
@@ -540,6 +548,98 @@ function renderDailyEntry(container) {
             }, 300); // Slight delay to allow keyboard to pop up on mobile
         });
     });
+}
+
+// --- Custom Date Picker Logic ---
+let pickerYear = new Date().getFullYear();
+
+function openMonthPicker() {
+    // Check if picker already exists
+    if (document.getElementById('custom-month-picker')) return;
+
+    // Get current value
+    const currentVal = document.getElementById('entryDate').value; // YYYY-MM
+    if(currentVal) {
+        pickerYear = parseInt(currentVal.split('-')[0]);
+    }
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay active';
+    modal.id = 'custom-month-picker';
+    
+    // Close on click outside
+    modal.addEventListener('click', (e) => {
+        if(e.target === modal) closeMonthPicker();
+    });
+
+    document.body.appendChild(modal);
+    renderCustomMonthPicker();
+}
+
+function renderCustomMonthPicker() {
+    const modal = document.getElementById('custom-month-picker');
+    if(!modal) return;
+    
+    // Determine currently selected month to highlight
+    const currentVal = document.getElementById('entryDate') ? document.getElementById('entryDate').value : '';
+    const selectedMonth = (currentVal && parseInt(currentVal.split('-')[0]) === pickerYear) 
+                          ? parseInt(currentVal.split('-')[1]) - 1 
+                          : -1;
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    modal.innerHTML = `
+        <div class="month-picker-content">
+            <div class="year-selector">
+                <button class="btn-icon-only" onclick="changePickerYear(-1)">
+                    <span class="material-icons-round">chevron_left</span>
+                </button>
+                <span>${pickerYear}</span>
+                <button class="btn-icon-only" onclick="changePickerYear(1)">
+                    <span class="material-icons-round">chevron_right</span>
+                </button>
+            </div>
+            <div class="month-grid">
+                ${months.map((m, index) => `
+                    <button class="month-btn ${index === selectedMonth ? 'active' : ''}" 
+                            onclick="selectPickerMonth(${index})">
+                        ${m}
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function changePickerYear(delta) {
+    pickerYear += delta;
+    renderCustomMonthPicker();
+}
+
+function selectPickerMonth(monthIndex) {
+    const monthStr = String(monthIndex + 1).padStart(2, '0');
+    const fullStr = `${pickerYear}-${monthStr}`;
+    
+    // Update Hidden Input (Logic)
+    const entryDateInput = document.getElementById('entryDate');
+    if(entryDateInput) entryDateInput.value = fullStr;
+
+    // Update Display Input (Visual)
+    const displayInput = document.getElementById('entryDateDisplay');
+    if(displayInput) {
+        const date = new Date(pickerYear, monthIndex);
+        displayInput.value = date.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+    }
+
+    closeMonthPicker();
+}
+
+function closeMonthPicker() {
+    const modal = document.getElementById('custom-month-picker');
+    if(modal) {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+    }
 }
 
 function saveEntry() {
@@ -770,28 +870,44 @@ function renderSettings(container) {
                      onclick="setTheme('forest')"></div>
             </div>
             
-            <h3 style="margin-top:20px; margin-bottom:10px; font-size:1rem;">Custom Theme Creator</h3>
-            <div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div>
-                    <label>Primary (Neon)</label>
-                    <input type="color" id="custom-primary" class="input-field" style="height: 50px; padding: 5px;" value="#38bdf8" onchange="previewCustomTheme()">
-                </div>
-                <div>
-                    <label>Background Start</label>
-                    <input type="color" id="custom-bg-start" class="input-field" style="height: 50px; padding: 5px;" value="#0f172a" onchange="previewCustomTheme()">
-                </div>
-                <div>
-                    <label>Background End</label>
-                    <input type="color" id="custom-bg-end" class="input-field" style="height: 50px; padding: 5px;" value="#020617" onchange="previewCustomTheme()">
-                </div>
-                <div>
-                    <label>Text Color</label>
-                    <input type="color" id="custom-text" class="input-field" style="height: 50px; padding: 5px;" value="#f1f5f9" onchange="previewCustomTheme()">
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px;">
+                <h3 style="font-size:1rem; margin:0;">Custom Theme Creator</h3>
+                <button class="btn-icon-only" onclick="toggleCustomTheme()" style="width: 30px; height: 30px; background: rgba(255,255,255,0.05);">
+                    <span class="material-icons-round" id="theme-toggle-icon">expand_more</span>
+                </button>
             </div>
-            <button class="btn" style="width:100%;" onclick="saveCustomTheme()">
-                Apply Custom Theme
-            </button>
+            
+            <div id="custom-theme-wrapper" style="display: none; transition: all 0.3s ease;">
+                <div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label>Primary (Neon)</label>
+                        <input type="color" id="custom-primary" class="input-field" style="height: 50px; padding: 5px;" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--primary-color'] : THEMES[STATE.theme]['--primary-color']) || '#38bdf8'}" 
+                               oninput="previewCustomTheme()">
+                    </div>
+                    <div>
+                        <label>Background Start</label>
+                        <input type="color" id="custom-bg-start" class="input-field" style="height: 50px; padding: 5px;" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--bg-gradient-start'] : THEMES[STATE.theme]['--bg-gradient-start']) || '#0f172a'}" 
+                               oninput="previewCustomTheme()">
+                    </div>
+                    <div>
+                        <label>Background End</label>
+                        <input type="color" id="custom-bg-end" class="input-field" style="height: 50px; padding: 5px;" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--bg-gradient-end'] : THEMES[STATE.theme]['--bg-gradient-end']) || '#020617'}" 
+                               oninput="previewCustomTheme()">
+                    </div>
+                    <div>
+                        <label>Text Color</label>
+                        <input type="color" id="custom-text" class="input-field" style="height: 50px; padding: 5px;" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--text-main'] : THEMES[STATE.theme]['--text-main']) || '#f1f5f9'}" 
+                               oninput="previewCustomTheme()">
+                    </div>
+                </div>
+                <button class="btn" style="width:100%;" onclick="saveCustomTheme()">
+                    Apply Custom Theme (Save as New)
+                </button>
+            </div>
         </div>
         
         <button class="btn" style="width:100%; background: var(--danger-color); margin-top: 20px;" onclick="resetData()">
@@ -836,11 +952,39 @@ function saveCustomTheme() {
     renderSettings(document.getElementById('main-content'));
 }
 
+
 function setTheme(themeName) {
+    // Capture state before re-render
+    const wrapper = document.getElementById('custom-theme-wrapper');
+    const wasOpen = wrapper && wrapper.style.display !== 'none';
+
     STATE.theme = themeName;
     saveState();
     updateTheme();
     renderSettings(document.getElementById('main-content'));
+
+    // Restore state
+    if (wasOpen) {
+        const newWrapper = document.getElementById('custom-theme-wrapper');
+        const newIcon = document.getElementById('theme-toggle-icon');
+        if (newWrapper) {
+            newWrapper.style.display = 'block';
+            newWrapper.style.opacity = '1';
+        }
+        if (newIcon) {
+            newIcon.innerText = 'expand_less';
+        }
+    }
+    
+    // Auto-fill custom creator with this preset's colors immediately so user can tweak it
+    // We don't save this as 'custom' yet, just prep the UI
+    const theme = THEMES[themeName];
+    if (theme) {
+        // Values might be in local scope if we don't re-query DOM, 
+        // but 'renderSettings' refreshes DOM, so we need to set values after render.
+        // However, 'renderSettings' uses template literals which are evaluated *now*.
+        // So we actually need to change how renderSettings *gets* its default values.
+    }
 }
 
 function updateTheme() {
@@ -963,4 +1107,20 @@ window.exportDashboard = function() {
             exportContainer.style.width = ''; 
         });
     }, 800);
+}
+
+function toggleCustomTheme() {
+    const wrapper = document.getElementById('custom-theme-wrapper');
+    const icon = document.getElementById('theme-toggle-icon');
+    
+    if (wrapper.style.display === 'none') {
+        wrapper.style.display = 'block';
+        icon.innerText = 'expand_less';
+        // Add a small fade in
+        wrapper.style.opacity = 0;
+        setTimeout(() => wrapper.style.opacity = 1, 10);
+    } else {
+        wrapper.style.display = 'none';
+        icon.innerText = 'expand_more';
+    }
 }
