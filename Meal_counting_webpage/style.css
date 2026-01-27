@@ -2,9 +2,17 @@
     /* Base Colors - Default Theme (Dark Blue/Navy) */
     --bg-gradient-start: #0f172a;
     --bg-gradient-end: #020617;
-    --surface-color: rgba(30, 41, 59, 0.4);
+    --surface-color: rgba(30, 41, 59, 0.6);
+    /* Slightly more opaque for better contrast */
     /* Glass surface */
-    --surface-border: rgba(148, 163, 184, 0.1);
+    --surface-border: rgba(148, 163, 184, 0.2);
+
+    /* Spacing System */
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
 
     --primary-color: #38bdf8;
 
@@ -31,13 +39,37 @@
 
 body {
     font-family: var(--font-family);
-    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    /* Modern Mesh Gradient Background */
+    background-color: var(--bg-gradient-start);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
     background-attachment: fixed;
     color: var(--text-main);
     min-height: 100vh;
-    padding-bottom: calc(var(--nav-height) + 20px);
-    /* Space for nav */
+    padding-bottom: calc(var(--nav-height) + 40px);
     overflow-x: hidden;
+    /* Prevent horizontal scroll from scaling animations */
+    overflow-y: auto;
+}
+
+/* Scrollbar Polish */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--surface-border);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }
 
 /* Typography */
@@ -52,15 +84,45 @@ h4 {
 /* Glassmorphism Utility */
 .glass {
     background: var(--surface-color);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--surface-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border-radius: var(--radius-md);
     position: relative;
     overflow: hidden;
+}
+
+/* Shimmer Loading Effect */
+.glass::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right,
+            transparent 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 100%);
+    transform: skewX(-25deg);
+    animation: shimmer 6s infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 200%;
+    }
+
+    100% {
+        left: 200%;
+    }
 }
 
 /* Subtle Neon Accent on Hover or Static */
@@ -103,15 +165,16 @@ h4 {
     max-width: 400px;
     height: var(--nav-height);
     background: var(--surface-color);
-    /* Updated to use theme variable */
+    /* Darker backdrop for nav */
     backdrop-filter: blur(20px);
     border: 1px solid var(--surface-border);
-    border-radius: 40px;
+    border-radius: 24px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 1000;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
 }
 
 .nav-item {
@@ -159,9 +222,18 @@ h4 {
 
 .summary-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    /* Better responsiveness */
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+/* Specific Highlight for Meal Rate */
+.summary-card.highlight {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    border: 1px solid var(--surface-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
 }
 
 .summary-card {
@@ -200,6 +272,15 @@ h4 {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+}
+
+.table-container::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Webkit */
 }
 
 .balance-table {
@@ -433,6 +514,127 @@ input[type="month"] {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.theme-preset:hover {
+    transform: scale(1.05);
+}
+
+/* --- New Components --- */
+
+/* Avatars */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--surface-border));
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Stepper Input */
+.stepper-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid var(--surface-border);
+    padding: 6px;
+    width: 100%;
+    height: 50px;
+    /* Matches standard input height */
+    transition: border-color 0.3s;
+}
+
+.stepper-control:focus-within {
+    border-color: var(--primary-color);
+}
+
+.stepper-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    /* Slight BG for visibility */
+    color: var(--primary-color);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.stepper-btn:hover {
+    background: var(--primary-color);
+    color: #000;
+}
+
+.stepper-btn:active {
+    transform: scale(0.9);
+}
+
+.stepper-input {
+    flex: 1;
+    width: 100%;
+    text-align: center;
+    border: none;
+    background: transparent;
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 1.1rem;
+    appearance: textfield;
+    -moz-appearance: textfield;
+    outline: none;
+}
+
+/* Mobile: Remove stepper buttons and style as standard input */
+@media (max-width: 600px) {
+    .stepper-btn {
+        display: none;
+    }
+
+    .stepper-control {
+        padding: 0;
+        /* Remove padding to let input fill standard size */
+    }
+
+    .stepper-input {
+        text-align: left;
+        padding-left: 14px;
+        /* Standard input padding */
+    }
+}
+
+/* Status Cards */
+.status-card {
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 24px;
+    background: linear-gradient(to right, rgba(74, 222, 128, 0.1), transparent);
+    border-left: 4px solid var(--success-color);
+}
+
+.status-card.danger {
+    background: linear-gradient(to right, rgba(248, 113, 113, 0.1), transparent);
+    border-left: 4px solid var(--danger-color);
+}
+
+/* Chart Container */
+.chart-container {
+    height: 250px;
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .theme-preset.active {
@@ -504,6 +706,64 @@ input[type="month"] {
 }
 
 /* Animations */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.row-pop {
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    /* Start hidden */
+}
+
+/* Stagger delays for up to 20 items */
+.row-pop:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.row-pop:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.row-pop:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.row-pop:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.row-pop:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.row-pop:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+.row-pop:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.row-pop:nth-child(8) {
+    animation-delay: 0.4s;
+}
+
+.row-pop:nth-child(9) {
+    animation-delay: 0.45s;
+}
+
+.row-pop:nth-child(10) {
+    animation-delay: 0.5s;
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -658,7 +918,28 @@ input[type="month"] {
     /* box-shadow: 0 0 15px var(--primary-glow); */
 }
 
-.btn-modal.danger {
-    background: #ef4444;
-    color: white;
+
+/* Animations Stagger */
+.fadeInUp-stagger:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.fadeInUp-stagger:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.fadeInUp-stagger:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.fadeInUp-stagger:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.fadeInUp-stagger:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+.row-pop {
+    animation: fadeInUp 0.5s ease backwards;
 }

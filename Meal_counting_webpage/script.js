@@ -9,20 +9,20 @@ const STATE = {
 // Theme Presets
 const THEMES = {
     default: { // Black (Midnight Professional)
-        '--bg-gradient-start': '#0B0C10',
-        '--bg-gradient-end': '#1F2833',
-        '--primary-color': '#66FCF1',
+        '--bg-gradient-start': '#000000',
+        '--bg-gradient-end': '#000000',
+        '--primary-color': '#0866ff',
         '--text-main': '#FFFFFF',
         '--text-muted': '#C5C6C7',
         '--surface-color': 'rgba(26, 26, 29, 0.4)',  /* #1A1A1D converted to RGBA for glass */
-        '--surface-border': '#45A29E'
+        '--surface-border': '#0866ff'
     },
     light: {
-        '--bg-gradient-start': '#F8F9FA',
-        '--bg-gradient-end': '#E9ECEF',
-        '--primary-color': '#007BFF',
-        '--text-main': '#212529',
-        '--text-muted': '#6C757D',
+        '--bg-gradient-start': '#D9D9D9',
+        '--bg-gradient-end': '#D9D9D9',
+        '--primary-color': '#0866ff',
+        '--text-main': '#1E1E1E',
+        '--text-muted': '#656565',
         '--surface-color': 'rgba(255, 255, 255, 0.6)',
         '--surface-border': '#DEE2E6'
     },
@@ -161,9 +161,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+
+    
+    // Prevent re-rendering active page
+    let currentPage = 'dashboard';
+
     renderPage('dashboard');
     updateTheme();
 });
+
+// Helper: Get Initials
+function getInitials(name) {
+    return name
+        .split(' ')
+        .map(word => word[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase();
+}
+
+// Helper: Get Avatar HTML
+function getAvatar(name) {
+    return `<div class="avatar">${getInitials(name)}</div>`;
+}
+
+// Helper: Render Stepper
+function renderStepper(id, type, placeholder) {
+    return `
+        <div class="stepper-control">
+            <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', -1)">-</button>
+            <input type="number" min="0" placeholder="${placeholder}" 
+                   class="stepper-input member-${type}-input" 
+                   id="${type}-${id}" data-id="${id}">
+            <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', 1)">+</button>
+        </div>
+    `;
+}
+
+// Global Stepper Update
+window.updateStepper = function(id, type, delta) {
+    const input = document.getElementById(`${type}-${id}`);
+    if(input) {
+        let val = parseInt(input.value) || 0;
+        val = Math.max(0, val + delta);
+        input.value = val > 0 ? val : '';
+    }
+};
 
 // --- Modal System ---
 let modalCallback = null;
@@ -264,6 +308,10 @@ function renderPage(page) {
         }
     });
 
+    // Don't re-render if already on page (optional optimization)
+    // if (currentPage === page && document.getElementById('main-content').innerHTML !== '') return;
+    // currentPage = page;
+
     const content = document.getElementById('main-content');
     content.innerHTML = '';
     content.style.opacity = 0;
@@ -320,11 +368,19 @@ function renderMembers(container) {
         </div>
 
         <div id="members-list">
-            ${STATE.members.length === 0 ? '<div style="text-align:center; opacity:0.6; padding:20px;">No members yet. Add one above!</div>' : ''}
+            ${STATE.members.length === 0 ? `
+                <div style="text-align:center; opacity:0.6; padding:40px;">
+                    <span class="material-icons-round" style="font-size:48px; margin-bottom:10px;">group_add</span>
+                    <p>No members yet.<br>Add your first member above!</p>
+                </div>
+            ` : ''}
             ${STATE.members.map(m => `
-                <div class="glass glass-card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="font-weight:600;">${m.name}</div>
-                    <button class="btn-icon-only" style="background: rgba(248,113,113,0.2); color: #f87171;" onclick="deleteMember(${m.id})">
+                <div class="glass glass-card row-pop" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        ${getAvatar(m.name)}
+                        <div style="font-weight:600;">${m.name}</div>
+                    </div>
+                    <button class="btn-icon-only" style="background: rgba(248,113,113,0.15); color: #f87171;" onclick="deleteMember(${m.id})">
                         <span class="material-icons-round">delete</span>
                     </button>
                 </div>
@@ -368,19 +424,29 @@ function renderDashboard(container) {
         </div>
 
         <div class="summary-grid">
-            <div class="glass glass-card summary-card">
+            <div class="glass glass-card summary-card fadeInUp-stagger">
                 <h3>Total Meals</h3>
                 <div class="value">${stats.totalMeals}</div>
             </div>
-             <div class="glass glass-card summary-card">
+             <div class="glass glass-card summary-card fadeInUp-stagger">
                 <h3>Total Bazar</h3>
                 <div class="value">${stats.totalCost}</div>
             </div>
-            <div class="glass glass-card summary-card">
+            <div class="glass glass-card summary-card fadeInUp-stagger highlight">
                 <h3>Meal Rate</h3>
                 <div class="value">${stats.mealRate.toFixed(2)}</div>
             </div>
         </div>
+
+        <!-- Charts Section -->
+        ${stats.totalCost > 0 ? `
+            <div class="glass glass-card fadeInUp-stagger">
+                <div class="section-title">Expense Breakdown</div>
+                <div class="chart-container">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+        ` : ''}
 
         <div class="glass glass-card">
             <div class="section-title">
@@ -403,7 +469,7 @@ function renderDashboard(container) {
                             const mStats = stats.memberStats[m.id];
                             const balance = mStats.deposit - mStats.cost;
                             return `
-                                <tr>
+                                <tr class="row-pop">
                                     <td>${m.name}</td>
                                     <td>${mStats.meals}</td>
                                     <td>${mStats.deposit}</td>
@@ -425,6 +491,55 @@ function renderDashboard(container) {
     `;
     
     container.innerHTML = html;
+
+    // Draw Chart if data exists
+    if(stats.totalCost > 0) {
+        setTimeout(() => drawCostChart(stats), 100);
+    }
+}
+
+function drawCostChart(stats) {
+    const ctx = document.getElementById('costChart');
+    if(!ctx) return;
+
+    // Prepare Data
+    const labels = [];
+    const data = [];
+    const colors = [
+        '#38bdf8', '#4ade80', '#f87171', '#f472b6', '#a78bfa', '#fbbf24'
+    ]; // Just some nice colors
+
+    Object.keys(stats.memberStats).forEach((id, index) => {
+        const m = STATE.members.find(mem => mem.id == id);
+        if(m) {
+            labels.push(m.name);
+            data.push(stats.memberStats[id].cost);
+        }
+    });
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+                borderWidth: 0,
+                hoverOffset: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: { color: '#94a3b8', font: { family: 'Outfit', size: 10 } }
+                }
+            },
+            layout: { padding: 10 }
+        }
+    });
 }
 
 function calculateStats() {
@@ -495,16 +610,22 @@ function renderDailyEntry(container) {
         </div>
         
         <div id="members-entry-list">
-            ${STATE.members.map(m => `
-                <div class="glass glass-card entry-card">
-                    <div style="font-weight: 600; font-size: 0.9rem;">${m.name}</div>
+            ${STATE.members.map((m, index) => `
+                <div class="glass glass-card entry-card row-pop" style="animation-delay: ${index * 0.05}s">
+                    <div style="font-weight: 600; font-size: 0.9rem; display:flex; align-items:center; gap:8px;">
+                        ${getAvatar(m.name)} 
+                        ${m.name}
+                    </div>
                     <div>
                         <label>Meals</label>
-                        <input type="number" min="0" placeholder="0" class="input-field member-meal-input" data-id="${m.id}">
+                        ${renderStepper(m.id, 'meal', '0')}
                     </div>
                     <div>
                         <label>Bazar</label>
-                        <input type="number" min="0" placeholder="0" class="input-field member-bazar-input" data-id="${m.id}">
+                        <!-- Keep simple input for Bazar as it handles larger numbers better, or use stepper? Let's use simple input for money -->
+                        <div class="input-with-icon">
+                            <input type="number" min="0" placeholder="0" class="input-field member-bazar-input" data-id="${m.id}" style="padding-left:10px;">
+                        </div>
                     </div>
                 </div>
             `).join('')}
@@ -808,69 +929,69 @@ function renderSettings(container) {
         <div class="glass glass-card">
             <label style="margin-bottom:12px;">Theme Preset</label>
             <div class="theme-grid" style="grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));">
-                <div class="theme-preset ${STATE.theme === 'default' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'default' ? 'active' : ''}" 
                      title="Midnight Black"
-                     style="background: linear-gradient(135deg, #0B0C10, #1F2833); border: 2px solid #45A29E;"
+                     style="background: linear-gradient(135deg, #0B0C10, #1F2833); border: 2px solid #45A29E; animation-delay: 0.05s;"
                      onclick="setTheme('default')"></div>
-                <div class="theme-preset ${STATE.theme === 'light' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'light' ? 'active' : ''}" 
                      title="Clean Minimalist"
-                     style="background: linear-gradient(135deg, #F8F9FA, #E9ECEF); border: 2px solid #DEE2E6;"
+                     style="background: linear-gradient(135deg, #F8F9FA, #E9ECEF); border: 2px solid #DEE2E6; animation-delay: 0.1s;"
                      onclick="setTheme('light')"></div>
-                <div class="theme-preset ${STATE.theme === 'red' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'red' ? 'active' : ''}" 
                      title="Luxury Crimson"
-                     style="background: linear-gradient(135deg, #2B0B0B, #4A0E0E); border: 2px solid #8B0000;"
+                     style="background: linear-gradient(135deg, #2B0B0B, #4A0E0E); border: 2px solid #8B0000; animation-delay: 0.15s;"
                      onclick="setTheme('red')"></div>
-                <div class="theme-preset ${STATE.theme === 'green' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'green' ? 'active' : ''}" 
                      title="Forest Organic"
-                     style="background: linear-gradient(135deg, #051612, #0A2E26); border: 2px solid #2D5A50;"
+                     style="background: linear-gradient(135deg, #051612, #0A2E26); border: 2px solid #2D5A50; animation-delay: 0.2s;"
                      onclick="setTheme('green')"></div>
-                <div class="theme-preset ${STATE.theme === 'blue' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'blue' ? 'active' : ''}" 
                      title="Deep Ocean"
-                     style="background: linear-gradient(135deg, #020C1B, #0A192F); border: 2px solid #233554;"
+                     style="background: linear-gradient(135deg, #020C1B, #0A192F); border: 2px solid #233554; animation-delay: 0.25s;"
                      onclick="setTheme('blue')"></div>
-                <div class="theme-preset ${STATE.theme === 'lavender' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'lavender' ? 'active' : ''}" 
                      title="Creative Lavender"
-                     style="background: linear-gradient(135deg, #1A1B2E, #2D2B52); border: 2px solid #6272A4;"
+                     style="background: linear-gradient(135deg, #1A1B2E, #2D2B52); border: 2px solid #6272A4; animation-delay: 0.3s;"
                      onclick="setTheme('lavender')"></div>
-                <div class="theme-preset ${STATE.theme === 'orange' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'orange' ? 'active' : ''}" 
                      title="Cyber Orange"
-                     style="background: linear-gradient(135deg, #121212, #1E1E1E); border: 2px solid #FF9F1C;"
+                     style="background: linear-gradient(135deg, #121212, #1E1E1E); border: 2px solid #FF9F1C; animation-delay: 0.35s;"
                      onclick="setTheme('orange')"></div>
-                <div class="theme-preset ${STATE.theme === 'earth' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'earth' ? 'active' : ''}" 
                      title="Earth & Clay"
-                     style="background: linear-gradient(135deg, #FDFCF0, #F2EFE9); border: 2px solid #D9D4CC;"
+                     style="background: linear-gradient(135deg, #FDFCF0, #F2EFE9); border: 2px solid #D9D4CC; animation-delay: 0.4s;"
                      onclick="setTheme('earth')"></div>
-                <div class="theme-preset ${STATE.theme === 'aurora' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'aurora' ? 'active' : ''}" 
                      title="Aurora Night"
-                     style="background: linear-gradient(135deg, #050B16, #0B1E2D); border: 2px solid #1D4D4F;"
+                     style="background: linear-gradient(135deg, #050B16, #0B1E2D); border: 2px solid #1D4D4F; animation-delay: 0.45s;"
                      onclick="setTheme('aurora')"></div>
-                <div class="theme-preset ${STATE.theme === 'rosewood' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'rosewood' ? 'active' : ''}" 
                      title="Rosewood & Gold"
-                     style="background: linear-gradient(135deg, #1A0F0F, #2D1B1B); border: 2px solid #5E3D3D;"
+                     style="background: linear-gradient(135deg, #1A0F0F, #2D1B1B); border: 2px solid #5E3D3D; animation-delay: 0.5s;"
                      onclick="setTheme('rosewood')"></div>
-                <div class="theme-preset ${STATE.theme === 'nordic' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'nordic' ? 'active' : ''}" 
                      title="Nordic Frost"
-                     style="background: linear-gradient(135deg, #F0F4F8, #D9E2EC); border: 2px solid #BCCCDC;"
+                     style="background: linear-gradient(135deg, #F0F4F8, #D9E2EC); border: 2px solid #BCCCDC; animation-delay: 0.55s;"
                      onclick="setTheme('nordic')"></div>
-                <div class="theme-preset ${STATE.theme === 'dusk' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'dusk' ? 'active' : ''}" 
                      title="Cyberpunk Dusk"
-                     style="background: linear-gradient(135deg, #10002B, #240046); border: 2px solid #5A189A;"
+                     style="background: linear-gradient(135deg, #10002B, #240046); border: 2px solid #5A189A; animation-delay: 0.6s;"
                      onclick="setTheme('dusk')"></div>
-                <div class="theme-preset ${STATE.theme === 'sandstone' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'sandstone' ? 'active' : ''}" 
                      title="Sandstone & Slate"
-                     style="background: linear-gradient(135deg, #F5F2ED, #E8E3D9); border: 2px solid #CBD5E0;"
+                     style="background: linear-gradient(135deg, #F5F2ED, #E8E3D9); border: 2px solid #CBD5E0; animation-delay: 0.65s;"
                      onclick="setTheme('sandstone')"></div>
-                <div class="theme-preset ${STATE.theme === 'solar' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'solar' ? 'active' : ''}" 
                      title="Solar Flare"
-                     style="background: linear-gradient(135deg, #0F0F0F, #1A1612); border: 2px solid #3D3830;"
+                     style="background: linear-gradient(135deg, #0F0F0F, #1A1612); border: 2px solid #3D3830; animation-delay: 0.7s;"
                      onclick="setTheme('solar')"></div>
-                <div class="theme-preset ${STATE.theme === 'forest' ? 'active' : ''}" 
+                <div class="theme-preset row-pop ${STATE.theme === 'forest' ? 'active' : ''}" 
                      title="Deep Forest"
-                     style="background: linear-gradient(135deg, #0B130E, #16221B); border: 2px solid #386641;"
+                     style="background: linear-gradient(135deg, #0B130E, #16221B); border: 2px solid #386641; animation-delay: 0.75s;"
                      onclick="setTheme('forest')"></div>
             </div>
             
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px;">
+            <div class="row-pop" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; animation-delay: 0.8s;">
                 <h3 style="font-size:1rem; margin:0;">Custom Theme Creator</h3>
                 <button class="btn-icon-only" onclick="toggleCustomTheme()" style="width: 30px; height: 30px; background: rgba(255,255,255,0.05);">
                     <span class="material-icons-round" id="theme-toggle-icon">expand_more</span>
@@ -1038,31 +1159,32 @@ window.exportDashboard = function() {
             </div>
             
             <!-- Summary in a row -->
+            <!-- Summary in a row -->
             <div style="display: flex; justify-content: space-around; gap: 40px; margin-bottom: 100px; width: 100%;">
-                <div class="glass" style="flex: 1; text-align: center; padding: 50px; border-radius: 30px;">
-                    <div style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;">Total Meals</div>
+                <div style="flex: 1; text-align: center; padding: 50px; border-radius: 30px; border: 1px solid var(--surface-border); background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));">
+                    <div style="font-size: 2.9rem; color: var(--text-muted); margin-bottom: 15px;">Total Meals</div>
                     <div style="font-size: 6rem; font-weight: 800; line-height: 1; color: var(--text-main);">${stats.totalMeals}</div>
                 </div>
-                <div class="glass" style="flex: 1; text-align: center; padding: 50px; border-radius: 30px;">
-                    <div style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;">Total Cost</div>
+                <div style="flex: 1; text-align: center; padding: 50px; border-radius: 30px; border: 1px solid var(--surface-border); background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));">
+                    <div style="font-size: 2.9rem; color: var(--text-muted); margin-bottom: 15px;">Total Cost</div>
                     <div style="font-size: 6rem; font-weight: 800; line-height: 1; color: var(--text-main);">${stats.totalCost}</div>
                 </div>
-                <div class="glass" style="flex: 1; text-align: center; padding: 50px; border-radius: 30px;">
-                    <div style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;">Meal Rate</div>
+                <div style="flex: 1; text-align: center; padding: 50px; border-radius: 30px; border: 1px solid var(--surface-border); background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));">
+                    <div style="font-size: 2.9rem; color: var(--text-muted); margin-bottom: 15px;">Meal Rate</div>
                     <div style="font-size: 6rem; font-weight: 800; line-height: 1; color: var(--text-main);">${stats.mealRate.toFixed(2)}</div>
                 </div>
             </div>
             
-            <div class="glass" style="margin: 0 auto; width: 100%; padding: 80px; border-radius: 50px; border: 1px solid var(--surface-border);">
+            <div style="margin: 0 auto; width: 100%; padding: 80px; border-radius: 50px; border: 1px solid var(--surface-border); background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));">
                 <h3 style="text-align: center; font-size: 4.5rem; margin-bottom: 60px; color: var(--text-main); font-weight: 700;">Balance Overview</h3>
                 <table class="balance-table" style="font-size: 3rem; width: 100%; border-collapse: separate; border-spacing: 0 20px;">
                     <thead>
                         <tr style="border-bottom: 2px solid var(--surface-border);">
-                            <th style="padding: 20px; text-align: left; color: var(--text-muted); font-size: 2.5rem;">Member</th>
-                            <th style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 2.5rem;">Meals</th>
-                            <th style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 2.5rem;">Paid</th>
-                            <th style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 2.5rem;">Cost</th>
-                            <th style="padding: 20px; text-align: right; color: var(--text-muted); font-size: 2.5rem;">Balance</th>
+                            <th style="padding: 20px; text-align: left; color: var(--text-muted); font-size: 2.9rem;">Member</th>
+                            <th style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 2.9rem;">Meals</th>
+                            <th style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 2.9rem;">Paid</th>
+                            <th style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 2.9rem;">Cost</th>
+                            <th style="padding: 20px; text-align: right; color: var(--text-muted); font-size: 2.9rem;">Balance</th>
                         </tr>
                     </thead>
                     <tbody>
