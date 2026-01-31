@@ -8,23 +8,23 @@ const STATE = {
 
 // Theme Presets
 const THEMES = {
-    default: { // Black (Midnight Professional)
+    default: { // OLED Black (Professional)
         '--bg-gradient-start': '#000000',
         '--bg-gradient-end': '#000000',
-        '--primary-color': '#0866ff',
-        '--text-main': '#FFFFFF',
-        '--text-muted': '#C5C6C7',
-        '--surface-color': 'rgba(26, 26, 29, 0.4)',  /* #1A1A1D converted to RGBA for glass */
-        '--surface-border': '#0866ff'
+        '--primary-color': '#0A84FF',     // Vivid Professional Blue (iOS Dark Mode style)
+        '--text-main': '#FFFFFF',         // Pure White for max contrast
+        '--text-muted': '#8E8E93',        // Neutral Gray
+        '--surface-color': 'rgba(28, 28, 30, 0.6)', // Subtle dark surface
+        '--surface-border': '#3A3A3C'     // Dark Grey border
     },
     light: {
-        '--bg-gradient-start': '#D9D9D9',
-        '--bg-gradient-end': '#D9D9D9',
-        '--primary-color': '#0866ff',
-        '--text-main': '#1E1E1E',
-        '--text-muted': '#656565',
+        '--bg-gradient-start': '#F0F4F8',
+        '--bg-gradient-end': '#D9E2EC',
+        '--primary-color': '#1273EB',
+        '--text-main': '#102A43',
+        '--text-muted': '#486581',
         '--surface-color': 'rgba(255, 255, 255, 0.6)',
-        '--surface-border': '#DEE2E6'
+        '--surface-border': '#BCCCDC'
     },
     red: {
         '--bg-gradient-start': '#2B0B0B',
@@ -98,15 +98,6 @@ const THEMES = {
         '--surface-color': 'rgba(54, 34, 34, 0.4)',
         '--surface-border': '#5E3D3D'
     },
-    nordic: {
-        '--bg-gradient-start': '#F0F4F8',
-        '--bg-gradient-end': '#D9E2EC',
-        '--primary-color': '#1273EB',
-        '--text-main': '#102A43',
-        '--text-muted': '#486581',
-        '--surface-color': 'rgba(255, 255, 255, 0.6)',
-        '--surface-border': '#BCCCDC'
-    },
     dusk: {
         '--bg-gradient-start': '#10002B',
         '--bg-gradient-end': '#240046',
@@ -150,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadState();
     setupNavigation();
     setupModal(); // Initialize custom modal
-    
+
     // Global Enter key for Modals
     document.addEventListener('keydown', (e) => {
         const modal = document.getElementById('custom-modal');
@@ -163,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    
+
     // Prevent re-rendering active page
     let currentPage = 'dashboard';
 
@@ -200,9 +191,9 @@ function renderStepper(id, type, placeholder) {
 }
 
 // Global Stepper Update
-window.updateStepper = function(id, type, delta) {
+window.updateStepper = function (id, type, delta) {
     const input = document.getElementById(`${type}-${id}`);
-    if(input) {
+    if (input) {
         let val = parseInt(input.value) || 0;
         val = Math.max(0, val + delta);
         input.value = val > 0 ? val : '';
@@ -240,14 +231,14 @@ function showModal({ title, message, type = 'alert', onConfirm = null, confirmTe
     const modal = document.getElementById('custom-modal');
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-message').innerText = message;
-    
+
     const confirmBtn = document.getElementById('modal-confirm-btn');
     const cancelBtn = modal.querySelector('.cancel');
-    
+
     confirmBtn.innerText = confirmText;
-    
+
     // Style danger button
-    if(danger) {
+    if (danger) {
         confirmBtn.classList.add('danger');
         confirmBtn.classList.remove('confirm');
     } else {
@@ -315,9 +306,9 @@ function renderPage(page) {
     const content = document.getElementById('main-content');
     content.innerHTML = '';
     content.style.opacity = 0;
-    
+
     setTimeout(() => {
-        switch(page) {
+        switch (page) {
             case 'dashboard': renderDashboard(content); break;
             case 'daily': renderDailyEntry(content); break;
             case 'history': renderHistory(content); break;
@@ -335,7 +326,7 @@ function addMember() {
     const nameInput = document.getElementById('new-member-name');
     const name = nameInput.value.trim();
     if (!name) return;
-    
+
     const newId = STATE.members.length > 0 ? Math.max(...STATE.members.map(m => m.id)) + 1 : 1;
     STATE.members.push({ id: newId, name: name, deposit: 0 });
     saveState();
@@ -351,9 +342,9 @@ function deleteMember(id) {
         confirmText: 'Delete',
         danger: true,
         onConfirm: () => {
-             STATE.members = STATE.members.filter(m => m.id !== id);
-             saveState();
-             renderMembers(document.getElementById('main-content'));
+            STATE.members = STATE.members.filter(m => m.id !== id);
+            saveState();
+            renderMembers(document.getElementById('main-content'));
         }
     });
 }
@@ -412,10 +403,10 @@ function showBalanceInfo() {
 
 function renderDashboard(container) {
     const stats = calculateStats();
-    
+
     // Header
     const month = STATE.currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    
+
     const html = `
         <div class="month-selector glassglass">
             <button class="btn btn-icon-only glass" onclick="changeMonth(-1)"><span class="material-icons-round">chevron_left</span></button>
@@ -466,9 +457,9 @@ function renderDashboard(container) {
                     </thead>
                     <tbody>
                         ${STATE.members.map(m => {
-                            const mStats = stats.memberStats[m.id];
-                            const balance = mStats.deposit - mStats.cost;
-                            return `
+        const mStats = stats.memberStats[m.id];
+        const balance = mStats.deposit - mStats.cost;
+        return `
                                 <tr class="row-pop">
                                     <td>${m.name}</td>
                                     <td>${mStats.meals}</td>
@@ -479,7 +470,7 @@ function renderDashboard(container) {
                                     </td>
                                 </tr>
                             `;
-                        }).join('')}
+    }).join('')}
                     </tbody>
                 </table>
             </div>
@@ -489,18 +480,18 @@ function renderDashboard(container) {
             <span class="material-icons-round">download</span> Download Monthly Report
         </button>
     `;
-    
+
     container.innerHTML = html;
 
     // Draw Chart if data exists
-    if(stats.totalCost > 0) {
+    if (stats.totalCost > 0) {
         setTimeout(() => drawCostChart(stats), 100);
     }
 }
 
 function drawCostChart(stats) {
     const ctx = document.getElementById('costChart');
-    if(!ctx) return;
+    if (!ctx) return;
 
     // Prepare Data
     const labels = [];
@@ -511,7 +502,7 @@ function drawCostChart(stats) {
 
     Object.keys(stats.memberStats).forEach((id, index) => {
         const m = STATE.members.find(mem => mem.id == id);
-        if(m) {
+        if (m) {
             labels.push(m.name);
             data.push(stats.memberStats[id].cost);
         }
@@ -546,11 +537,11 @@ function calculateStats() {
     let totalMeals = 0;
     let totalCost = 0;
     const memberStats = {};
-    
+
     STATE.members.forEach(m => {
         memberStats[m.id] = { meals: 0, cost: 0, deposit: m.deposit };
     });
-    
+
     const currentYear = STATE.currentMonth.getFullYear();
     const currentMonth = STATE.currentMonth.getMonth();
 
@@ -558,27 +549,27 @@ function calculateStats() {
         const entryDate = new Date(entry.date);
         if (entryDate.getFullYear() === currentYear && entryDate.getMonth() === currentMonth) {
             Object.entries(entry.meals).forEach(([id, count]) => {
-                if(memberStats[id]) {
+                if (memberStats[id]) {
                     memberStats[id].meals += count;
                     totalMeals += count;
                 }
             });
-            
+
             Object.entries(entry.bazar || {}).forEach(([id, amount]) => {
-                 totalCost += amount;
-                 if(memberStats[id]) {
-                    memberStats[id].deposit += amount; 
-                 }
+                totalCost += amount;
+                if (memberStats[id]) {
+                    memberStats[id].deposit += amount;
+                }
             });
         }
     });
-    
+
     const mealRate = totalMeals > 0 ? totalCost / totalMeals : 0;
-    
+
     Object.keys(memberStats).forEach(id => {
         memberStats[id].cost = memberStats[id].meals * mealRate;
     });
-    
+
     return { totalMeals, totalCost, mealRate, memberStats };
 }
 
@@ -593,14 +584,14 @@ function renderDailyEntry(container) {
     const year = STATE.currentMonth.getFullYear();
     const month = String(STATE.currentMonth.getMonth() + 1).padStart(2, '0');
     const currentMonthStr = `${year}-${month}`;
-    
+
     const html = `
         <h2 class="section-title">Monthly Entry</h2>
         <div class="glass glass-card input-group">
              <label>Select Month</label>
              <div class="input-with-icon" onclick="openMonthPicker()">
                  <!-- Display Input (Read Only) -->
-                 <input type="text" value="${STATE.currentMonth.toLocaleDateString('en-US', {month: 'long', year: 'numeric'})}" 
+                 <input type="text" value="${STATE.currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}" 
                         class="input-field with-icon-right" id="entryDateDisplay" readonly style="cursor: pointer;">
                  <span class="material-icons-round input-icon right">expand_more</span>
                  
@@ -652,7 +643,7 @@ function renderDailyEntry(container) {
                 } else {
                     // Trigger visual click on save button
                     const saveBtn = container.querySelector('.btn-inline-save');
-                    if(saveBtn) {
+                    if (saveBtn) {
                         saveBtn.focus(); // Move focus to button
                         saveBtn.click(); // Trigger click
                     } else {
@@ -661,7 +652,7 @@ function renderDailyEntry(container) {
                 }
             }
         });
-        
+
         // Auto-scroll to center on focus
         input.addEventListener('focus', (e) => {
             setTimeout(() => {
@@ -680,17 +671,17 @@ function openMonthPicker() {
 
     // Get current value
     const currentVal = document.getElementById('entryDate').value; // YYYY-MM
-    if(currentVal) {
+    if (currentVal) {
         pickerYear = parseInt(currentVal.split('-')[0]);
     }
 
     const modal = document.createElement('div');
     modal.className = 'modal-overlay active';
     modal.id = 'custom-month-picker';
-    
+
     // Close on click outside
     modal.addEventListener('click', (e) => {
-        if(e.target === modal) closeMonthPicker();
+        if (e.target === modal) closeMonthPicker();
     });
 
     document.body.appendChild(modal);
@@ -699,13 +690,13 @@ function openMonthPicker() {
 
 function renderCustomMonthPicker() {
     const modal = document.getElementById('custom-month-picker');
-    if(!modal) return;
-    
+    if (!modal) return;
+
     // Determine currently selected month to highlight
     const currentVal = document.getElementById('entryDate') ? document.getElementById('entryDate').value : '';
-    const selectedMonth = (currentVal && parseInt(currentVal.split('-')[0]) === pickerYear) 
-                          ? parseInt(currentVal.split('-')[1]) - 1 
-                          : -1;
+    const selectedMonth = (currentVal && parseInt(currentVal.split('-')[0]) === pickerYear)
+        ? parseInt(currentVal.split('-')[1]) - 1
+        : -1;
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -740,16 +731,16 @@ function changePickerYear(delta) {
 function selectPickerMonth(monthIndex) {
     const monthStr = String(monthIndex + 1).padStart(2, '0');
     const fullStr = `${pickerYear}-${monthStr}`;
-    
+
     // Update Hidden Input (Logic)
     const entryDateInput = document.getElementById('entryDate');
-    if(entryDateInput) entryDateInput.value = fullStr;
+    if (entryDateInput) entryDateInput.value = fullStr;
 
     // Update Display Input (Visual)
     const displayInput = document.getElementById('entryDateDisplay');
-    if(displayInput) {
+    if (displayInput) {
         const date = new Date(pickerYear, monthIndex);
-        displayInput.value = date.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+        displayInput.value = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     }
 
     closeMonthPicker();
@@ -757,7 +748,7 @@ function selectPickerMonth(monthIndex) {
 
 function closeMonthPicker() {
     const modal = document.getElementById('custom-month-picker');
-    if(modal) {
+    if (modal) {
         modal.classList.remove('active');
         setTimeout(() => modal.remove(), 300);
     }
@@ -767,17 +758,17 @@ function saveEntry() {
     let date = document.getElementById('entryDate').value; // YYYY-MM
     const meals = {};
     const bazar = {};
-    
+
     document.querySelectorAll('.member-meal-input').forEach(input => {
         const val = parseInt(input.value);
         if (val > 0) meals[input.dataset.id] = val;
     });
-    
+
     document.querySelectorAll('.member-bazar-input').forEach(input => {
         const val = parseInt(input.value);
         if (val > 0) bazar[input.dataset.id] = val;
     });
-    
+
     if (Object.keys(meals).length === 0 && Object.keys(bazar).length === 0) {
         showModal({
             title: 'Wait!',
@@ -786,10 +777,10 @@ function saveEntry() {
         });
         return;
     }
-    
+
     // Append a day to ensure stats calculation works reliably (middle of month avoids potential timezone edge cases)
-    if(date.length === 7) { 
-        date += '-15'; 
+    if (date.length === 7) {
+        date += '-15';
     }
 
     STATE.entries.push({ date, meals, bazar });
@@ -804,8 +795,8 @@ function saveEntry() {
 
 // --- History Component ---
 function renderHistory(container) {
-    const sorted = [...STATE.entries].sort((a,b) => new Date(b.date) - new Date(a.date));
-    
+    const sorted = [...STATE.entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+
     if (sorted.length === 0) {
         container.innerHTML = `
             <h2 class="section-title">History</h2>
@@ -820,14 +811,14 @@ function renderHistory(container) {
         <h2 class="section-title">History</h2>
         <div class="history-list">
             ${sorted.map((entry) => {
-                const totalM = Object.values(entry.meals).reduce((a,b)=>a+b, 0);
-                const totalB = Object.values(entry.bazar || {}).reduce((a,b)=>a+b, 0);
-                
-                const originalIndex = STATE.entries.indexOf(entry);
+        const totalM = Object.values(entry.meals).reduce((a, b) => a + b, 0);
+        const totalB = Object.values(entry.bazar || {}).reduce((a, b) => a + b, 0);
 
-                const entryMealRate = totalM > 0 ? totalB / totalM : 0;
+        const originalIndex = STATE.entries.indexOf(entry);
 
-                const details = `
+        const entryMealRate = totalM > 0 ? totalB / totalM : 0;
+
+        const details = `
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; color: var(--text-muted);">
                             <thead>
@@ -840,14 +831,14 @@ function renderHistory(container) {
                             </thead>
                             <tbody>
                                 ${STATE.members.map(m => {
-                                    const mMeals = entry.meals[m.id] || 0;
-                                    const mBazar = (entry.bazar && entry.bazar[m.id]) || 0;
-                                    const mCost = mMeals * entryMealRate;
-                                    const mBalance = mBazar - mCost;
-                                    
-                                    if(mMeals === 0 && mBazar === 0) return '';
-                                    
-                                    return `
+            const mMeals = entry.meals[m.id] || 0;
+            const mBazar = (entry.bazar && entry.bazar[m.id]) || 0;
+            const mCost = mMeals * entryMealRate;
+            const mBalance = mBazar - mCost;
+
+            if (mMeals === 0 && mBazar === 0) return '';
+
+            return `
                                         <tr>
                                             <td style="padding: 4px; color: var(--text-main); font-weight: 500;">${m.name}</td>
                                             <td style="padding: 4px; text-align: center;">${mMeals}</td>
@@ -857,7 +848,7 @@ function renderHistory(container) {
                                             </td>
                                         </tr>
                                     `;
-                                }).join('')}
+        }).join('')}
                             </tbody>
                         </table>
                         <div style="margin-top: 8px; font-size: 0.7rem; opacity: 0.6; text-align: right;">
@@ -866,11 +857,11 @@ function renderHistory(container) {
                     </div>
                 `;
 
-                return `
+        return `
                 <div class="glass glass-card history-item" onclick="toggleHistory(this)" style="position: relative;">
                     <div style="display:flex; justify-content:space-between; align-items:center; padding-right: 30px;">
                         <div class="history-date">
-                            <span>${new Date(entry.date).toLocaleDateString('en-US', {day:'numeric', month:'short'})}</span>
+                            <span>${new Date(entry.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</span>
                             <span>${new Date(entry.date).getFullYear()}</span>
                         </div>
                         <div style="text-align: right;">
@@ -890,7 +881,7 @@ function renderHistory(container) {
                     </div>
                 </div>
                 `;
-            }).join('')}
+    }).join('')}
         </div>
     `;
     container.innerHTML = html;
@@ -911,11 +902,11 @@ function deleteEntry(index) {
     });
 }
 
-window.toggleHistory = function(element) {
+window.toggleHistory = function (element) {
     const details = element.querySelector('.history-details');
     if (details.style.display === 'none') {
         details.style.display = 'block';
-        element.style.background = 'rgba(255, 255, 255, 0.08)'; 
+        element.style.background = 'rgba(255, 255, 255, 0.08)';
     } else {
         details.style.display = 'none';
         element.style.background = '';
@@ -925,17 +916,24 @@ window.toggleHistory = function(element) {
 // --- Settings Component ---
 function renderSettings(container) {
     container.innerHTML = `
+        <h2 class="section-title">Settings</h2>
+
+        <!-- PWA Install Button (Hidden by default) -->
+        <button id="pwa-install-btn" class="btn" style="width:100%; margin-bottom: 20px; background: linear-gradient(135deg, #00C6FB, #005BEA); display: none;" onclick="installPWA()">
+            <span class="material-icons-round">download</span> Install App
+        </button>
+
         <h2 class="section-title">Appearance</h2>
         <div class="glass glass-card">
             <label style="margin-bottom:12px;">Theme Preset</label>
             <div class="theme-grid" style="grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));">
                 <div class="theme-preset row-pop ${STATE.theme === 'default' ? 'active' : ''}" 
-                     title="Midnight Black"
-                     style="background: linear-gradient(135deg, #0B0C10, #1F2833); border: 2px solid #45A29E; animation-delay: 0.05s;"
+                     title="Professional Black"
+                     style="background: #000000; border: 2px solid #0A84FF; animation-delay: 0.05s;"
                      onclick="setTheme('default')"></div>
                 <div class="theme-preset row-pop ${STATE.theme === 'light' ? 'active' : ''}" 
-                     title="Clean Minimalist"
-                     style="background: linear-gradient(135deg, #F8F9FA, #E9ECEF); border: 2px solid #DEE2E6; animation-delay: 0.1s;"
+                     title="Professional White"
+                     style="background: #ffffff; border: 2px solid #007AFF; animation-delay: 0.1s;"
                      onclick="setTheme('light')"></div>
                 <div class="theme-preset row-pop ${STATE.theme === 'red' ? 'active' : ''}" 
                      title="Luxury Crimson"
@@ -969,10 +967,6 @@ function renderSettings(container) {
                      title="Rosewood & Gold"
                      style="background: linear-gradient(135deg, #1A0F0F, #2D1B1B); border: 2px solid #5E3D3D; animation-delay: 0.5s;"
                      onclick="setTheme('rosewood')"></div>
-                <div class="theme-preset row-pop ${STATE.theme === 'nordic' ? 'active' : ''}" 
-                     title="Nordic Frost"
-                     style="background: linear-gradient(135deg, #F0F4F8, #D9E2EC); border: 2px solid #BCCCDC; animation-delay: 0.55s;"
-                     onclick="setTheme('nordic')"></div>
                 <div class="theme-preset row-pop ${STATE.theme === 'dusk' ? 'active' : ''}" 
                      title="Cyberpunk Dusk"
                      style="background: linear-gradient(135deg, #10002B, #240046); border: 2px solid #5A189A; animation-delay: 0.6s;"
@@ -1003,25 +997,25 @@ function renderSettings(container) {
                     <div>
                         <label>Primary (Neon)</label>
                         <input type="color" id="custom-primary" class="input-field" style="height: 50px; padding: 5px;" 
-                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--primary-color'] : THEMES[STATE.theme]['--primary-color']) || '#38bdf8'}" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--primary-color'] : (THEMES[STATE.theme] || THEMES['default'])['--primary-color']) || '#38bdf8'}" 
                                oninput="previewCustomTheme()">
                     </div>
                     <div>
                         <label>Background Start</label>
                         <input type="color" id="custom-bg-start" class="input-field" style="height: 50px; padding: 5px;" 
-                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--bg-gradient-start'] : THEMES[STATE.theme]['--bg-gradient-start']) || '#0f172a'}" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--bg-gradient-start'] : (THEMES[STATE.theme] || THEMES['default'])['--bg-gradient-start']) || '#0f172a'}" 
                                oninput="previewCustomTheme()">
                     </div>
                     <div>
                         <label>Background End</label>
                         <input type="color" id="custom-bg-end" class="input-field" style="height: 50px; padding: 5px;" 
-                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--bg-gradient-end'] : THEMES[STATE.theme]['--bg-gradient-end']) || '#020617'}" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--bg-gradient-end'] : (THEMES[STATE.theme] || THEMES['default'])['--bg-gradient-end']) || '#020617'}" 
                                oninput="previewCustomTheme()">
                     </div>
                     <div>
                         <label>Text Color</label>
                         <input type="color" id="custom-text" class="input-field" style="height: 50px; padding: 5px;" 
-                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--text-main'] : THEMES[STATE.theme]['--text-main']) || '#f1f5f9'}" 
+                               value="${(STATE.theme === 'custom' ? STATE.customTheme['--text-main'] : (THEMES[STATE.theme] || THEMES['default'])['--text-main']) || '#f1f5f9'}" 
                                oninput="previewCustomTheme()">
                     </div>
                 </div>
@@ -1034,7 +1028,22 @@ function renderSettings(container) {
         <button class="btn" style="width:100%; background: var(--danger-color); margin-top: 20px;" onclick="resetData()">
             Reset All Data
         </button>
+        
+        <script>
+            // Check install availability immediately when rendering specific checks
+            if (deferredPrompt) {
+                document.getElementById('pwa-install-btn').style.display = 'flex';
+            }
+        </script>
     `;
+
+    // Check global deferredPrompt in the next tick to ensure button exists
+    setTimeout(() => {
+        if (window.deferredPrompt) {
+            const btn = document.getElementById('pwa-install-btn');
+            if (btn) btn.style.display = 'flex';
+        }
+    }, 0);
 }
 
 function previewCustomTheme() {
@@ -1042,7 +1051,7 @@ function previewCustomTheme() {
     const bgStart = document.getElementById('custom-bg-start').value;
     const bgEnd = document.getElementById('custom-bg-end').value;
     const text = document.getElementById('custom-text').value;
-    
+
     document.documentElement.style.setProperty('--primary-color', primary);
     document.documentElement.style.setProperty('--primary-glow', primary + '4d');
     document.documentElement.style.setProperty('--bg-gradient-start', bgStart);
@@ -1055,7 +1064,7 @@ function saveCustomTheme() {
     const bgStart = document.getElementById('custom-bg-start').value;
     const bgEnd = document.getElementById('custom-bg-end').value;
     const text = document.getElementById('custom-text').value;
-    
+
     STATE.theme = 'custom';
     STATE.customTheme = {
         '--primary-color': primary,
@@ -1096,7 +1105,7 @@ function setTheme(themeName) {
             newIcon.innerText = 'expand_less';
         }
     }
-    
+
     // Auto-fill custom creator with this preset's colors immediately so user can tweak it
     // We don't save this as 'custom' yet, just prep the UI
     const theme = THEMES[themeName];
@@ -1132,25 +1141,25 @@ function resetData() {
         confirmText: 'Reset Forever',
         danger: true,
         onConfirm: () => {
-             STATE.entries = [];
-             STATE.members.forEach(m => m.deposit = 0); 
-             saveState();
-             location.reload();
+            STATE.entries = [];
+            STATE.members.forEach(m => m.deposit = 0);
+            saveState();
+            location.reload();
         }
     });
 }
 
 // --- Export Logic ---
-window.exportDashboard = function() {
+window.exportDashboard = function () {
     const stats = calculateStats();
     const month = STATE.currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     const today = new Date().toLocaleDateString();
 
     const exportContainer = document.getElementById('export-container');
-    
+
     // High-res layout, wider container for Full HD feel
-    exportContainer.style.width = '1920px'; 
-    
+    exportContainer.style.width = '1920px';
+
     exportContainer.innerHTML = `
         <div class="export-layout" style="width: 1920px; min-height: 1080px; padding: 100px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));">
             <div class="export-header" style="text-align: center; margin-bottom: 80px;">
@@ -1189,9 +1198,9 @@ window.exportDashboard = function() {
                     </thead>
                     <tbody>
                         ${STATE.members.map(m => {
-                            const mStats = stats.memberStats[m.id];
-                            const balance = mStats.deposit - mStats.cost;
-                            return `
+        const mStats = stats.memberStats[m.id];
+        const balance = mStats.deposit - mStats.cost;
+        return `
                                 <tr>
                                     <td style="padding: 25px; text-align: left; font-size: 3.5rem; font-weight: 600;">${m.name}</td>
                                     <td style="padding: 25px; text-align: center; font-size: 3.5rem;">${mStats.meals}</td>
@@ -1202,7 +1211,7 @@ window.exportDashboard = function() {
                                     </td>
                                 </tr>
                             `;
-                        }).join('')}
+    }).join('')}
                     </tbody>
                 </table>
             </div>
@@ -1226,7 +1235,7 @@ window.exportDashboard = function() {
             link.href = canvas.toDataURL('image/png');
             link.click();
             exportContainer.innerHTML = '';
-            exportContainer.style.width = ''; 
+            exportContainer.style.width = '';
         });
     }, 800);
 }
@@ -1234,7 +1243,7 @@ window.exportDashboard = function() {
 function toggleCustomTheme() {
     const wrapper = document.getElementById('custom-theme-wrapper');
     const icon = document.getElementById('theme-toggle-icon');
-    
+
     if (wrapper.style.display === 'none') {
         wrapper.style.display = 'block';
         icon.innerText = 'expand_less';
@@ -1245,4 +1254,46 @@ function toggleCustomTheme() {
         wrapper.style.display = 'none';
         icon.innerText = 'expand_more';
     }
+}
+
+// --- PWA Support ---
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+
+    // Update UI notify the user they can install the PWA
+    // If the user is on the settings page, show the button
+    const btn = document.getElementById('pwa-install-btn');
+    if (btn) {
+        btn.style.display = 'flex';
+    }
+
+    console.log('[PWA] BeforeInstallPrompt captured');
+});
+
+window.addEventListener('appinstalled', (evt) => {
+    console.log('[PWA] App Installed');
+    deferredPrompt = null;
+    const btn = document.getElementById('pwa-install-btn');
+    if (btn) btn.style.display = 'none';
+});
+
+async function installPWA() {
+    if (!deferredPrompt) {
+        return;
+    }
+    // Show the install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`[PWA] User response to the install prompt: ${outcome}`);
+    // We've used the prompt, and can't use it again, throw it away
+    deferredPrompt = null;
+
+    const btn = document.getElementById('pwa-install-btn');
+    if (btn) btn.style.display = 'none';
 }
