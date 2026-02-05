@@ -1,0 +1,513 @@
+/* --- New Settings Page Styles --- */
+.settings-group {
+    margin-bottom: 32px;
+}
+
+.settings-label {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.btn-group {
+    display: flex;
+    background: var(--surface-color);
+    padding: 4px;
+    border-radius: .375rem;
+    gap: 4px;
+}
+
+.btn-group-item {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    border-radius: .375rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-group-item:hover {
+    color: var(--text-main);
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.btn-group-item.active {
+    background: var(--primary-color);
+    color: #000000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+
+/* Color Grids */
+.color-section-title {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+}
+
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2px;
+    margin-bottom: 24px;
+    max-width: 420px;
+}
+
+.color-option {
+    width: 100%;
+    aspect-ratio: 1;
+    height: auto;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.1s;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.color-option:hover {
+    z-index: 10;
+    border-color: rgba(255, 255, 255);
+}
+
+.color-option.active {
+    border-color: var(--text-main);
+    /* outline: 2px solid var(--text-main); */
+}
+
+.color-option.active::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 18px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    font-weight: bold;
+}
+
+/* Custom Color Button */
+.custom-color-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: .375rem;
+    background: rgba(128, 128, 128, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-main);
+    border: 2px solid transparent;
+}
+
+.custom-color-btn:hover {
+    background: rgba(128, 128, 128, 0.3);
+}
+
+/* Text Size Preview */
+.text-size-preview {
+    margin-top: 10px;
+    padding: 10px;
+    background: var(--surface-color);
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--surface-border);
+}
+
+/* Checkbox specific to Windows style */
+.windows-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+/* Theme Customizer Grid (Might be unused if removed, keeping just in case) */
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.theme-preset {
+    height: 80px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.theme-preset:hover {
+    filter: brightness(0.85);
+}
+
+.theme-preset.active {
+    border-color: var(--primary-color);
+}
+
+/* --- Windows-style Custom Color Picker (Exact Replica) --- */
+.cp-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    padding: 0;
+}
+
+.cp-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.cp-modal {
+    background: var(--surface-color);
+    /* Adaptive background */
+    border: 1px solid var(--surface-border);
+    border-radius: .375rem;
+    width: 100%;
+    max-width: 530px;
+    /* Verified width */
+    max-height: 95vh;
+    box-shadow: 0 0 0 1px var(--surface-border), 0 16px 36px rgba(0, 0, 0, 0.5);
+    color: var(--text-main);
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    position: relative;
+    margin: auto;
+    animation: modalIn 0.2s forwards;
+}
+
+@keyframes modalIn {
+    from {
+        transform: scale(0.98);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.cp-title-bar {
+    padding: calc(22px + env(safe-area-inset-top)) 24px 10px 24px;
+    background: transparent;
+}
+
+.cp-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.cp-body {
+    padding: 0 24px;
+    padding-bottom: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex: 1;
+    /* Custom Scrollbar - Hidden but scrollable */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.cp-body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Spectrum & Preview Bar Container */
+.cp-main-area {
+    display: flex;
+    gap: 12px;
+    height: 350px;
+    /* Tall square */
+    margin-bottom: 24px;
+    flex-shrink: 0;
+}
+
+.cp-spectrum-box {
+    flex: 1;
+    /* Takes most space */
+    background:
+        linear-gradient(to top, white, transparent),
+        linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+    position: relative;
+    border: none;
+}
+
+/* The circular selector on the spectrum */
+.cp-spectrum-handle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    /* box-shadow: 0 0 0 1px black; */
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* The static bar on the right (Selected Color) */
+.cp-current-color-bar {
+    width: 48px;
+    height: 100%;
+    background: #0078D4;
+    /* Updates via JS */
+    border: none;
+}
+
+/* Value Slider */
+.cp-slider-track {
+    height: 12px;
+    min-height: 12px;
+    /* Forced visibility */
+    width: 100%;
+    /* Gradient set by JS */
+    background: #333;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 24px;
+}
+
+/* The pill slider handle */
+.cp-slider-handle {
+    position: absolute;
+    top: -5px;
+    bottom: -4px;
+    width: 8px;
+    height: 25px;
+    background: white;
+    border-radius: 8px;
+    /* Pill shape */
+    transform: translateX(-50%);
+    pointer-events: none;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+/* More/Less Toggle */
+.cp-toggle-more {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    gap: 8px;
+    align-self: flex-end;
+}
+
+.cp-toggle-more:hover {
+    color: var(--text-main);
+}
+
+/* Details Section (Inputs) */
+.cp-details {
+    display: none;
+    margin-bottom: 24px;
+    gap: 12px;
+}
+
+.cp-details.open {
+    display: grid;
+    /* Explicit 50/50 columns */
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+}
+
+/* Input Columns */
+.cp-inputs-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Rows */
+.cp-input-row {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    /* Force row height */
+}
+
+/* Specific fix for Hex Label alignment */
+.cp-input-row .cp-label {
+    margin-left: 12px;
+    color: var(--text-main);
+    font-size: 14px;
+    min-width: 40px;
+    text-align: left;
+}
+
+.cp-input {
+    background: rgba(128, 128, 128, 0.1);
+    border: 2px solid var(--surface-border);
+    color: var(--text-main);
+    padding: 0 12px;
+    /* Center text vertically */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    width: 100%;
+    max-width: 130px;
+    height: 32px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+    /* Critical for size matching */
+}
+
+.cp-input:hover {
+    border-color: var(--text-muted);
+}
+
+.cp-input:focus {
+    background: var(--surface-color);
+    border-color: var(--primary-color);
+    color: var(--text-main);
+    outline: none;
+}
+
+.cp-select {
+    width: 100%;
+    max-width: 130px;
+    height: 32px;
+    background: rgba(128, 128, 128, 0.1);
+    color: var(--text-main);
+    border: 2px solid var(--surface-border);
+    padding: 0 12px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.cp-label {
+    margin-left: 12px;
+    color: var(--text-main);
+    font-size: 14px;
+    min-width: 40px;
+}
+
+/* Hex Input Specifics */
+#cp-hex {
+    /* Make Hex input flex-grow to fill its wrapper if needed, 
+       but standard Windows is smaller. Let's make it full width relative to column for uniformity */
+    width: 100%;
+}
+
+/* Preview Section */
+.cp-preview-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: var(--text-main);
+    font-weight: 400;
+}
+
+.cp-preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid transparent;
+    margin-bottom: 30px;
+    /* Space before footer */
+}
+
+/* 4 specific preview boxes matching image */
+.cp-preview-box {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* Footer Buttons */
+.cp-footer {
+    display: flex;
+    gap: 4px;
+    /* Tiny gap */
+    background: transparent;
+    padding: 0 24px;
+    padding-bottom: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+
+.cp-btn {
+    flex: 1;
+    background: rgba(128, 128, 128, 0.2);
+    border: 1px solid transparent;
+    color: var(--text-main);
+    height: 32px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.cp-btn:hover {
+    background: rgba(128, 128, 128, 0.3);
+}
+
+.cp-btn:active {
+    background: rgba(128, 128, 128, 0.4);
+    color: var(--text-main);
+}
+
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 600px) {
+    .cp-overlay {
+        padding: 0;
+        background: var(--surface-color);
+        /* Full black on mobile */
+    }
+
+    .cp-modal {
+        height: 100%;
+        max-height: 100vh;
+        max-width: 100%;
+        border: none;
+        box-shadow: none;
+    }
+
+    .cp-main-area {
+        height: 300px;
+        /* Square-ish on mobile */
+    }
+
+    .cp-details.open {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .cp-btn {
+        height: 40px;
+    }
+}

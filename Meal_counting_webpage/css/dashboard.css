@@ -1,0 +1,148 @@
+/* Dashboard Elements */
+.month-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 10px 0;
+    background: transparent;
+    border: none;
+}
+
+.month-label {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    /* Better responsiveness */
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+/* Specific Highlight for Meal Rate */
+.summary-card.highlight {
+    transform: scale(1.02);
+}
+
+.summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px 8px;
+}
+
+.summary-card h3 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.summary-card .value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Tables */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+}
+
+.table-container::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Webkit */
+}
+
+.balance-table {
+    width: 100%;
+    min-width: 300px;
+    /* Ensure it doesn't squish too much */
+    border-collapse: collapse;
+}
+
+.balance-table th {
+    text-align: left;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    padding: 12px;
+    border-bottom: 1px solid var(--surface-border);
+}
+
+.balance-table td {
+    padding: 12px;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.balance-table tr:last-child td {
+    border-bottom: none;
+}
+
+.text-green {
+    color: var(--success-color);
+}
+
+.text-red {
+    color: var(--danger-color);
+}
+
+/* Chart Container */
+.chart-container {
+    height: 250px;
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Export Styles (Specific) */
+#export-container {
+    position: absolute;
+    top: -9999px;
+    left: 0;
+    width: 800px;
+    /* Fixed width for high res export */
+    background: var(--background-color);
+    /* Ensure background is captured */
+}
+
+.export-layout {
+    padding: 40px;
+    background: var(--background-color);
+    color: var(--text-main);
+    font-family: var(--font-family);
+    min-height: 1000px;
+}
+
+.export-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.export-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.export-footer {
+    margin-top: 40px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1rem;
+    border-top: 1px solid var(--surface-border);
+    padding-top: 20px;
+}

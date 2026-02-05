@@ -1,23 +1,19 @@
 :root {
-    /* Base Colors - Default Theme (Dark Blue/Navy) */
-    --bg-gradient-start: #0f172a;
-    --bg-gradient-end: #020617;
-    --surface-color: rgba(30, 41, 59, 0.6);
-    /* Slightly more opaque for better contrast */
-    /* Glass surface */
-    --surface-border: rgba(148, 163, 184, 0.2);
+    --background-color: #000;
+    --surface-color: #161b22;
+    --surface-border: #25272b;
 
     /* Spacing System */
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 24px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
+    --radius-md: .375rem;
+    --radius-lg: .625rem;
 
-    --primary-color: #38bdf8;
+    --primary-color: #70ffaf;
 
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
+    --text-main: #f5f5f5;
+    --text-muted: #c2c4c7;
 
     --success-color: #4ade80;
     --danger-color: #f87171;
@@ -48,8 +44,8 @@ textarea {
 body {
     font-family: var(--font-family);
     /* Background is now fully controlled by theme variables for purity */
-    background-color: var(--bg-gradient-start);
-    background-image: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    background-color: var(--background-color);
+    /* background-image removed */
     background-attachment: fixed;
     color: var(--text-main);
     min-height: 100vh;
@@ -87,35 +83,19 @@ h4 {
     letter-spacing: -0.02em;
 }
 
-/* Glassmorphism Utility */
-.glass {
+/* Solid Surface Utility (formerly Glass) */
+.surface-card {
     background: var(--surface-color);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--surface-border);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border-width: 1px;
+    border-color: var(--surface-border);
+    border-style: solid;
     border-radius: var(--radius-md);
     position: relative;
     overflow: hidden;
 }
 
 /* Shimmer Loading Effect */
-.glass::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right,
-            transparent 0%,
-            rgba(255, 255, 255, 0.05) 50%,
-            transparent 100%);
-    transform: skewX(-25deg);
-    animation: shimmer 6s infinite;
-    pointer-events: none;
-}
+/* Removed Shimmer Loading Effect */
 
 @keyframes shimmer {
     0% {
@@ -134,13 +114,13 @@ h4 {
 /* Subtle Neon Accent on Hover or Static */
 
 
-.glass-card {
+.surface-card-interactive {
     padding: 20px;
     margin-bottom: 20px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.glass-card:active {
+.surface-card-interactive:active {
     transform: scale(0.99);
 }
 
@@ -174,7 +154,7 @@ h4 {
     /* Darker backdrop for nav */
     backdrop-filter: blur(20px);
     border: 1px solid var(--surface-border);
-    border-radius: 24px;
+    border-radius: .375rem;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -202,7 +182,7 @@ h4 {
 }
 
 .nav-item .nav-label {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
 }
 
@@ -210,113 +190,23 @@ h4 {
     color: var(--primary-color);
 }
 
-
-
-/* Dashboard Elements */
-.month-selector {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding: 10px 0;
+.nav-item:hover {
+    color: var(--primary-color);
+    filter: brightness(0.85);
 }
 
-.month-label {
-    font-size: 1.5rem;
-    font-weight: 700;
+.nav-item:active {
+    filter: brightness(0.7);
 }
 
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    /* Better responsiveness */
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-/* Specific Highlight for Meal Rate */
-.summary-card.highlight {
-    transform: scale(1.02);
-}
-
-.summary-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 16px 8px;
-}
-
-.summary-card h3 {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 500;
-    margin-bottom: 4px;
-}
-
-.summary-card .value {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-main);
-}
-
+/* Shared Titles */
 .section-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--text-muted);
     margin-bottom: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-/* Tables */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    /* Firefox */
-    -ms-overflow-style: none;
-    /* IE 10+ */
-}
-
-.table-container::-webkit-scrollbar {
-    display: none;
-    /* Chrome/Safari/Webkit */
-}
-
-.balance-table {
-    width: 100%;
-    min-width: 300px;
-    /* Ensure it doesn't squish too much */
-    border-collapse: collapse;
-}
-
-.balance-table th {
-    text-align: left;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    padding: 12px;
-    border-bottom: 1px solid var(--surface-border);
-}
-
-.balance-table td {
-    padding: 12px;
-    font-size: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-}
-
-.balance-table tr:last-child td {
-    border-bottom: none;
-}
-
-.text-green {
-    color: var(--success-color);
-}
-
-.text-red {
-    color: var(--danger-color);
 }
 
 /* Buttons */
@@ -325,10 +215,10 @@ h4 {
     color: #000;
     border: none;
     padding: 12px 24px;
-    border-radius: 12px;
+    border-radius: .375rem;
     font-weight: 600;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
     transition: transform 0.2s, box-shadow 0.2s;
     display: inline-flex;
     align-items: center;
@@ -339,10 +229,15 @@ h4 {
     transform: scale(0.95);
 }
 
+.btn:hover {
+    filter: brightness(0.85);
+    /* No transform or shadow lift */
+}
+
 .btn-icon-only {
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    border-radius: .375rem;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -392,7 +287,7 @@ h4 {
     /* Cleaner look */
     border: 1px solid var(--surface-border);
     padding: 14px;
-    border-radius: 12px;
+    border-radius: .375rem;
     color: var(--text-main);
     font-family: inherit;
     font-size: 1rem;
@@ -423,7 +318,7 @@ input[type=number] {
 label {
     display: block;
     margin-bottom: 6px;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
 }
 
@@ -460,166 +355,30 @@ label {
     padding-left: 14px;
 }
 
-/* Hide default calendar indicator but keep it clickable */
-/* Remove default calendar indicator completely */
-input[type="month"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-}
-
 /* Ensure mobile browsers don't add default styling */
 input[type="month"] {
     -webkit-appearance: none;
     appearance: none;
 }
 
-/* Entry Cards */
-.entry-card {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    align-items: end;
-    margin-bottom: 12px;
-    padding: 16px;
+input[type="month"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
 }
-
-/* History */
-.history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    cursor: pointer;
-}
-
-.history-date {
-    display: flex;
-    flex-direction: column;
-}
-
-.history-date span:first-child {
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-
-.history-date span:last-child {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-/* Theme Customizer */
-.theme-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-}
-
-.theme-preset {
-    height: 80px;
-    border-radius: 12px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s;
-}
-
-.theme-preset:hover {
-    filter: brightness(0.85);
-}
-
-/* --- New Components --- */
 
 /* Avatars */
 .avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--surface-border));
+    background: linear-gradient(135deg, var(--primary-color), var(--background-color));
     color: #000;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Stepper Input */
-.stepper-control {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    border: 1px solid var(--surface-border);
-    padding: 6px;
-    width: 100%;
-    height: 50px;
-    /* Matches standard input height */
-    transition: border-color 0.3s;
-}
-
-.stepper-control:focus-within {
-    border-color: var(--primary-color);
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.stepper-btn {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: rgba(255, 255, 255, 0.05);
-    /* Slight BG for visibility */
-    color: var(--primary-color);
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s;
-}
-
-.stepper-btn:hover {
-    background: var(--primary-color);
-    color: #000;
-}
-
-.stepper-btn:active {
-    transform: scale(0.9);
-}
-
-.stepper-input {
-    flex: 1;
-    width: 100%;
-    text-align: center;
-    border: none;
-    background: transparent;
-    color: var(--text-main);
-    font-weight: 600;
-    font-size: 1.1rem;
-    appearance: textfield;
-    -moz-appearance: textfield;
-    outline: none;
-}
-
-/* Mobile: Remove stepper buttons and style as standard input */
-@media (max-width: 600px) {
-    .stepper-btn {
-        display: none;
-    }
-
-    .stepper-control {
-        padding: 0;
-        /* Remove padding to let input fill standard size */
-    }
-
-    .stepper-input {
-        text-align: left;
-        padding-left: 14px;
-        /* Standard input padding */
-    }
 }
 
 /* Status Cards */
@@ -636,60 +395,6 @@ input[type="month"] {
     border-left: 4px solid var(--danger-color);
 }
 
-/* Chart Container */
-.chart-container {
-    height: 250px;
-    width: 100%;
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.theme-preset.active {
-    border-color: var(--primary-color);
-}
-
-/* Export Styles (Specific) */
-#export-container {
-    position: absolute;
-    top: -9999px;
-    left: 0;
-    width: 800px;
-    /* Fixed width for high res export */
-    background: var(--bg-gradient-start);
-    /* Ensure background is captured */
-}
-
-.export-layout {
-    padding: 40px;
-    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
-    color: var(--text-main);
-    font-family: var(--font-family);
-    min-height: 1000px;
-}
-
-.export-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.export-header h1 {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.export-footer {
-    margin-top: 40px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    border-top: 1px solid var(--surface-border);
-    padding-top: 20px;
-}
-
-/* --- Custom Modal System --- */
 /* --- Custom Modal System --- */
 .modal-overlay {
     position: fixed;
@@ -785,100 +490,10 @@ input[type="month"] {
     }
 }
 
-.modal-overlay.active .modal-content {
-    animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-/* Button & Nav Hover Specifics */
-/* Button & Nav Hover Specifics */
-.btn:hover {
-    filter: brightness(0.85);
-    /* No transform or shadow lift */
-}
-
-.nav-item {
-    transition: transform 0.2s ease, color 0.3s ease;
-    position: relative;
-}
-
-.nav-item:hover {
-    color: var(--primary-color);
-    filter: brightness(0.85);
-}
-
-.nav-item:active {
-    filter: brightness(0.7);
-}
-
-/* --- Custom Month Picker --- */
-.month-picker-content {
-    background: var(--surface-color);
-    /* Matches theme */
-    border: 1px solid var(--primary-color);
-    border-radius: 24px;
-    padding: 25px;
-    width: 340px;
-    max-width: 90%;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    transform: scale(0.9);
-    animation: fadeInUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    text-align: center;
-}
-
-.year-selector {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    letter-spacing: -1px;
-    border-bottom: 1px solid var(--surface-border);
-    padding-bottom: 15px;
-}
-
-.month-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.month-btn {
-    padding: 16px 10px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid transparent;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.month-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-main);
-    transform: translateY(-2px);
-}
-
-.month-btn.active {
-    background: var(--primary-color);
-    color: #000;
-    font-weight: 800;
-    transform: scale(1.05);
-    /* Pop effect */
-    border: none;
-}
-
-
-
 .modal-content {
     background: var(--surface-color);
     border: 1px solid var(--surface-border);
-    border-radius: 20px;
+    border-radius: .375rem;
     padding: 30px;
     width: 90%;
     max-width: 400px;
@@ -890,8 +505,9 @@ input[type="month"] {
     overflow: hidden;
 }
 
-/* Modal Glow Effect */
-
+.modal-overlay.active .modal-content {
+    animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
 
 .modal-title {
     font-size: 1.5rem;
@@ -915,7 +531,7 @@ input[type="month"] {
 
 .btn-modal {
     padding: 10px 25px;
-    border-radius: 12px;
+    border-radius: .375rem;
     border: none;
     cursor: pointer;
     font-weight: 600;
