@@ -44,14 +44,16 @@ const BASE_THEMES = {
         '--surface-color': '#f6f8fa',
         '--surface-border': '#25272b',
         '--text-main': '#25272b',
-        '--text-muted': '#868789'
+        '--text-muted': '#868789',
+        '--avatar-text-color': '#000000'
     },
     dark: {
         '--background-color': '#000',
         '--surface-color': '#161b22',
         '--surface-border': '#25272b',
         '--text-main': '#f5f5f5',
-        '--text-muted': '#c2c4c7'
+        '--text-muted': '#c2c4c7',
+        '--avatar-text-color': '#ffffff'
     }
 };
 
