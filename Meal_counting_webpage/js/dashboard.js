@@ -181,8 +181,37 @@ function calculateStats() {
 }
 
 function changeMonth(delta) {
-    STATE.currentMonth.setMonth(STATE.currentMonth.getMonth() + delta);
-    renderDashboard(document.getElementById('main-content'));
+    const label = document.querySelector('.month-selector .month-label');
+    if (!label) {
+        STATE.currentMonth.setMonth(STATE.currentMonth.getMonth() + delta);
+        renderDashboard(document.getElementById('main-content'));
+        return;
+    }
+
+    const dir = delta > 0 ? 'next' : 'prev';
+    const exitClass = dir === 'next' ? 'year-slide-next-exit' : 'year-slide-prev-exit';
+
+    // 1. Animate Out
+    label.classList.add(exitClass);
+
+    setTimeout(() => {
+        // 2. Update State
+        STATE.currentMonth.setMonth(STATE.currentMonth.getMonth() + delta);
+
+        // 3. Re-render Dashboard (this will create new DOM with enter animation if we add it)
+        // To make it smooth, we need renderDashboard to handle "enter" animation on the label if a transition just happened.
+        // But since renderDashboard wipes HTML, we can just call it.
+        // We'll trust the re-render is fast enough. 
+        // For better UX, we could pass a flag or class to renderDashboard.
+        renderDashboard(document.getElementById('main-content'));
+
+        // 4. Animate In (New Element)
+        const newLabel = document.querySelector('.month-selector .month-label');
+        if (newLabel) {
+            const enterClass = dir === 'next' ? 'year-slide-next-enter' : 'year-slide-prev-enter';
+            newLabel.classList.add(enterClass);
+        }
+    }, 200);
 }
 
 window.exportDashboard = function () {

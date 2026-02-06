@@ -265,3 +265,64 @@
     opacity: 1;
     animation: 4s spin linear infinite;
 }
+
+/* Year Slider Animations */
+.year-slide-next-enter {
+    animation: slideInRight 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.year-slide-prev-enter {
+    animation: slideInLeft 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.year-slide-next-exit {
+    animation: slideOutLeft 0.5s forwards;
+}
+
+.year-slide-prev-exit {
+    animation: slideOutRight 0.5s forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutLeft {
+    to {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+}
+
+@keyframes slideOutRight {
+    to {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+}
+
+#picker-year-text {
+    display: inline-block;
+    min-width: 60px;
+    text-align: center;
+}

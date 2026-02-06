@@ -123,12 +123,12 @@ function renderCustomMonthPicker() {
                 <button class="btn-icon-only" onclick="changePickerYear(-1)">
                     <span class="material-icons-round">chevron_left</span>
                 </button>
-                <span>${pickerYear}</span>
+                <span id="picker-year-text">${pickerYear}</span>
                 <button class="btn-icon-only" onclick="changePickerYear(1)">
                     <span class="material-icons-round">chevron_right</span>
                 </button>
             </div>
-            <div class="month-grid">
+            <div class="month-grid" id="picker-month-grid">
                 ${months.map((m, index) => `
                     <button class="month-btn ${index === selectedMonth ? 'active' : ''}" 
                             onclick="selectPickerMonth(${index})">
@@ -141,8 +141,53 @@ function renderCustomMonthPicker() {
 }
 
 function changePickerYear(delta) {
-    pickerYear += delta;
-    renderCustomMonthPicker();
+    const yearText = document.getElementById('picker-year-text');
+    if (!yearText) {
+        pickerYear += delta;
+        renderCustomMonthPicker();
+        return;
+    }
+
+    const dir = delta > 0 ? 'next' : 'prev';
+    const exitClass = dir === 'next' ? 'year-slide-next-exit' : 'year-slide-prev-exit';
+    const enterClass = dir === 'next' ? 'year-slide-next-enter' : 'year-slide-prev-enter';
+
+    // 1. Animate Out
+    yearText.className = ''; // reset
+    yearText.classList.add(exitClass);
+
+    setTimeout(() => {
+        // 2. Update Value
+        pickerYear += delta;
+        yearText.innerText = pickerYear;
+
+        // 3. Animate In
+        yearText.className = '';
+        yearText.classList.add(enterClass);
+
+        // 4. Update Grid Highlights (Silent Update)
+        updatePickerGrid();
+    }, 200); // Wait for exit animation
+}
+
+function updatePickerGrid() {
+    const grid = document.getElementById('picker-month-grid');
+    if (!grid) return;
+
+    // Calculate currently active month
+    const currentVal = document.getElementById('entryDate') ? document.getElementById('entryDate').value : '';
+    const selectedMonth = (currentVal && parseInt(currentVal.split('-')[0]) === pickerYear)
+        ? parseInt(currentVal.split('-')[1]) - 1
+        : -1;
+
+    const btns = grid.querySelectorAll('.month-btn');
+    btns.forEach((btn, index) => {
+        if (index === selectedMonth) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
 }
 
 function selectPickerMonth(monthIndex) {
