@@ -211,8 +211,13 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, color 0.2s;
     opacity: 0.8;
+
+    /* Animation Container Props */
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
 }
 
 .month-btn:hover {
@@ -223,13 +228,40 @@
     transform: translateY(-2px);
 }
 
+/* Active State - Spinning Border Style */
 .month-btn.active {
-    background: var(--primary-color);
-    color: #000;
-    /* Ensure text is readable on primary color */
+    background: transparent;
+    color: var(--primary-color);
     font-weight: 700;
     transform: scale(1.05);
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: none;
+    /* Border handled by mask gap */
     opacity: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Inner Mask for Active Button */
+.month-btn.active::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    background: var(--surface-color);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+/* Spinning Gradient for Active Button (Exact Match) */
+.month-btn.active::after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 65%;
+    background-image: conic-gradient(var(--primary-color));
+    top: 30%;
+    left: -50%;
+    transform: rotate(0deg);
+    border-radius: 14px;
+    z-index: -2;
+    opacity: 1;
+    animation: 4s spin linear infinite;
 }
