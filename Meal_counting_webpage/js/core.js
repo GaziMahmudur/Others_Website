@@ -6,7 +6,7 @@ const STATE = {
     entries: [],
     currentMonth: new Date(),
     settings: {
-        themeMode: 'system', // system, light, dark
+        themeMode: 'light', // system, light, dark
         textSize: 's', // xxs, xs, s, l, xl, xxl
         accentColor: '#0078D7',
         recentColors: []
@@ -38,22 +38,73 @@ const WINDOWS_COLORS = [
 ];
 
 // Base Themes
+// Base Themes
 const BASE_THEMES = {
-    light: {
-        '--background-color': '#ffffff',
-        '--surface-color': '#f6f8fa',
-        '--surface-border': '#25272b',
-        '--text-main': '#25272b',
-        '--text-muted': '#868789',
-        '--avatar-text-color': '#000000'
+    // PC Themes
+    pc_light: {
+        '--background-color': '#FFFFFF',
+        '--surface-color': '#F7F7F8',
+        '--surface-border': '#E5E7EB',
+        '--text-main': '#0F172A',
+        '--text-muted': '#6B7280',
+        '--secondary-color': '#6366F1',
+        '--avatar-text-color': '#FFFFFF',
+        '--input-bg': '#FFFFFF',
+        '--radius-xs': '4px',
+        '--radius-sm': '6px',
+        '--radius-md': '8px',
+        '--radius-lg': '12px',
+        '--radius-xl': '16px',
+        '--radius-full': '9999px'
     },
-    dark: {
-        '--background-color': '#000',
-        '--surface-color': '#161b22',
-        '--surface-border': '#25272b',
+    pc_dark: {
+        '--background-color': '#0F0F10',
+        '--surface-color': '#1A1A1B',
+        '--surface-border': '#2A2A2E',
+        '--text-main': '#ECECF1',
+        '--text-muted': '#9CA3AF',
+        '--secondary-color': '#7C7CFF',
+        '--avatar-text-color': '#0F0F10',
+        '--input-bg': '#202123',
+        '--radius-xs': '4px',
+        '--radius-sm': '6px',
+        '--radius-md': '8px',
+        '--radius-lg': '12px',
+        '--radius-xl': '16px',
+        '--radius-full': '9999px'
+    },
+    // Phone Themes
+    phone_light: {
+        '--background-color': '#FFFFFF',
+        '--surface-color': '#FAFAFA',
+        '--surface-border': '#E6E6E6',
+        '--text-main': '#111827',
+        '--text-muted': '#6B7280',
+        '--secondary-color': '#6366F1',
+        '--avatar-text-color': '#FFFFFF',
+        '--input-bg': '#FFFFFF',
+        '--radius-xs': '6px',
+        '--radius-sm': '8px',
+        '--radius-md': '12px',
+        '--radius-lg': '16px',
+        '--radius-xl': '20px',
+        '--radius-full': '9999px'
+    },
+    phone_dark: {
+        '--background-color': '#0D0D0E',
+        '--surface-color': '#1a1a1a',
+        '--surface-border': '#2C2C2E',
         '--text-main': '#f5f5f5',
-        '--text-muted': '#c2c4c7',
-        '--avatar-text-color': '#ffffff'
+        '--text-muted': '#9CA3AF',
+        '--secondary-color': '#7C7CFF',
+        '--avatar-text-color': '#0D0D0E',
+        '--input-bg': '#242427',
+        '--radius-xs': '6px',
+        '--radius-sm': '8px',
+        '--radius-md': '12px',
+        '--radius-lg': '16px',
+        '--radius-xl': '20px',
+        '--radius-full': '9999px'
     }
 };
 
@@ -273,6 +324,15 @@ const handleThemeChange = (e) => {
 try {
     // Modern browsers
     mediaQuery.addEventListener('change', handleThemeChange);
+
+    // Resize Listener for PC/Phone theme switching
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateTheme();
+        }, 100);
+    });
 } catch (e1) {
     try {
         // Older Safari / IE / Edge
@@ -325,25 +385,34 @@ async function installPWA() {
 }
 
 function updateTheme() {
-    // 1. Theme Mode
+    // 1. Determine Device Type
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const devicePrefix = isMobile ? 'phone_' : 'pc_';
+
+    // 2. Determine Theme Mode
     let mode = STATE.settings.themeMode;
     if (mode === 'system') {
         mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
-    const themeVars = BASE_THEMES[mode] || BASE_THEMES['dark']; // Fallback
+    // 3. Construct Theme Key & Get Variables
+    const themeKey = devicePrefix + mode;
+    const themeVars = BASE_THEMES[themeKey] || BASE_THEMES['pc_dark']; // Fallback
+
     const root = document.documentElement;
 
+    // 4. Apply Theme Variables
     Object.keys(themeVars).forEach(key => {
         root.style.setProperty(key, themeVars[key]);
     });
 
-    // 2. Accent Color
-    // Use fallback if setting is missing (migration safety)
+    // 5. Apply Accent Color (Primary)
+    // Always apply the user's accent color setting (Windows Color or Custom).
+    // If it's missing for some reason, fallback to Default Blue (#0078D7).
     const accent = STATE.settings.accentColor || '#0078D7';
     root.style.setProperty('--primary-color', accent);
 
-    // 3. Text Size
+    // 6. Text Size
     const sizeName = STATE.settings.textSize || 's';
     const sizeVal = TEXT_SIZES[sizeName];
     if (sizeVal) {
