@@ -6,6 +6,55 @@
     align-items: end;
     margin-bottom: 12px;
     padding: 16px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    background: transparent;
+    border-radius: var(--radius-md);
+}
+
+/* Inner Surface Mask */
+.entry-card::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    background: var(--surface-color);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+/* Spinning Border Effect */
+.entry-card::after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 65%;
+    background-image: conic-gradient(var(--primary-color));
+    top: 30%;
+    left: -50%;
+    transform: rotate(0deg);
+    border-radius: 14px;
+    transition: 1s ease;
+    z-index: -2;
+    opacity: 0;
+    animation: 4s spin linear infinite;
+}
+
+.entry-card:hover::after,
+.entry-card:focus-within::after {
+    opacity: 1;
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
 }
 
 /* Stepper Input */

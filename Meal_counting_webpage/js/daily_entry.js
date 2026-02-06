@@ -74,12 +74,8 @@ function renderDailyEntry(container) {
             }
         });
 
-        // Auto-scroll to center on focus
-        input.addEventListener('focus', (e) => {
-            setTimeout(() => {
-                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300); // Slight delay to allow keyboard to pop up on mobile
-        });
+        // Auto-scroll removed as per user request to prevent "jumping up"
+        // input.addEventListener('focus', (e) => { ... });
     });
 }
 
