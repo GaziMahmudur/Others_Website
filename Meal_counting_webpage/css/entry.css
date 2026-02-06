@@ -134,20 +134,53 @@
 }
 
 /* --- Custom Month Picker --- */
+/* --- Custom Month Picker --- */
 .month-picker-content {
-    background: var(--surface-color);
-    /* Matches theme */
-    border: 1px solid var(--primary-color);
+    /* Matches theme handled by ::before mask now */
+    background: transparent;
     border-radius: .375rem;
     padding: 25px;
     width: 340px;
     max-width: 90%;
+    /* Backdrop filter handled by mask or separate? Keeping logical layering. 
+       Note: backdrop-filter works on the element itself, so we keep it here */
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
     transform: scale(0.9);
     animation: fadeInUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     text-align: center;
+
+    /* Animation Container Props */
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Inner Surface Mask */
+.month-picker-content::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    background: var(--surface-color);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+/* Spinning Border Effect - Always Active */
+.month-picker-content::after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 65%;
+    background-image: conic-gradient(var(--primary-color));
+    top: 30%;
+    left: -50%;
+    transform: rotate(0deg);
+    border-radius: 14px;
+    z-index: -2;
+    opacity: 1;
+    animation: spin 4s linear infinite;
 }
 
 .year-selector {
