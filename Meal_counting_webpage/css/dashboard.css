@@ -9,9 +9,21 @@
     border: none;
 }
 
+.month-label-container {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+}
+
 .month-label {
     font-size: 1.5rem;
     font-weight: 700;
+    width: 100%;
+    text-align: center;
 }
 
 .summary-grid {

@@ -123,7 +123,9 @@ function renderCustomMonthPicker() {
                 <button class="btn-icon-only" onclick="changePickerYear(-1)">
                     <span class="material-icons-round">chevron_left</span>
                 </button>
-                <span id="picker-year-text">${pickerYear}</span>
+                <div class="year-text-container">
+                    <span id="picker-year-text">${pickerYear}</span>
+                </div>
                 <button class="btn-icon-only" onclick="changePickerYear(1)">
                     <span class="material-icons-round">chevron_right</span>
                 </button>

@@ -17,7 +17,9 @@ function renderDashboard(container) {
     const html = `
         <div class="month-selector">
             <button class="btn btn-icon-only surface-card" onclick="changeMonth(-1)"><span class="material-icons-round">chevron_left</span></button>
-            <span class="month-label">${month}</span>
+            <div class="month-label-container">
+                <span class="month-label">${month}</span>
+            </div>
             <button class="btn btn-icon-only surface-card" onclick="changeMonth(1)"><span class="material-icons-round">chevron_right</span></button>
         </div>
 
