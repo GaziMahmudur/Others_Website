@@ -31,7 +31,7 @@ function renderMembers(container) {
     container.innerHTML = `
         <h2 class="section-title">Manage Members</h2>
         
-        <div class="surface-card surface-card-interactive input-group" style="display:flex; gap:10px;">
+        <div class="surface-card surface-card-interactive input-group member-input-group" style="display:flex; gap:10px;">
             <input type="text" id="new-member-name" class="input-field" placeholder="Enter Member Name">
             <button class="btn" onclick="addMember()">Add</button>
         </div>

@@ -40,7 +40,6 @@
     animation: 4s spin linear infinite;
 }
 
-.entry-card:hover::after,
 .entry-card:focus-within::after {
     opacity: 1;
 }
