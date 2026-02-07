@@ -49,7 +49,7 @@ function renderMembers(container) {
                         ${getAvatar(m.name)}
                         <div style="font-weight:600;">${m.name}</div>
                     </div>
-                    <button class="btn-icon-only" style="background: rgba(248,113,113,0.15); color: #f87171;" onclick="deleteMember(${m.id})">
+                    <button class="btn-icon-only btn-icon-danger" onclick="deleteMember(${m.id})">
                         <span class="material-icons-round">delete</span>
                     </button>
                 </div>
