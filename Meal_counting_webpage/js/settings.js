@@ -6,11 +6,6 @@ function renderSettings(container) {
     container.innerHTML = `
         <h2 class="section-title">Settings</h2>
 
-        <!-- PWA Install Button -->
-        <button id="pwa-install-btn" class="btn" style="width:100%; margin-bottom: 20px; background: linear-gradient(135deg, #00C6FB, #005BEA); display: none;" onclick="installPWA()">
-            <span class="material-icons-round">download</span> Install App
-        </button>
-
         <!-- Theme Mode -->
         <div class="settings-group">
             <span class="settings-label">Theme</span>
@@ -55,18 +50,15 @@ function renderSettings(container) {
             </div>
         </div>
         
-        <button class="btn" style="width:100%; background: var(--danger-color); margin-top: 20px;" onclick="resetData()">
-            Reset All Data
-        </button>
+        <div style="display: flex; justify-content: center; margin-top: 30px; margin-bottom: 20px;">
+            <button class="btn" style="width: auto; padding: 12px 32px; font-size: 1rem; color: var(--danger-color);" onclick="resetData()">
+                <span class="material-icons-round" style="font-size: 22px; margin-right: 8px;">delete_forever</span> 
+                <span style="font-weight: 400;">Reset All Data</span>
+            </button>
+        </div>
     `;
 
-    // Check deferredPrompt again after rendering
-    setTimeout(() => {
-        if (window.deferredPrompt) {
-            const btn = document.getElementById('pwa-install-btn');
-            if (btn) btn.style.display = 'flex';
-        }
-    }, 0);
+
 }
 
 function setThemeMode(mode) {

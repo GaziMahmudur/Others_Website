@@ -1,25 +1,13 @@
 :root {
-    --background-color: #000;
-    --surface-color: #161b22;
-    --surface-border: #25272b;
-
-    /* Spacing System */
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 24px;
-    /* Border Radius System */
     --radius-xs: 4px;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
     --radius-xl: 16px;
     --radius-full: 9999px;
-
-    --primary-color: #70ffaf;
-    --secondary-color: #50E3C2;
-
-    --text-main: #f5f5f5;
-    --text-muted: #c2c4c7;
 
     --success-color: #4ade80;
     --danger-color: #f87171;
@@ -29,8 +17,6 @@
 
     /* Animation Speeds */
     --transition-speed: 0.3s;
-
-    --input-bg: rgba(0, 0, 0, 0.2);
 }
 
 /* Reset & Base */
@@ -87,16 +73,13 @@ h1,
 h2,
 h3,
 h4 {
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: -0.02em;
 }
 
 /* Solid Surface Utility (formerly Glass) */
 .surface-card {
     background: var(--surface-color);
-    border-width: 1px;
-    border-color: var(--surface-border);
-    border-style: solid;
     border-radius: var(--radius-md);
     position: relative;
     overflow: hidden;
@@ -125,12 +108,12 @@ h4 {
 .surface-card-interactive {
     padding: 20px;
     margin-bottom: 20px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: box-shadow 0.2s;
 }
 
-.surface-card-interactive:active {
+/*.surface-card-interactive:active {
     transform: scale(0.99);
-}
+} Removed to stop movement */
 
 /* Container */
 #main-content {
@@ -158,24 +141,21 @@ h4 {
     width: 90%;
     max-width: 400px;
     height: var(--nav-height);
-    background: var(--surface-color);
-    /* Darker backdrop for nav */
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--surface-border);
-    border-radius: .375rem;
+    background: var(--background-color);
+    border-radius: 28px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 1000;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0px 4px 4px 0px #0000000a, 0px 0px 1px 0px #0000009e;
     transition: all 0.3s ease;
+    border: none;
 }
 
 .nav-item {
     background: none;
     border: none;
     color: var(--text-muted);
-    /* Ensures this flips with theme */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -191,7 +171,7 @@ h4 {
 
 .nav-item .nav-label {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .nav-item.active {
@@ -219,33 +199,40 @@ h4 {
 
 /* Buttons */
 .btn {
-    background: var(--primary-color);
-    color: #000;
+    background: transparent;
+    color: var(--primary-color);
+    box-shadow: 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0px 4px 4px 0px #0000000a, 0px 0px 1px 0px #0000009e;
     border: none;
     padding: 12px 24px;
-    border-radius: .375rem;
-    font-weight: 600;
+    border-radius: 28px;
+    font-weight: 400;
     cursor: pointer;
     font-size: 1rem;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: box-shadow 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.btn:active {
+/*.btn:active {
     transform: scale(0.95);
-}
+} Removed to stop movement */
 
 .btn:hover {
-    filter: brightness(0.85);
-    /* No transform or shadow lift */
+    background: #00000012;
+}
+
+/* Specific Hover for Reset Button (which has danger color) */
+.btn[style*="var(--danger-color)"]:hover,
+.btn[style*="color: var(--danger-color)"]:hover {
+    background: rgba(248, 113, 113, 0.1) !important;
+    /* Red tint */
 }
 
 .btn-icon-only {
     width: 40px;
     height: 40px;
-    border-radius: .375rem;
+    border-radius: 28px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -253,15 +240,15 @@ h4 {
     transition: all 0.2s ease;
     cursor: pointer;
     background: transparent;
-    border: 1px solid var(--text-muted);
-    color: var(--text-main);
+    border: none;
+    color: var(--primary-color);
+    box-shadow: 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0px 4px 4px 0px #0000000a, 0px 0px 1px 0px #0000009e;
 }
 
 .btn-icon-only:hover {
     border-color: var(--primary-color);
     color: var(--primary-color);
-    background: rgba(128, 128, 128, 0.1);
-    transform: translateY(-2px);
+    background: #00000012;
 }
 
 .btn-icon-danger {
@@ -274,7 +261,7 @@ h4 {
     border-color: var(--danger-color) !important;
     color: var(--danger-color) !important;
     background: rgba(248, 113, 113, 0.1);
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); Removed */
 }
 
 .btn-floating {
@@ -296,7 +283,7 @@ h4 {
     /* Simple float to align right within flow */
     margin-bottom: 10px;
     /* Space for nav */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0px 4px 4px 0px #0000000a, 0px 0px 1px 0px #0000009e;
 }
 
 /* Inputs */
@@ -399,7 +386,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -425,8 +412,8 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     left: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
     z-index: 1000;
     display: flex;
     justify-content: center;
@@ -533,14 +520,14 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .modal-title {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 400;
     margin-bottom: 10px;
     color: var(--text-main);
 }
 
 .modal-message {
     color: var(--text-main);
-    opacity: 0.8;
+    opacity: 1;
     margin-bottom: 25px;
     line-height: 1.5;
 }
@@ -553,22 +540,47 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .btn-modal {
     padding: 10px 25px;
-    border-radius: .375rem;
+    border-radius: 28px;
     border: none;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 400;
     transition: all 0.2s ease;
 }
 
+/* Button Hover Effects (No Transform) */
+.btn-modal:hover {
+    filter: brightness(0.9);
+}
+
 .btn-modal.cancel {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-border);
     color: var(--text-main);
+}
+
+.btn-modal.cancel:hover {
+    background: var(--text-muted);
+    color: #fff;
+    /* Optional: make it clearer it's being hovered */
 }
 
 .btn-modal.confirm {
     background: var(--primary-color);
     color: #000;
-    /* box-shadow: 0 0 15px var(--primary-glow); */
+}
+
+.btn-modal.confirm:hover {
+    filter: brightness(0.85);
+}
+
+/* Specific Danger Button in Modals (if used) */
+.btn-modal.danger {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+.btn-modal.danger:hover {
+    background: #ef4444;
+    /* Darker Red */
 }
 
 
@@ -654,4 +666,23 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .member-input-group:focus-within::after {
     opacity: 1;
+}
+
+/* --- Dark Mode Shadow Overrides --- */
+body.pc_dark .bottom-nav,
+body.phone_dark .bottom-nav,
+body.pc_dark .btn,
+body.phone_dark .btn,
+body.pc_dark .btn-icon-only,
+body.phone_dark .btn-icon-only,
+body.pc_dark .btn-inline-save,
+body.phone_dark .btn-inline-save {
+    box-shadow: 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0px 4px 4px 0px #ffffff0a, 0px 0px 1px 0px #ffffff9e;
+}
+
+body.pc_dark .btn:hover,
+body.phone_dark .btn:hover,
+body.pc_dark .btn-icon-only:hover,
+body.phone_dark .btn-icon-only:hover {
+    background: #ffffff1a;
 }

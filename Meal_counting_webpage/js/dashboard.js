@@ -85,9 +85,11 @@ function renderDashboard(container) {
             </div>
         </div>
 
-        <button class="btn" style="width: 100%; margin-top: 20px;" onclick="exportDashboard()">
-            <span class="material-icons-round">download</span> Download Monthly Report
-        </button>
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <button class="btn" style="width: auto;" onclick="exportDashboard()">
+                <span class="material-icons-round">download</span> Download Monthly Report
+            </button>
+        </div>
     `;
 
     container.innerHTML = html;

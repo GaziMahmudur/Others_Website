@@ -38,73 +38,48 @@ const WINDOWS_COLORS = [
 ];
 
 // Base Themes
-// Base Themes
 const BASE_THEMES = {
     // PC Themes
     pc_light: {
         '--background-color': '#FFFFFF',
-        '--surface-color': '#F7F7F8',
+        '--surface-color': '#f0f0f0',
         '--surface-border': '#E5E7EB',
-        '--text-main': '#0F172A',
-        '--text-muted': '#6B7280',
+        '--text-main': '#0d0d0d',
+        '--text-muted': '#8f8f8f',
         '--secondary-color': '#6366F1',
         '--avatar-text-color': '#FFFFFF',
         '--input-bg': '#FFFFFF',
-        '--radius-xs': '4px',
-        '--radius-sm': '6px',
-        '--radius-md': '8px',
-        '--radius-lg': '12px',
-        '--radius-xl': '16px',
-        '--radius-full': '9999px'
     },
     pc_dark: {
-        '--background-color': '#0F0F10',
-        '--surface-color': '#1A1A1B',
+        '--background-color': '#212121',
+        '--surface-color': '#181818',
         '--surface-border': '#2A2A2E',
-        '--text-main': '#ECECF1',
-        '--text-muted': '#9CA3AF',
-        '--secondary-color': '#7C7CFF',
+        '--text-main': '#ffffff',
+        '--text-muted': '#afafaf',
+        '--secondary-color': '#6366F1',
         '--avatar-text-color': '#0F0F10',
-        '--input-bg': '#202123',
-        '--radius-xs': '4px',
-        '--radius-sm': '6px',
-        '--radius-md': '8px',
-        '--radius-lg': '12px',
-        '--radius-xl': '16px',
-        '--radius-full': '9999px'
+        '--input-bg': '#212121',
     },
     // Phone Themes
     phone_light: {
         '--background-color': '#FFFFFF',
         '--surface-color': '#FAFAFA',
         '--surface-border': '#E6E6E6',
-        '--text-main': '#111827',
-        '--text-muted': '#6B7280',
+        '--text-main': '#0d0d0d',
+        '--text-muted': '#8f8f8f',
         '--secondary-color': '#6366F1',
         '--avatar-text-color': '#FFFFFF',
         '--input-bg': '#FFFFFF',
-        '--radius-xs': '6px',
-        '--radius-sm': '8px',
-        '--radius-md': '12px',
-        '--radius-lg': '16px',
-        '--radius-xl': '20px',
-        '--radius-full': '9999px'
     },
     phone_dark: {
-        '--background-color': '#0D0D0E',
-        '--surface-color': '#1a1a1a',
+        '--background-color': '#000000',
+        '--surface-color': '#181818',
         '--surface-border': '#2C2C2E',
-        '--text-main': '#f5f5f5',
-        '--text-muted': '#9CA3AF',
-        '--secondary-color': '#7C7CFF',
+        '--text-main': '#ffffff',
+        '--text-muted': '#afafaf',
+        '--secondary-color': '#6366F1',
         '--avatar-text-color': '#0D0D0E',
-        '--input-bg': '#242427',
-        '--radius-xs': '6px',
-        '--radius-sm': '8px',
-        '--radius-md': '12px',
-        '--radius-lg': '16px',
-        '--radius-xl': '20px',
-        '--radius-full': '9999px'
+        '--input-bg': '#000000',
     }
 };
 
@@ -251,7 +226,7 @@ function loadState() {
 
             // Migration: Check for known legacy 'default' colors and update to new Default Blue #0078D7
             // This ensures users who never customized their color get the new default.
-            const legacyDefaults = ['#0A84FF', '#38bdf8', '#70ffaf'];
+            const legacyDefaults = ['#70ffaf'];
             if (legacyDefaults.includes(STATE.settings.accentColor)) {
                 STATE.settings.accentColor = '#0078D7';
             }
@@ -313,7 +288,6 @@ function renderPage(page) {
 }
 
 // System Theme Listener
-// System Theme Listener
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 const handleThemeChange = (e) => {
     if (STATE.settings.themeMode === 'system') {
@@ -339,49 +313,8 @@ try {
         mediaQuery.addListener(handleThemeChange);
     } catch (e2) {
         console.error('System theme listener not supported');
+
     }
-}
-
-// --- PWA Support ---
-window.deferredPrompt = null;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
-    e.preventDefault();
-    // Stash the event so it can be triggered later.
-    window.deferredPrompt = e;
-
-    // Update UI notify the user they can install the PWA
-    // If the user is on the settings page, show the button
-    const btn = document.getElementById('pwa-install-btn');
-    if (btn) {
-        btn.style.display = 'flex';
-    }
-
-    console.log('[PWA] BeforeInstallPrompt captured');
-});
-
-window.addEventListener('appinstalled', (evt) => {
-    console.log('[PWA] App Installed');
-    window.deferredPrompt = null;
-    const btn = document.getElementById('pwa-install-btn');
-    if (btn) btn.style.display = 'none';
-});
-
-async function installPWA() {
-    if (!window.deferredPrompt) {
-        return;
-    }
-    // Show the install prompt
-    window.deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    const { outcome } = await window.deferredPrompt.userChoice;
-    console.log(`[PWA] User response to the install prompt: ${outcome}`);
-    // We've used the prompt, and can't use it again, throw it away
-    window.deferredPrompt = null;
-
-    const btn = document.getElementById('pwa-install-btn');
-    if (btn) btn.style.display = 'none';
 }
 
 function updateTheme() {
@@ -402,6 +335,10 @@ function updateTheme() {
     const root = document.documentElement;
 
     // 4. Apply Theme Variables
+    // Reset previous styles: clear hardcoded styles if any, but we are setting vars on root
+    // Apply body class for specific overrides (like box-shadows)
+    document.body.className = themeKey;
+
     Object.keys(themeVars).forEach(key => {
         root.style.setProperty(key, themeVars[key]);
     });
