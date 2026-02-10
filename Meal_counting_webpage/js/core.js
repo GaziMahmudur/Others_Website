@@ -53,7 +53,7 @@ const BASE_THEMES = {
     pc_dark: {
         '--background-color': '#212121',
         '--surface-color': '#181818',
-        '--surface-border': '#2A2A2E',
+        '--surface-border': '#00000026',
         '--text-main': '#ffffff',
         '--text-muted': '#afafaf',
         '--secondary-color': '#6366F1',
@@ -74,7 +74,7 @@ const BASE_THEMES = {
     phone_dark: {
         '--background-color': '#000000',
         '--surface-color': '#181818',
-        '--surface-border': '#2C2C2E',
+        '--surface-border': '#00000026',
         '--text-main': '#ffffff',
         '--text-muted': '#afafaf',
         '--secondary-color': '#6366F1',

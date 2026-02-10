@@ -1,10 +1,48 @@
-/* History */
+/* History Container */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 20px;
+}
+
+/* History Card */
 .history-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     padding: 16px;
-    cursor: pointer;
+    background: var(--surface-color);
+    border-radius: var(--radius-md);
+    position: relative;
+    /* cursor: pointer;  Removed cursor pointer from entire card */
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Removed hover background effect */
+.history-item:hover {
+    background: var(--surface-color);
+    /* Kept consistent */
+}
+
+.history-item.expanded {
+    background: var(--surface-color);
+    border-color: var(--surface-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Section (Date & Totals) */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Align to top to handle potential height diffs */
+    width: 100%;
+    padding-right: 48px;
+    /* Precise space for delete button */
+    min-height: 42px;
+    /* Ensure generic height */
 }
 
 .history-date {
@@ -13,11 +51,144 @@
 }
 
 .history-date span:first-child {
-    font-weight: 400;
     font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-main);
 }
 
 .history-date span:last-child {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.history-summary {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.history-meals {
+    font-weight: 500;
+    color: var(--text-main);
+    font-size: 1rem;
+}
+
+.history-bazar {
+    font-size: 0.85rem;
+    color: var(--success-color);
+    font-weight: 500;
+}
+
+/* ... existing code ... */
+
+/* View Button */
+.history-view-btn {
+    margin: 4px 0 0 auto;
+    /* Adjusted top margin for better alignment */
+    width: auto;
+    /* Use auto width for text */
+    padding: 6px 16px;
+    height: 32px;
+    border: 1px solid var(--surface-border);
+    background: transparent;
+    color: var(--text-main);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.history-view-btn:hover {
+    background: rgba(128, 128, 128, 0.05);
+    color: var(--text-main);
+    border-color: var(--text-muted);
+    transform: none;
+}
+
+.history-view-btn .material-icons-round {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.history-item.expanded .history-view-btn .material-icons-round {
+    transform: rotate(180deg);
+}
+
+/* Delete Button Positioning - Centered vertically relative to header */
+/* logic handled in inline style or utility, but making sure container allows it */
+
+
+/* Details Section */
+.history-details {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out;
+    border-top: 1px solid transparent;
+    /* Hidden initially */
+    margin-top: 0;
+}
+
+.history-item.expanded .history-details {
+    grid-template-rows: 1fr;
+    border-top-color: var(--surface-border);
+    margin-top: 12px;
+    padding-top: 12px;
+}
+
+.history-details-inner {
+    overflow: hidden;
+}
+
+/* New Table Styles */
+.history-table-wrapper {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
     font-size: 0.9rem;
     color: var(--text-muted);
+}
+
+.history-table th {
+    text-align: left;
+    padding: 8px 4px;
+    border-bottom: 1px solid var(--surface-border);
+    font-weight: 500;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.history-table td {
+    padding: 8px 4px;
+    color: var(--text-main);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.05);
+}
+
+.history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.history-table td.balance-positive {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.history-table td.balance-negative {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+
+.history-rate {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    text-align: right;
+    color: var(--text-muted);
+    opacity: 0.8;
 }

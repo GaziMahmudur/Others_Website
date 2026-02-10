@@ -6,7 +6,7 @@ function renderHistory(container) {
     if (sorted.length === 0) {
         container.innerHTML = `
             <h2 class="section-title">History</h2>
-            <div class="surface surface-card" style="text-align:center; padding:40px; color:var(--text-muted);">
+            <div class="surface-card" style="text-align:center; padding:40px; color:var(--text-muted);">
                 No history entries yet.
             </div>
         `;
@@ -25,14 +25,14 @@ function renderHistory(container) {
         const entryMealRate = totalM > 0 ? totalB / totalM : 0;
 
         const details = `
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; color: var(--text-muted);">
+                    <div class="history-table-wrapper">
+                        <table class="history-table">
                             <thead>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left;">
-                                    <th style="padding: 4px;">Name</th>
-                                    <th style="padding: 4px; text-align: center;">M</th>
-                                    <th style="padding: 4px; text-align: center;">B</th>
-                                    <th style="padding: 4px; text-align: right;">Bal</th>
+                                <tr>
+                                    <th>Name</th>
+                                    <th style="text-align: center;">M</th>
+                                    <th style="text-align: center;">Paid</th>
+                                    <th style="text-align: right;">Bal</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,10 +46,10 @@ function renderHistory(container) {
 
             return `
                                         <tr>
-                                            <td style="padding: 4px; color: var(--text-main); font-weight: 500;">${m.name}</td>
-                                            <td style="padding: 4px; text-align: center;">${mMeals}</td>
-                                            <td style="padding: 4px; text-align: center;">${mBazar}</td>
-                                            <td style="padding: 4px; text-align: right; color: ${mBalance >= 0 ? 'var(--success-color)' : 'var(--danger-color)'}; font-weight: 600;">
+                                            <td>${m.name}</td>
+                                            <td style="text-align: center;">${mMeals}</td>
+                                            <td style="text-align: center;">${mBazar}</td>
+                                            <td style="text-align: right;" class="${mBalance >= 0 ? 'balance-positive' : 'balance-negative'}">
                                                 ${mBalance >= 0 ? '+' : ''}${Math.round(mBalance)}
                                             </td>
                                         </tr>
@@ -57,33 +57,40 @@ function renderHistory(container) {
         }).join('')}
                             </tbody>
                         </table>
-                        <div style="margin-top: 8px; font-size: 0.8rem; opacity: 0.6; text-align: right;">
+                        <div class="history-rate">
                             Meal Rate: ${entryMealRate.toFixed(2)}
                         </div>
                     </div>
                 `;
 
         return `
-                <div class="glass glass-card history-item" onclick="toggleHistory(this)" style="position: relative;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding-right: 30px;">
+                <div class="history-item">
+                    <div class="history-header">
                         <div class="history-date">
                             <span>${new Date(entry.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</span>
                             <span>${new Date(entry.date).getFullYear()}</span>
                         </div>
-                        <div style="text-align: right;">
-                            <div style="font-weight: bold;">${totalM} Meals</div>
-                            <div style="font-size: 0.9rem; color: var(--success-color);">+ ${totalB} Bazar</div>
+                        <div class="history-summary">
+                            <div class="history-meals">${totalM} Meals</div>
+                            <div class="history-bazar">+ ${totalB} Bazar</div>
                         </div>
                     </div>
                     
-                    <button class="btn-icon-only" 
-                            style="position: absolute; top: 15px; right: 10px; background: rgba(248,113,113,0.1); color: #f87171; width: 30px; height: 30px; padding: 5px;"
+                    <button class="btn-icon-only btn-icon-danger" 
+                            style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;"
                             onclick="event.stopPropagation(); deleteEntry(${originalIndex})">
-                        <span class="material-icons-round" style="font-size: 16px;">delete</span>
+                        <span class="material-icons-round" style="font-size: 18px;">delete</span>
+                    </button>
+                    
+                    <button class="history-view-btn" onclick="toggleHistory(this.parentElement)">
+                        <span>See Details</span>
+                        <span class="material-icons-round">expand_more</span>
                     </button>
 
-                    <div class="history-details" style="display:none; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">
-                        ${details || 'No component data'}
+                    <div class="history-details">
+                        <div class="history-details-inner">
+                            ${details || 'No data available'}
+                        </div>
                     </div>
                 </div>
                 `;
@@ -108,13 +115,14 @@ function deleteEntry(index) {
     });
 }
 
-window.toggleHistory = function (element) {
-    const details = element.querySelector('.history-details');
-    if (details.style.display === 'none') {
-        details.style.display = 'block';
-        element.style.background = 'rgba(255, 255, 255, 0.08)';
+window.toggleHistory = function (card) {
+    card.classList.toggle('expanded');
+
+    // Toggle Button Text
+    const btnText = card.querySelector('.history-view-btn span:first-child');
+    if (card.classList.contains('expanded')) {
+        btnText.innerText = 'Hide Details';
     } else {
-        details.style.display = 'none';
-        element.style.background = '';
+        btnText.innerText = 'See Details';
     }
 }
