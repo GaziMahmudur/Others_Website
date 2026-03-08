@@ -108,7 +108,7 @@ function drawCostChart(stats) {
     const labels = [];
     const data = [];
     const colors = [
-        '#38bdf8', '#4ade80', '#f87171', '#f472b6', '#a78bfa', '#fbbf24'
+        '#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', '#66b3ff', '#ff6666'
     ]; // Just some nice colors
 
     Object.keys(stats.memberStats).forEach((id, index) => {

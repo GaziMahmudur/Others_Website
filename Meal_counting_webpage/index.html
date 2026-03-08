@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mess Manager</title>
+    <link rel="icon" type="image/png" href="icons/icon-any.png">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +27,7 @@
 
 <body>
 
-    <div id="app">
+    <div id="app" style="display: none;">
         <script>
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(function (registrations) {
@@ -52,6 +53,7 @@
                 <span class="material-icons-round">edit_calendar</span>
                 <span class="nav-label">Entry</span>
             </button>
+
             <button class="nav-item" data-target="history">
                 <span class="material-icons-round">history</span>
                 <span class="nav-label">History</span>
@@ -70,7 +72,7 @@
     <!-- Hidden Export Container -->
     <div id="export-container"></div>
 
-    <!-- Scripts -->
+    <script src="js/theme.js"></script>
     <script src="js/core.js"></script>
     <script src="js/members.js"></script>
     <script src="js/dashboard.js"></script>

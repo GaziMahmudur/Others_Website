@@ -74,8 +74,19 @@ function renderDailyEntry(container) {
             }
         });
 
-        // Auto-scroll removed as per user request to prevent "jumping up"
-        // input.addEventListener('focus', (e) => { ... });
+        // Robust Auto-scroll on focus for mobile keyboards
+        input.addEventListener('focus', function () {
+            setTimeout(() => {
+                const rect = this.getBoundingClientRect();
+                const absoluteTop = window.scrollY + rect.top;
+                const buffer = window.innerHeight / 3; // Position in upper third of screen
+
+                window.scrollTo({
+                    top: absoluteTop - buffer,
+                    behavior: 'smooth'
+                });
+            }, 400);
+        });
     });
 }
 

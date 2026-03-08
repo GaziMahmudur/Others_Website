@@ -5,6 +5,7 @@ const STATE = {
     members: [], // Start empty
     entries: [],
     currentMonth: new Date(),
+    updatedAt: 0,
     settings: {
         themeMode: 'light', // system, light, dark
         textSize: 's', // xxs, xs, s, l, xl, xxl
@@ -13,89 +14,22 @@ const STATE = {
     }
 };
 
-// Text Size Definitions
-const TEXT_SIZES = {
-    xxs: '12px',
-    xs: '13px',
-    s: '14px', // Default
-    l: '15px',
-    xl: '16px',
-    xxl: '18px'
-};
-
-// Windows Standard Colors
-const WINDOWS_COLORS = [
-    { hex: '#FFB900', name: 'Yellow gold' }, { hex: '#FF8C00', name: 'Gold' }, { hex: '#F7630C', name: 'Orange bright' }, { hex: '#CA5010', name: 'Orange dark' }, { hex: '#DA3B01', name: 'Rust' },
-    { hex: '#EF6950', name: 'Pale rust' }, { hex: '#D13438', name: 'Brick red' }, { hex: '#FF4343', name: 'Mod red' }, { hex: '#E74856', name: 'Pale red' }, { hex: '#E81123', name: 'Red' },
-    { hex: '#EA005E', name: 'Rose bright' }, { hex: '#C30052', name: 'Rose' }, { hex: '#E3008C', name: 'Plum light' }, { hex: '#BF0077', name: 'Plum' }, { hex: '#C239B3', name: 'Orchid light' },
-    { hex: '#9A0089', name: 'Orchid' }, { hex: '#0078D7', name: 'Default blue' }, { hex: '#0063B1', name: 'Navy blue' }, { hex: '#8E8CD8', name: 'Purple shadow' }, { hex: '#6B69D6', name: 'Purple shadow dark' },
-    { hex: '#8764B8', name: 'Iris pastel' }, { hex: '#744DA9', name: 'Iris spring' }, { hex: '#B146C2', name: 'Violet red light' }, { hex: '#881798', name: 'Violet red' }, { hex: '#0099BC', name: 'Cool blue bright' },
-    { hex: '#2D7D9A', name: 'Cool blue' }, { hex: '#00B7C3', name: 'Seafoam' }, { hex: '#038387', name: 'Seafoam teal' }, { hex: '#00B294', name: 'Mint light' }, { hex: '#018574', name: 'Mint dark' },
-    { hex: '#00CC6A', name: 'Turf green' }, { hex: '#10893E', name: 'Sport green' }, { hex: '#7A7574', name: 'Gray' }, { hex: '#5D5A58', name: 'Gray brown' }, { hex: '#68768A', name: 'Steel blue' },
-    { hex: '#515C6B', name: 'Metal blue' }, { hex: '#567C73', name: 'Pale moss' }, { hex: '#486860', name: 'Moss' }, { hex: '#498205', name: 'Meadow green' }, { hex: '#107C10', name: 'Green' },
-    { hex: '#767676', name: 'Overcast' }, { hex: '#4C4A48', name: 'Storm' }, { hex: '#69797E', name: 'Blue gray' }, { hex: '#4A5459', name: 'Gray dark' }, { hex: '#647C64', name: 'Liddy green' },
-    { hex: '#525E54', name: 'Sage' }, { hex: '#847545', name: 'Camouflage desert' }, { hex: '#7E735F', name: 'Camouflage' }
-];
-
-// Base Themes
-const BASE_THEMES = {
-    // PC Themes
-    pc_light: {
-        '--background-color': '#FFFFFF',
-        '--surface-color': '#f0f0f0',
-        '--surface-border': '#E5E7EB',
-        '--text-main': '#0d0d0d',
-        '--text-muted': '#8f8f8f',
-        '--secondary-color': '#6366F1',
-        '--avatar-text-color': '#FFFFFF',
-        '--input-bg': '#FFFFFF',
-    },
-    pc_dark: {
-        '--background-color': '#212121',
-        '--surface-color': '#181818',
-        '--surface-border': '#00000026',
-        '--text-main': '#ffffff',
-        '--text-muted': '#afafaf',
-        '--secondary-color': '#6366F1',
-        '--avatar-text-color': '#0F0F10',
-        '--input-bg': '#212121',
-    },
-    // Phone Themes
-    phone_light: {
-        '--background-color': '#FFFFFF',
-        '--surface-color': '#FAFAFA',
-        '--surface-border': '#E6E6E6',
-        '--text-main': '#0d0d0d',
-        '--text-muted': '#8f8f8f',
-        '--secondary-color': '#6366F1',
-        '--avatar-text-color': '#FFFFFF',
-        '--input-bg': '#FFFFFF',
-    },
-    phone_dark: {
-        '--background-color': '#000000',
-        '--surface-color': '#181818',
-        '--surface-border': '#00000026',
-        '--text-main': '#ffffff',
-        '--text-muted': '#afafaf',
-        '--secondary-color': '#6366F1',
-        '--avatar-text-color': '#0D0D0E',
-        '--input-bg': '#000000',
-    }
-};
-
 document.addEventListener('DOMContentLoaded', () => {
+    // Always initialize modal system first
+    setupModal();
+
     loadState();
     setupNavigation();
-    setupModal(); // Initialize custom modal
+    let currentPage = 'dashboard';
+    renderPage('dashboard');
+    updateTheme();
+    document.getElementById('app').style.display = 'block';
 
-    // Global Enter key for Modals
+    // Global Enter key for Modals (keep existing)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             const modal = document.querySelector('.modal-overlay.active, .cp-overlay.active');
-            // If color picker is active, don't interfere
             if (modal && modal.id === 'cp-overlay') return;
-
-            // If active modal is our custom modal
             if (modal && modal.id === 'custom-modal') {
                 const confirmBtn = document.getElementById('modal-confirm-btn');
                 if (confirmBtn) {
@@ -106,12 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
-    // Prevent re-rendering active page
-    let currentPage = 'dashboard';
-
-    renderPage('dashboard');
-    updateTheme();
 });
 
 // Helper: Get Initials
@@ -133,11 +61,15 @@ function getAvatar(name) {
 function renderStepper(id, type, placeholder) {
     return `
         <div class="stepper-control">
-            <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', -1)">-</button>
+            <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', -1)">
+                <span class="material-icons-round" style="font-size:16px;">remove</span>
+            </button>
             <input type="number" min="0" placeholder="${placeholder}" 
                    class="stepper-input member-${type}-input" 
                    id="${type}-${id}" data-id="${id}">
-            <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', 1)">+</button>
+            <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', 1)">
+                <span class="material-icons-round" style="font-size:16px;">add</span>
+            </button>
         </div>
     `;
 }
@@ -216,26 +148,37 @@ function closeModal() {
 }
 
 function loadState() {
-    const saved = localStorage.getItem('messAppState');
-    if (saved) {
-        const parsed = JSON.parse(saved);
-        STATE.members = parsed.members || STATE.members;
-        STATE.entries = parsed.entries || STATE.entries;
-        if (parsed.settings) {
-            STATE.settings = { ...STATE.settings, ...parsed.settings };
+    try {
+        const saved = localStorage.getItem('messAppState');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            STATE.members = parsed.members || STATE.members;
+            STATE.entries = parsed.entries || STATE.entries;
+            STATE.updatedAt = parsed.updatedAt || 0;
+            if (parsed.settings) {
+                STATE.settings = { ...STATE.settings, ...parsed.settings };
 
-            // Migration: Check for known legacy 'default' colors and update to new Default Blue #0078D7
-            // This ensures users who never customized their color get the new default.
-            const legacyDefaults = ['#70ffaf'];
-            if (legacyDefaults.includes(STATE.settings.accentColor)) {
-                STATE.settings.accentColor = '#0078D7';
+                // Migration: Check for known legacy 'default' colors and update to new Default Blue #0078D7
+                const legacyDefaults = ['#70ffaf'];
+                if (legacyDefaults.includes(STATE.settings.accentColor)) {
+                    STATE.settings.accentColor = '#0078D7';
+                }
             }
+            // Always reset navigation to current month on app load
+            STATE.currentMonth = new Date();
         }
+    } catch (e) {
+        console.error("State corrupted, resetting:", e);
+        localStorage.removeItem('messAppState');
+        // Keep default STATE
     }
 }
 
 function saveState() {
+    STATE.updatedAt = Date.now();
     localStorage.setItem('messAppState', JSON.stringify(STATE));
+
+
 }
 
 // Navigation
@@ -249,7 +192,7 @@ function setupNavigation() {
     });
 }
 
-function renderPage(page) {
+function renderPage(page, forceImmediate = false) {
     // Sync navigation items active state
     document.querySelectorAll('.nav-item').forEach(btn => {
         if (btn.dataset.target === page) {
@@ -260,10 +203,14 @@ function renderPage(page) {
     });
 
     const content = document.getElementById('main-content');
-    content.innerHTML = '';
-    content.style.opacity = 0;
 
-    setTimeout(() => {
+    // If NOT immediate, fade out first
+    if (!forceImmediate) {
+        content.style.opacity = 0;
+    }
+
+    const renderLogic = () => {
+        content.innerHTML = ''; // Clear previous content
         switch (page) {
             case 'dashboard':
                 if (typeof renderDashboard === 'function') renderDashboard(content);
@@ -281,10 +228,22 @@ function renderPage(page) {
                 if (typeof renderSettings === 'function') renderSettings(content);
                 break;
         }
-        content.style.animation = 'none';
-        content.offsetHeight; /* trigger reflow */
-        content.style.animation = 'fadeIn 0.9s forwards';
-    }, 50);
+
+        if (!forceImmediate) {
+            content.style.animation = 'none';
+            content.offsetHeight; /* trigger reflow */
+            content.style.animation = 'fadeIn 0.9s forwards';
+        } else {
+            content.style.opacity = 1;
+            content.style.animation = 'none';
+        }
+    };
+
+    if (forceImmediate) {
+        renderLogic();
+    } else {
+        setTimeout(renderLogic, 50);
+    }
 }
 
 // System Theme Listener

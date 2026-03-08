@@ -1,121 +1,154 @@
 // Settings & Customization
 
-function renderSettings(container) {
-    const { themeMode, textSize, accentColor, recentColors } = STATE.settings;
+function renderSettings(container, expandedId = null) {
+    const { themeMode, textSize, accentColor } = STATE.settings;
+
+    // Helpers to get display text
+    const themeLabel = themeMode === 'system' ? 'System (Default)' : (themeMode.charAt(0).toUpperCase() + themeMode.slice(1));
+    const sizeLabel = textSize.toUpperCase();
+
+    // Find color name if matches basic colors, else 'Custom'
+    const colorObj = WINDOWS_COLORS.find(c => c.hex === accentColor);
+    const colorLabel = colorObj ? colorObj.name : 'Custom';
 
     container.innerHTML = `
-        <h2 class="section-title">Settings</h2>
-
-        <!-- Theme Mode -->
-        <div class="settings-group">
-            <span class="settings-label">Theme</span>
-            <div class="btn-group">
-                <button class="btn-group-item ${themeMode === 'system' ? 'active' : ''}" onclick="setThemeMode('system')">System Default</button>
-                <button class="btn-group-item ${themeMode === 'light' ? 'active' : ''}" onclick="setThemeMode('light')">Light</button>
-                <button class="btn-group-item ${themeMode === 'dark' ? 'active' : ''}" onclick="setThemeMode('dark')">Dark</button>
-            </div>
-        </div>
-
-        <!-- Text Size -->
-        <div class="settings-group">
-            <span class="settings-label">Text size</span>
-            <div class="btn-group">
-                ${Object.keys(TEXT_SIZES).map(size => `
-                    <button class="btn-group-item ${textSize === size ? 'active' : ''}" onclick="setTextSize('${size}')">${size.toUpperCase()}</button>
-                `).join('')}
-            </div>
-        </div>
-
-        <!-- Accent Color -->
-        <div class="settings-group">
-            <span class="settings-label">Choose your accent color</span>
-            
-            <!-- Windows Colors -->
-            <div class="color-section-title">Windows colors</div>
-            <div class="color-grid">
-                ${WINDOWS_COLORS.map(c => `
-                    <div class="color-option ${accentColor === c.hex ? 'active' : ''}" 
-                         style="background-color: ${c.hex};"
-                         title="${c.name}"
-                         onclick="setAccentColor('${c.hex}')"></div>
-                `).join('')}
-            </div>
-            
-            <!-- Custom Color -->
-            <div class="windows-checkbox" style="margin-top: 20px;">
-                <div class="custom-color-btn" onclick="ColorPicker.open(STATE.settings.accentColor, setAccentColor)">
-                    <span class="material-icons-round">add</span>
+        <div class="settings-section-title">App Settings</div>
+        
+        <!-- Appearance Card -->
+        <div class="settings-card">
+            <div class="settings-item" onclick="toggleSettingsExpanded('theme-expand')">
+                <div class="settings-item-icon">
+                    <span class="material-icons-round">brightness_6</span>
                 </div>
-                <span style="margin-left: 10px; cursor: pointer;" onclick="ColorPicker.open(STATE.settings.accentColor, setAccentColor)">Custom color</span>
+                <div class="settings-item-content">
+                    <div class="settings-item-title">Appearance</div>
+                    <div class="settings-item-subtitle">${themeLabel}</div>
+                </div>
+                <div class="settings-item-action">
+                    <span class="material-icons-round">expand_more</span>
+                </div>
+            </div>
+            <div id="theme-expand" class="settings-content-expanded ${expandedId === 'theme-expand' ? 'active' : ''}">
+                <div class="settings-expand-inner">
+                    <div class="btn-group">
+                        <button class="btn-group-item ${themeMode === 'system' ? 'active' : ''}" onclick="setThemeMode('system'); event.stopPropagation();">System</button>
+                        <button class="btn-group-item ${themeMode === 'light' ? 'active' : ''}" onclick="setThemeMode('light'); event.stopPropagation();">Light</button>
+                        <button class="btn-group-item ${themeMode === 'dark' ? 'active' : ''}" onclick="setThemeMode('dark'); event.stopPropagation();">Dark</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accent Color Card -->
+        <div class="settings-card">
+            <div class="settings-item" onclick="toggleSettingsExpanded('color-expand')">
+                <div class="settings-item-icon">
+                    <span class="material-icons-round">palette</span>
+                </div>
+                <div class="settings-item-content">
+                    <div class="settings-item-title">Accent color</div>
+                    <div class="settings-item-subtitle">${colorLabel}</div>
+                </div>
+                <div class="settings-item-action">
+                    <div style="width:16px; height:16px; border-radius:50%; background:${accentColor}; border:1px solid var(--surface-border);"></div>
+                    <span class="material-icons-round">expand_more</span>
+                </div>
+            </div>
+            <div id="color-expand" class="settings-content-expanded ${expandedId === 'color-expand' ? 'active' : ''}">
+                 <div class="settings-expand-inner">
+                     <div class="color-section-title">Windows colors</div>
+                     <div class="color-grid" style="margin: 0 auto;">
+                        ${WINDOWS_COLORS.map(c => `
+                            <div class="color-option ${accentColor === c.hex ? 'active' : ''}" 
+                                 style="background-color: ${c.hex};"
+                                 title="${c.name}"
+                                 onclick="setAccentColor('${c.hex}'); event.stopPropagation();"></div>
+                        `).join('')}
+                    </div>
+                    <div class="windows-checkbox" style="margin-top: 20px;">
+                        <div class="custom-color-btn" onclick="ColorPicker.open(STATE.settings.accentColor, setAccentColor)">
+                            <span class="material-icons-round">add</span>
+                        </div>
+                        <span style="margin-left: 10px; cursor: pointer;" onclick="ColorPicker.open(STATE.settings.accentColor, setAccentColor)">Custom color</span>
+                    </div>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Text Size Card -->
+        <div class="settings-card">
+            <div class="settings-item" onclick="toggleSettingsExpanded('text-expand')">
+                <div class="settings-item-icon">
+                    <span class="material-icons-round">text_fields</span>
+                </div>
+                <div class="settings-item-content">
+                    <div class="settings-item-title">Text Size</div>
+                    <div class="settings-item-subtitle">${sizeLabel}</div>
+                </div>
+                <div class="settings-item-action">
+                    <span class="material-icons-round">expand_more</span>
+                </div>
+            </div>
+            <div id="text-expand" class="settings-content-expanded ${expandedId === 'text-expand' ? 'active' : ''}">
+                <div class="settings-expand-inner">
+                    <div class="btn-group">
+                        ${Object.keys(TEXT_SIZES).map(size => `
+                            <button class="btn-group-item ${textSize === size ? 'active' : ''}" onclick="setTextSize('${size}'); event.stopPropagation();">${size.toUpperCase()}</button>
+                        `).join('')}
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div style="display: flex; justify-content: center; margin-top: 30px; margin-bottom: 20px;">
-            <button class="btn" style="width: auto; padding: 12px 32px; font-size: 1rem; color: var(--danger-color);" onclick="resetData()">
-                <span class="material-icons-round" style="font-size: 22px; margin-right: 8px;">delete_forever</span> 
-                <span style="font-weight: 400;">Reset All Data</span>
-            </button>
-        </div>
+
+
+        <div style="height: 40px;"></div>
     `;
-
-
 }
 
+window.toggleSettingsExpanded = function (id) {
+    const el = document.getElementById(id);
+    if (el) {
+        const isActive = el.classList.contains('active');
+        if (isActive) el.classList.remove('active');
+        else el.classList.add('active');
+    }
+}
+
+// Override update functions to maintain expansion state
 function setThemeMode(mode) {
     STATE.settings.themeMode = mode;
     saveState();
     updateTheme();
-    renderSettings(document.getElementById('main-content'));
+    renderSettings(document.getElementById('main-content'), 'theme-expand');
 }
 
 function setTextSize(size) {
     STATE.settings.textSize = size;
     saveState();
     updateTheme();
-    renderSettings(document.getElementById('main-content'));
+    renderSettings(document.getElementById('main-content'), 'text-expand');
 }
 
 function setAccentColor(color) {
     STATE.settings.accentColor = color;
-
-    // Manage Recent Colors
     let recent = STATE.settings.recentColors || [];
-    // Remove if exists
     recent = recent.filter(c => c !== color);
-    // Add to front
     recent.unshift(color);
-    // Limit to 5
     if (recent.length > 5) recent.pop();
-
     STATE.settings.recentColors = recent;
-
     saveState();
     updateTheme();
-    renderSettings(document.getElementById('main-content'));
+    renderSettings(document.getElementById('main-content'), 'color-expand');
 }
 
-function resetData() {
-    showModal({
-        title: 'Reset All Data?',
-        message: 'This will wipe all expense entries. Members will remain. Cannot be undone.',
-        type: 'confirm',
-        confirmText: 'Reset Forever',
-        danger: true,
-        onConfirm: () => {
-            // Factory Reset
-            localStorage.removeItem('messAppState');
-            location.reload();
-        }
-    });
-}
+
 
 function toggleCustomTheme() {
     const icon = document.getElementById('theme-toggle-icon');
-
     if (wrapper.style.display === 'none') {
         wrapper.style.display = 'block';
         icon.innerText = 'expand_less';
-        // Add a small fade in
         wrapper.style.opacity = 0;
         setTimeout(() => wrapper.style.opacity = 1, 10);
     } else {
@@ -173,16 +206,13 @@ window.ColorPicker = {
                 </div>
                 
                 <div class="cp-body">
-                    <!-- Spectrum Box + Side Bar -->
                     <div class="cp-main-area">
                         <div class="cp-spectrum-box" id="cp-spectrum">
                             <div class="cp-spectrum-handle" id="cp-handle"></div>
                         </div>
-                        <!-- Current Color Bar (Right Side) -->
                         <div class="cp-current-color-bar" id="cp-current-bar"></div>
                     </div>
 
-                    <!-- Value Slider (Bottom) -->
                     <div class="cp-slider-track" id="cp-slider-track">
                         <div class="cp-slider-handle" id="cp-slider-handle"></div>
                     </div>
@@ -192,20 +222,18 @@ window.ColorPicker = {
                     </div>
 
                     <div class="cp-details" id="cp-details">
-                        <!-- Top Row: Select & Hex (Spans full width) -->
                         <div style="grid-column: 1 / -1; display: flex; gap: 40px;">
                              <div class="cp-input-row" style="flex: 1;">
-                                <select class="cp-select">
-                                    <option>RGB</option>
-                                    <option>HSV</option>
-                                </select>
+                                 <select class="cp-select">
+                                     <option>RGB</option>
+                                     <option>HSV</option>
+                                 </select>
                             </div>
                              <div class="cp-input-row">
                                 <input type="text" class="cp-input" id="cp-hex" value="#70ffaf" onchange="ColorPicker.inputHex(this.value)">
                             </div>
                         </div>
 
-                        <!-- Numeric Inputs Column (Left) -->
                         <div class="cp-inputs-column">
                             <div class="cp-input-row">
                                 <input type="number" class="cp-input" id="cp-r" min="0" max="255" onchange="ColorPicker.inputRGB()">
@@ -221,18 +249,13 @@ window.ColorPicker = {
                             </div>
                         </div>
                         
-                        <!-- Right Column (Empty for now as Hex moved up) -->
                         <div class="cp-inputs-column"></div> 
                     </div>
 
-                    <!-- Preview Grid (Restored to bottom) -->
                     <div class="cp-preview-title">Color preview</div>
                     <div class="cp-preview-grid">
-                        <!-- Top Row -->
                         <div class="cp-preview-box" id="cp-pre-1" style="background: #0078D4; color: white;">Preview</div>
                         <div class="cp-preview-box" id="cp-pre-2" style="background: #0078D4; color: white;">Preview</div>
-                        
-                        <!-- Bottom Row -->
                         <div class="cp-preview-box" id="cp-pre-3" style="background: #000; color: #0078D4;">Preview</div>
                         <div class="cp-preview-box" id="cp-pre-4" style="background: #d9d9d9; color: #0078D4;">Preview</div>
                     </div>
@@ -338,7 +361,6 @@ window.ColorPicker = {
         const hex = this.hsvToHex(this.h, this.s, this.v);
         const pureHex = this.hsvToHex(this.h, this.s, 100);
 
-        // Fixed ID from 'cp-current-color-bar' to 'cp-current-bar' as per HTML creation
         const bar = document.getElementById('cp-current-bar');
         if (bar) bar.style.background = hex;
 
@@ -374,28 +396,23 @@ window.ColorPicker = {
         if (document.getElementById('cp-g')) document.getElementById('cp-g').value = rgb.g;
         if (document.getElementById('cp-b')) document.getElementById('cp-b').value = rgb.b;
 
-        // Preview 1 (Top Left): Current Color, White Text
         const p1 = document.getElementById('cp-pre-1');
         if (p1) {
             p1.style.background = hex;
             p1.style.color = '#fff';
         }
 
-        // Preview 2 (Top Right): Deeper Tone Background, Text = Current Color
-        // Logic: Reduce V by 30% for "deeper tone" or use black if very dark
         const p2 = document.getElementById('cp-pre-2');
         if (p2) {
-            // Create a deeper tone by reducing Value (V)
             const deepHex = this.hsvToHex(this.h, this.s, Math.max(0, this.v - 30));
             p2.style.background = deepHex;
             p2.style.color = hex;
         }
 
-        // Preview 3 & 4: Text = Current Color
-        const p3 = document.getElementById('cp-pre-3'); // Black BG
+        const p3 = document.getElementById('cp-pre-3');
         if (p3) p3.style.color = hex;
 
-        const p4 = document.getElementById('cp-pre-4'); // Grey BG
+        const p4 = document.getElementById('cp-pre-4');
         if (p4) p4.style.color = hex;
     },
 
@@ -475,3 +492,5 @@ window.ColorPicker = {
         return this.rgbToHsv(+r, +g, +b);
     }
 };
+
+

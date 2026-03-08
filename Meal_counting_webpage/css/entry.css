@@ -83,17 +83,19 @@
     align-items: center;
     justify-content: center;
     border: none;
-    background: var(--surface-border);
-    /* Slight BG for visibility */
+    background: transparent;
     color: var(--primary-color);
     cursor: pointer;
-    border-radius: .375rem;
+    border-radius: 50%;
     transition: all 0.2s;
+    box-shadow: 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0px 4px 4px 0px #0000000a, 0px 0px 1px 0px #0000009e;
+
 }
 
 .stepper-btn:hover {
-    background: var(--primary-color);
-    color: #000;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: #00000012;
 }
 
 .stepper-btn:active {

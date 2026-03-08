@@ -9,9 +9,6 @@
     --radius-xl: 16px;
     --radius-full: 9999px;
 
-    --success-color: #4ade80;
-    --danger-color: #f87171;
-
     --nav-height: 70px;
     --font-family: 'Outfit', sans-serif;
 
@@ -45,7 +42,10 @@ body {
     min-height: 100vh;
     padding-bottom: calc(var(--nav-height) + 40px + env(safe-area-inset-bottom));
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
+    /* Force scrollbar to prevent layout shift and ensure scrollability */
+    -webkit-overflow-scrolling: touch;
+    /* smooth scrolling on iOS */
 }
 
 /* Scrollbar Polish */
@@ -83,6 +83,8 @@ h4 {
     border-radius: var(--radius-md);
     position: relative;
     overflow: hidden;
+    border: 1px solid var(--surface-border);
+    transition: all 0.2s;
 }
 
 /* Shimmer Loading Effect */
@@ -142,7 +144,7 @@ h4 {
     max-width: 400px;
     height: var(--nav-height);
     background: var(--background-color);
-    border-radius: 28px;
+    border-radius: var(--radius-md);
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -377,18 +379,28 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 }
 
 /* Avatars */
+/* Avatars */
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--background-color));
-    color: var(--avatar-text-color);
+    /* Vibrant Gradient: Primary to slightly lighter/darker or overlay */
+    background: var(--primary-color);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 400;
-    font-size: 1rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
 }
 
 /* Status Cards */
@@ -414,7 +426,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     height: 100%;
     backdrop-filter: blur(1px);
     -webkit-backdrop-filter: blur(1px);
-    z-index: 1000;
+    z-index: 3000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -626,8 +638,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     overflow: hidden;
     border-radius: var(--radius-md);
     transition: border-color 0.3s ease;
-    /* Ensure background helps reveal the spinner */
-    background: transparent !important;
+    /* background: transparent !important; */
 }
 
 /* Inner Mask (Background) */
@@ -676,7 +687,9 @@ body.phone_dark .btn,
 body.pc_dark .btn-icon-only,
 body.phone_dark .btn-icon-only,
 body.pc_dark .btn-inline-save,
-body.phone_dark .btn-inline-save {
+body.phone_dark .btn-inline-save,
+body.pc_dark .btn-pill-outline,
+body.phone_dark .btn-pill-outline {
     box-shadow: 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0px 4px 4px 0px #ffffff0a, 0px 0px 1px 0px #ffffff9e;
 }
 
