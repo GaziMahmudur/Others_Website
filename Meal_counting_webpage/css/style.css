@@ -376,19 +376,19 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    /* Vibrant Gradient Matching Reference Image */
-    background: #0866FF;
+    /* 1:1 Dynamic mapped gradient preserving the original glow lighting exactly */
+    background: var(--primary-color);
     background-image:
-        radial-gradient(circle at 10% 10%, #02ADFC 0%, transparent 50%),
-        radial-gradient(circle at 90% 90%, #2B7EFF 0%, #0866FF 60%),
-        linear-gradient(135deg, #02ADFC 0%, #0866FF 50%, #2B7EFF 100%);
+        radial-gradient(circle at 10% 10%, color-mix(in srgb, white 40%, var(--primary-color)) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, color-mix(in srgb, white 20%, var(--primary-color)) 0%, var(--primary-color) 60%),
+        linear-gradient(135deg, color-mix(in srgb, white 40%, var(--primary-color)) 0%, var(--primary-color) 50%, color-mix(in srgb, white 20%, var(--primary-color)) 100%);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
     font-size: 1.1rem;
-    box-shadow: 0 4px 12px rgba(8, 102, 255, 0.35);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--primary-color) 35%, transparent);
     /* Glowing shadow */
     border: 1px solid rgba(255, 255, 255, 0.15);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
@@ -397,7 +397,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .avatar:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(8, 102, 255, 0.5);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--primary-color) 50%, transparent);
 }
 
 /* Status Cards */
