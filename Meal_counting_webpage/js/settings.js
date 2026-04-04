@@ -75,14 +75,14 @@ function renderSettings(container, expandedId = null) {
             </div>
         </div>
 
-        <!-- Text Size Card -->
+        <!-- Display Scale Card -->
         <div class="settings-card row-pop">
             <div class="settings-item" onclick="toggleSettingsExpanded('text-expand')">
                 <div class="settings-item-icon">
-                    <span class="material-icons-round">text_fields</span>
+                    <span class="material-icons-round">fit_screen</span>
                 </div>
                 <div class="settings-item-content">
-                    <div class="settings-item-title">Text Size</div>
+                    <div class="settings-item-title">Display Scale</div>
                     <div class="settings-item-subtitle">${sizeLabel}</div>
                 </div>
                 <div class="settings-item-action">
@@ -92,7 +92,7 @@ function renderSettings(container, expandedId = null) {
             <div id="text-expand" class="settings-content-expanded ${expandedId === 'text-expand' ? 'active' : ''}">
                 <div class="settings-expand-inner">
                     <div class="btn-group">
-                        ${Object.keys(TEXT_SIZES).map(size => `
+                        ${Object.keys(DISPLAY_SCALES).map(size => `
                             <button class="btn-group-item ${textSize === size ? 'active' : ''}" onclick="setTextSize('${size}'); event.stopPropagation();">${size.toUpperCase()}</button>
                         `).join('')}
                     </div>

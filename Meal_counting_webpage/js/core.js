@@ -320,12 +320,13 @@ function updateTheme() {
     const accent = STATE.settings.accentColor || '#0078D7';
     root.style.setProperty('--primary-color', accent);
 
-    // 6. Text Size
+    // 6. Display Scale (UI Zoom)
     const sizeName = STATE.settings.textSize || 's';
-    const sizeVal = TEXT_SIZES[sizeName];
-    if (sizeVal) {
-        document.documentElement.style.fontSize = sizeVal;
-    }
+    const scaleVal = DISPLAY_SCALES[sizeName] || '1.0';
+    document.body.style.zoom = scaleVal;
+    
+    // Maintain a base responsive root font-size so the app looks good on all displays natively
+    document.documentElement.style.fontSize = 'clamp(14px, 0.4vw + 12.5px, 18px)';
 }
 
 // Native Sharing/Saving for Android
