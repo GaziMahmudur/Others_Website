@@ -1,5 +1,34 @@
 // Daily Entry & Date Picker
 
+window.evaluateMath = function(str) {
+    if (!str) return '';
+    try {
+        // Sanitize strictly to allow only basic math
+        const sanitized = String(str).replace(/[^0-9+\-*/(). ]/g, '');
+        if (sanitized !== str && sanitized.trim().length === 0) return '';
+        
+        // Safely parse
+        const result = new Function('return ' + sanitized)();
+        if (!isFinite(result) || isNaN(result)) return str;
+        
+        return Number.isInteger(result) ? result : parseFloat(result.toFixed(2));
+    } catch (e) {
+        return str; // Return as-is if invalid
+    }
+};
+
+window.appendPlus = function(btn) {
+    const input = btn.previousElementSibling;
+    if (input) {
+        const val = input.value.trim();
+        // Don't double append plus
+        if (val && !/[+\-*/]$/.test(val)) {
+            input.value = val + ' + ';
+        }
+        input.focus();
+    }
+};
+
 function renderDailyEntry(container) {
     // Default to the currently selected month in STATE
     const year = STATE.currentMonth.getFullYear();
@@ -34,9 +63,12 @@ function renderDailyEntry(container) {
                     </div>
                     <div>
                         <label>Bazar</label>
-                        <!-- Keep simple input for Bazar as it handles larger numbers better, or use stepper? Let's use simple input for money -->
-                        <div class="input-with-icon">
-                            <input type="number" min="0" placeholder="0" class="input-field member-bazar-input" data-id="${m.id}" style="padding-left:10px;">
+                        <!-- Smart Inline Calculator Input for Bazar -->
+                        <div class="input-with-icon" style="position: relative;">
+                            <input type="text" inputmode="tel" placeholder="e.g. 140+90" class="input-field member-bazar-input calc-enabled" data-id="${m.id}" style="padding-left:12px; padding-right:45px; font-family: 'Segoe UI', monospace; font-size: 1.05rem;">
+                            <button type="button" class="btn-icon-only text-primary" style="position: absolute; right: 4px; top: 50%; transform: translateY(-50%); height: 32px; width: 32px; background: rgba(128,128,128,0.15); border-radius: 6px; box-shadow: var(--shadow-sm);" onclick="appendPlus(this)" title="Add (+) to calculate sum">
+                                <span class="material-icons-round" style="font-size: 1.25rem;">add</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -51,16 +83,33 @@ function renderDailyEntry(container) {
     `;
     container.innerHTML = html;
 
-    // Advanced Enter Key Navigation for Entry Form
-    const inputs = Array.from(container.querySelectorAll('input[type="number"]'));
+    // Advanced Enter Key Navigation for Entry Form (including calculated fields)
+    const inputs = Array.from(container.querySelectorAll('input[type="number"], .calc-enabled'));
     inputs.forEach((input, index) => {
+        
+        // If it's the custom calculator field, we evaluate it on leaving
+        if (input.classList.contains('calc-enabled')) {
+            input.addEventListener('blur', function() {
+                this.value = window.evaluateMath(this.value);
+            });
+        }
+
         input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' || e.key === '=') {
                 e.preventDefault();
+                
+                // If it's a calc-enabled field, immediately compute on enter
+                if (input.classList.contains('calc-enabled')) {
+                    input.value = window.evaluateMath(input.value);
+                }
+
+                // If user just pressed '=', compute but stay in the field
+                if (e.key === '=') return;
+
                 const nextInput = inputs[index + 1];
                 if (nextInput) {
                     nextInput.focus();
-                    nextInput.select();
+                    if(nextInput.select) nextInput.select();
                 } else {
                     // Trigger visual click on save button
                     const saveBtn = container.querySelector('.btn-inline-save');
@@ -240,7 +289,9 @@ function saveEntry() {
     });
 
     document.querySelectorAll('.member-bazar-input').forEach(input => {
-        const val = parseInt(input.value);
+        // Double check evaluation in case they click save while still typing
+        const evaluatedVal = window.evaluateMath(input.value);
+        const val = parseInt(evaluatedVal);
         if (val > 0) bazar[input.dataset.id] = val;
     });
 
