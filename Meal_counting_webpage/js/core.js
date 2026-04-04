@@ -72,7 +72,7 @@ function getAvatar(name) {
 // Helper: Render Stepper
 function renderStepper(id, type, placeholder) {
     return `
-        <div class="stepper-control">
+        <div class="stepper-control stepper-${type}">
             <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', -1)">
                 <span class="material-icons-round" style="font-size:1.15rem;">remove</span>
             </button>

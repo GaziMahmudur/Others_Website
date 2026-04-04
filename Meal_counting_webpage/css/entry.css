@@ -56,7 +56,7 @@
     }
 }
 
-/* Stepper Input */
+/* Stepper Input - Unified Inline Design */
 .stepper-control {
     display: flex;
     align-items: center;
@@ -64,11 +64,11 @@
     background: var(--input-bg);
     border-radius: .375rem;
     border: 1px solid var(--surface-border);
-    padding: 6px;
+    padding: 0; /* Flush edges */
     width: 100%;
-    height: 50px;
-    /* Matches standard input height */
+    height: 46px;
     transition: border-color 0.3s;
+    overflow: hidden; /* Clips children to border radius */
 }
 
 .stepper-control:focus-within {
@@ -76,29 +76,45 @@
 }
 
 .stepper-btn {
-    width: 36px;
-    height: 36px;
+    width: 46px; /* Square touch target */
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     background: transparent;
-    color: var(--primary-color);
+    color: var(--text-muted);
     cursor: pointer;
-    border-radius: 50%;
+    border-radius: 0; /* Square borders internally */
     transition: all 0.2s;
-    box-shadow: var(--shadow-fluent);
-
+    box-shadow: none; /* No separate shadow */
 }
 
-.stepper-btn:hover {
-    border-color: var(--primary-color);
+/* Vertical separators matching sketch */
+.stepper-btn:first-child {
+    border-right: 1px solid var(--surface-border);
+}
+
+.stepper-btn:last-child {
+    border-left: 1px solid var(--surface-border);
+}
+
+.stepper-btn:hover, .stepper-btn.hover-sim {
     color: var(--primary-color);
-    background: #00000012;
+    background: rgba(128, 128, 128, 0.1);
 }
 
-.stepper-btn:active {
-    transform: scale(0.9);
+.stepper-btn:active, .stepper-btn.active-sim {
+    background: rgba(128, 128, 128, 0.2);
+}
+
+/* Animate the icon inside the button on press to emulate haptic visuals */
+.stepper-btn .material-icons-round {
+    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepper-btn:active .material-icons-round, .stepper-btn.active-sim .material-icons-round {
+    transform: scale(0.75);
 }
 
 .stepper-input {
@@ -108,28 +124,45 @@
     border: none;
     background: transparent;
     color: var(--text-main);
-    font-weight: 400;
-    font-size: 1.2rem;
+    font-weight: 500;
+    font-size: 1.15rem;
     appearance: textfield;
     -moz-appearance: textfield;
     outline: none;
+    padding: 0 10px;
 }
 
-/* Mobile: Remove stepper buttons and style as standard input */
+/* Mobile Responsive Layout and Stepper Overrides */
 @media (max-width: 600px) {
-    .stepper-btn {
-        display: none;
+    .stepper-meal .stepper-btn {
+        display: none; /* Hide meal stepper buttons */
     }
 
-    .stepper-control {
-        padding: 0;
-        /* Remove padding to let input fill standard size */
-    }
-
-    .stepper-input {
+    .stepper-meal .stepper-input {
         text-align: left;
-        padding-left: 14px;
-        /* Standard input padding */
+        padding-left: 14px; /* Standardize alignment for bare input */
+    }
+    
+    /* Bazar Input Expanding Animation over Meals */
+    .stepper-bazar {
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    .stepper-bazar:focus-within {
+        margin-left: -80px; /* Expanding to cover meals input */
+        width: calc(100% + 80px);
+        z-index: 10;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .stepper-bazar .stepper-btn {
+        width: 40px; 
+    }
+    
+    .stepper-bazar .stepper-input {
+        padding: 0 8px;
     }
 }
 

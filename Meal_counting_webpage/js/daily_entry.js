@@ -20,9 +20,10 @@ window.evaluateMath = function(str) {
 window.appendPlus = function(btn) {
     const input = btn.previousElementSibling;
     if (input) {
-        const val = input.value.trim();
+        let val = input.value.trim();
         // Don't double append plus
         if (val && !/[+\-*/]$/.test(val)) {
+            val = window.evaluateMath(val);
             input.value = val + ' + ';
         }
         input.focus();
@@ -63,10 +64,10 @@ function renderDailyEntry(container) {
                     </div>
                     <div>
                         <label>Bazar</label>
-                        <!-- Smart Inline Calculator Input for Bazar -->
-                        <div class="input-with-icon" style="position: relative;">
-                            <input type="text" inputmode="tel" placeholder="e.g. 140+90" class="input-field member-bazar-input calc-enabled" data-id="${m.id}" style="padding-left:12px; padding-right:45px; font-family: 'Segoe UI', monospace; font-size: 1.05rem;">
-                            <button type="button" class="btn-icon-only text-primary" style="position: absolute; right: 4px; top: 50%; transform: translateY(-50%); height: 32px; width: 32px; background: rgba(128,128,128,0.15); border-radius: 6px; box-shadow: var(--shadow-sm);" onclick="appendPlus(this)" title="Add (+) to calculate sum">
+                        <!-- Smart Inline Calculator Input for Bazar with Unified Stepper Design -->
+                        <div class="stepper-control stepper-bazar">
+                            <input type="text" inputmode="tel" placeholder="0" class="stepper-input member-bazar-input calc-enabled" data-id="${m.id}" style="text-align: left; padding-left: 14px; font-family: 'Segoe UI', monospace; font-size: 1.05rem;">
+                            <button type="button" class="stepper-btn" onclick="appendPlus(this)" title="Add (+) to calculate sum">
                                 <span class="material-icons-round" style="font-size: 1.25rem;">add</span>
                             </button>
                         </div>
@@ -95,6 +96,40 @@ function renderDailyEntry(container) {
         }
 
         input.addEventListener('keydown', (e) => {
+            // Meals Hotkeys: Keys '+' and '-'
+            if (input.classList.contains('member-meal-input')) {
+                const id = input.dataset.id;
+                if (e.key === '+') {
+                    e.preventDefault();
+                    window.updateStepper(id, 'meal', 1);
+                    const btn = input.nextElementSibling;
+                    if(btn) { btn.classList.add('active-sim'); setTimeout(()=>btn.classList.remove('active-sim'), 100); }
+                    return;
+                }
+                if (e.key === '-') {
+                    e.preventDefault();
+                    window.updateStepper(id, 'meal', -1);
+                    const btn = input.previousElementSibling;
+                    if(btn) { btn.classList.add('active-sim'); setTimeout(()=>btn.classList.remove('active-sim'), 100); }
+                    return;
+                }
+            }
+
+            // Bazar Hotkey: Key '+'
+            if (input.classList.contains('member-bazar-input') && input.classList.contains('calc-enabled')) {
+                if (e.key === '+') {
+                    e.preventDefault();
+                    let val = input.value.trim();
+                    if (val && !/[+\-*/]$/.test(val)) {
+                        val = window.evaluateMath(val);
+                        input.value = val + ' + ';
+                    }
+                    const btn = input.nextElementSibling;
+                    if(btn) { btn.classList.add('active-sim'); setTimeout(()=>btn.classList.remove('active-sim'), 100); }
+                    return;
+                }
+            }
+
             if (e.key === 'Enter' || e.key === '=') {
                 e.preventDefault();
                 
