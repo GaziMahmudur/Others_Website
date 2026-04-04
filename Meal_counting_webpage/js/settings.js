@@ -218,7 +218,7 @@ window.ColorPicker = {
                     </div>
 
                     <div class="cp-toggle-more" onclick="ColorPicker.toggleMore()">
-                        <span id="cp-more-text">More</span> <span class="material-icons-round" id="cp-more-icon" style="font-size:16px; vertical-align:middle;">expand_more</span>
+                        <span id="cp-more-text">More</span> <span class="material-icons-round" id="cp-more-icon" style="font-size:1.15rem; vertical-align:middle;">expand_more</span>
                     </div>
 
                     <div class="cp-details" id="cp-details">

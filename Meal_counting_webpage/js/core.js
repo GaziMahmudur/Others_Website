@@ -74,13 +74,13 @@ function renderStepper(id, type, placeholder) {
     return `
         <div class="stepper-control">
             <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', -1)">
-                <span class="material-icons-round" style="font-size:16px;">remove</span>
+                <span class="material-icons-round" style="font-size:1.15rem;">remove</span>
             </button>
             <input type="number" min="0" placeholder="${placeholder}" 
                    class="stepper-input member-${type}-input" 
                    id="${type}-${id}" data-id="${id}">
             <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', 1)">
-                <span class="material-icons-round" style="font-size:16px;">add</span>
+                <span class="material-icons-round" style="font-size:1.15rem;">add</span>
             </button>
         </div>
     `;

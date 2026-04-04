@@ -79,7 +79,7 @@ function renderHistory(container) {
                     <button class="btn-icon-only btn-icon-danger" 
                             style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;"
                             onclick="event.stopPropagation(); deleteEntry(${originalIndex})">
-                        <span class="material-icons-round" style="font-size: 18px;">delete</span>
+                        <span class="material-icons-round" style="font-size: 1.25rem;">delete</span>
                     </button>
                     
                     <button class="history-view-btn" onclick="toggleHistory(this.parentElement)">
