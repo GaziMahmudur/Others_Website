@@ -658,3 +658,48 @@
     background-color: var(--surface-color);
     /* Explicitly surface color */
 }
+/* About Section Specifics */
+.about-detail-row {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.08);
+}
+
+.about-detail-row:last-child {
+    border-bottom: none;
+}
+
+.about-icon {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.about-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.about-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.about-value {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.about-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+}

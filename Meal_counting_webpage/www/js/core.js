@@ -1,11 +1,13 @@
 // Core Application Logic & State
 
-// State Management
+const APP_VERSION = '1.0.2'; // Incrementing version
+
 const STATE = {
     members: [], // Start empty
     entries: [],
     currentMonth: new Date(),
     updatedAt: 0,
+    version: APP_VERSION,
     settings: {
         themeMode: 'light', // system, light, dark
         textSize: 's', // xxs, xs, s, l, xl, xxl
@@ -72,15 +74,15 @@ function getAvatar(name) {
 // Helper: Render Stepper
 function renderStepper(id, type, placeholder) {
     return `
-        <div class="stepper-control">
+        <div class="stepper-control stepper-${type}">
             <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', -1)">
-                <span class="material-icons-round" style="font-size:16px;">remove</span>
+                <span class="material-icons-round" style="font-size:1.15rem;">remove</span>
             </button>
             <input type="number" min="0" placeholder="${placeholder}" 
                    class="stepper-input member-${type}-input" 
                    id="${type}-${id}" data-id="${id}">
             <button class="stepper-btn" onclick="updateStepper('${id}', '${type}', 1)">
-                <span class="material-icons-round" style="font-size:16px;">add</span>
+                <span class="material-icons-round" style="font-size:1.15rem;">add</span>
             </button>
         </div>
     `;
@@ -159,9 +161,29 @@ function closeModal() {
     modalCallback = null;
 }
 
-function loadState() {
+async function loadState() {
     try {
-        const saved = localStorage.getItem('messAppState');
+        let saved = localStorage.getItem('messAppState');
+        const isNative = window.Capacitor && window.Capacitor.isNativePlatform();
+
+        // If localStorage is empty (reinstall), check filesystem backup
+        if (!saved && isNative) {
+            try {
+                const { Filesystem } = window.Capacitor.Plugins;
+                const result = await Filesystem.readFile({
+                    path: 'mess_manager_backup.json',
+                    directory: 'DOCUMENTS',
+                    encoding: 'utf8'
+                });
+                if (result && result.data) {
+                    saved = result.data;
+                    console.log("Restored data from filesystem backup after reinstall.");
+                }
+            } catch (fsErr) {
+                console.warn("No filesystem backup found to restore.");
+            }
+        }
+
         if (saved) {
             const parsed = JSON.parse(saved);
             STATE.members = parsed.members || STATE.members;
@@ -186,11 +208,28 @@ function loadState() {
     }
 }
 
-function saveState() {
+async function saveState() {
     STATE.updatedAt = Date.now();
-    localStorage.setItem('messAppState', JSON.stringify(STATE));
+    STATE.version = APP_VERSION;
+    const serialized = JSON.stringify(STATE);
+    localStorage.setItem('messAppState', serialized);
 
-
+    // Backup to filesystem for persistence across uninstalls
+    const isNative = window.Capacitor && window.Capacitor.isNativePlatform();
+    if (isNative) {
+        try {
+            const { Filesystem } = window.Capacitor.Plugins;
+            await Filesystem.writeFile({
+                path: 'mess_manager_backup.json',
+                data: serialized,
+                directory: 'DOCUMENTS',
+                encoding: 'utf8',
+                recursive: true
+            });
+        } catch (e) {
+            console.error("Filesystem backup failed:", e);
+        }
+    }
 }
 
 // Navigation
@@ -320,12 +359,13 @@ function updateTheme() {
     const accent = STATE.settings.accentColor || '#0078D7';
     root.style.setProperty('--primary-color', accent);
 
-    // 6. Text Size
+    // 6. Display Scale (UI Zoom)
     const sizeName = STATE.settings.textSize || 's';
-    const sizeVal = TEXT_SIZES[sizeName];
-    if (sizeVal) {
-        document.documentElement.style.fontSize = sizeVal;
-    }
+    const scaleVal = DISPLAY_SCALES[sizeName] || '1.0';
+    document.body.style.zoom = scaleVal;
+    
+    // Maintain a base responsive root font-size so the app looks good on all displays natively
+    document.documentElement.style.fontSize = 'clamp(14px, 0.4vw + 12.5px, 18px)';
 }
 
 // Native Sharing/Saving for Android

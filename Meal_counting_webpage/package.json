@@ -1,11 +1,14 @@
 {
   "name": "meal_counting_webpage",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "version:inc": "node scripts/version_updater.js",
+    "sync": "npm run version:inc && npx cap sync",
+    "build": "npm run version:inc && npx cap build android"
   },
   "keywords": [],
   "author": "",

@@ -39,7 +39,7 @@ function renderMembers(container) {
         <div id="members-list">
             ${STATE.members.length === 0 ? `
                 <div style="text-align:center; opacity:0.6; padding:40px;">
-                    <span class="material-icons-round" style="font-size:48px; margin-bottom:10px;">group_add</span>
+                    <span class="material-icons-round" style="font-size:3.5rem; margin-bottom:10px;">group_add</span>
                     <p>No members yet.<br>Add your first member above!</p>
                 </div>
             ` : ''}

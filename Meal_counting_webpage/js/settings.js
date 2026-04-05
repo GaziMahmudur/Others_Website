@@ -102,6 +102,66 @@ function renderSettings(container, expandedId = null) {
         
 
 
+        </div>
+
+        <!-- About Card -->
+        <div class="settings-card row-pop">
+            <div class="settings-item" onclick="toggleSettingsExpanded('about-expand')">
+                <div class="settings-item-icon">
+                    <span class="material-icons-round" style="color:var(--primary-color)">info</span>
+                </div>
+                <div class="settings-item-content">
+                    <div class="settings-item-title">About App</div>
+                    <div class="settings-item-subtitle">Version ${APP_VERSION}</div>
+                </div>
+                <div class="settings-item-action">
+                    <span class="material-icons-round">expand_more</span>
+                </div>
+            </div>
+            
+            <div id="about-expand" class="settings-content-expanded ${expandedId === 'about-expand' ? 'active' : ''}">
+                <div class="settings-expand-inner" style="padding-top: 5px;">
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon">person</span>
+                        <div class="about-text">
+                            <div class="about-label">Developer</div>
+                            <div class="about-value">Gazi Mahmudur</div>
+                        </div>
+                    </div>
+                    
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon" style="color: #4caf50;">cloud_done</span>
+                        <div class="about-text">
+                            <div class="about-label">Auto-Backup</div>
+                            <div class="about-value">Persistent Backup Active</div>
+                            <div class="about-desc">Your data survives app uninstalls. Backup is saved in the Documents folder.</div>
+                        </div>
+                    </div>
+
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon">star</span>
+                        <div class="about-text">
+                            <div class="about-label">Key Features</div>
+                            <div class="about-value" style="font-size: 0.8rem; margin-top: 4px;">
+                                • Full Offline Management<br>
+                                • Custom Accent Themes<br>
+                                • Auto-Sync with Android Docs<br>
+                                • Monthly Meal & Bazar History
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon">update</span>
+                        <div class="about-text">
+                            <div class="about-label">Update Status</div>
+                            <div class="about-value">Up to date</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div style="height: 40px;"></div>
     `;
 }

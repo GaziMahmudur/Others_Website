@@ -75,14 +75,14 @@ function renderSettings(container, expandedId = null) {
             </div>
         </div>
 
-        <!-- Text Size Card -->
+        <!-- Display Scale Card -->
         <div class="settings-card row-pop">
             <div class="settings-item" onclick="toggleSettingsExpanded('text-expand')">
                 <div class="settings-item-icon">
-                    <span class="material-icons-round">text_fields</span>
+                    <span class="material-icons-round">fit_screen</span>
                 </div>
                 <div class="settings-item-content">
-                    <div class="settings-item-title">Text Size</div>
+                    <div class="settings-item-title">Display Scale</div>
                     <div class="settings-item-subtitle">${sizeLabel}</div>
                 </div>
                 <div class="settings-item-action">
@@ -92,7 +92,7 @@ function renderSettings(container, expandedId = null) {
             <div id="text-expand" class="settings-content-expanded ${expandedId === 'text-expand' ? 'active' : ''}">
                 <div class="settings-expand-inner">
                     <div class="btn-group">
-                        ${Object.keys(TEXT_SIZES).map(size => `
+                        ${Object.keys(DISPLAY_SCALES).map(size => `
                             <button class="btn-group-item ${textSize === size ? 'active' : ''}" onclick="setTextSize('${size}'); event.stopPropagation();">${size.toUpperCase()}</button>
                         `).join('')}
                     </div>
@@ -101,6 +101,66 @@ function renderSettings(container, expandedId = null) {
         </div>
         
 
+
+        </div>
+
+        <!-- About Card -->
+        <div class="settings-card row-pop">
+            <div class="settings-item" onclick="toggleSettingsExpanded('about-expand')">
+                <div class="settings-item-icon">
+                    <span class="material-icons-round" style="color:var(--primary-color)">info</span>
+                </div>
+                <div class="settings-item-content">
+                    <div class="settings-item-title">About App</div>
+                    <div class="settings-item-subtitle">Version ${APP_VERSION}</div>
+                </div>
+                <div class="settings-item-action">
+                    <span class="material-icons-round">expand_more</span>
+                </div>
+            </div>
+            
+            <div id="about-expand" class="settings-content-expanded ${expandedId === 'about-expand' ? 'active' : ''}">
+                <div class="settings-expand-inner" style="padding-top: 5px;">
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon">person</span>
+                        <div class="about-text">
+                            <div class="about-label">Developer</div>
+                            <div class="about-value">Gazi Mahmudur</div>
+                        </div>
+                    </div>
+                    
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon" style="color: #4caf50;">cloud_done</span>
+                        <div class="about-text">
+                            <div class="about-label">Auto-Backup</div>
+                            <div class="about-value">Persistent Backup Active</div>
+                            <div class="about-desc">Your data survives app uninstalls. Backup is saved in the Documents folder.</div>
+                        </div>
+                    </div>
+
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon">star</span>
+                        <div class="about-text">
+                            <div class="about-label">Key Features</div>
+                            <div class="about-value" style="font-size: 0.8rem; margin-top: 4px;">
+                                • Full Offline Management<br>
+                                • Custom Accent Themes<br>
+                                • Auto-Sync with Android Docs<br>
+                                • Monthly Meal & Bazar History
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon">update</span>
+                        <div class="about-text">
+                            <div class="about-label">Update Status</div>
+                            <div class="about-value">Up to date</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div style="height: 40px;"></div>
     `;
@@ -218,7 +278,7 @@ window.ColorPicker = {
                     </div>
 
                     <div class="cp-toggle-more" onclick="ColorPicker.toggleMore()">
-                        <span id="cp-more-text">More</span> <span class="material-icons-round" id="cp-more-icon" style="font-size:16px; vertical-align:middle;">expand_more</span>
+                        <span id="cp-more-text">More</span> <span class="material-icons-round" id="cp-more-icon" style="font-size:1.15rem; vertical-align:middle;">expand_more</span>
                     </div>
 
                     <div class="cp-details" id="cp-details">

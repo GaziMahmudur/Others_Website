@@ -1,5 +1,35 @@
 // Daily Entry & Date Picker
 
+window.evaluateMath = function(str) {
+    if (!str) return '';
+    try {
+        // Sanitize strictly to allow only basic math
+        const sanitized = String(str).replace(/[^0-9+\-*/(). ]/g, '');
+        if (sanitized !== str && sanitized.trim().length === 0) return '';
+        
+        // Safely parse
+        const result = new Function('return ' + sanitized)();
+        if (!isFinite(result) || isNaN(result)) return str;
+        
+        return Number.isInteger(result) ? result : parseFloat(result.toFixed(2));
+    } catch (e) {
+        return str; // Return as-is if invalid
+    }
+};
+
+window.appendPlus = function(btn) {
+    const input = btn.previousElementSibling;
+    if (input) {
+        let val = input.value.trim();
+        // Don't double append plus
+        if (val && !/[+\-*/]$/.test(val)) {
+            val = window.evaluateMath(val);
+            input.value = val + ' + ';
+        }
+        input.focus();
+    }
+};
+
 function renderDailyEntry(container) {
     // Default to the currently selected month in STATE
     const year = STATE.currentMonth.getFullYear();
@@ -34,9 +64,12 @@ function renderDailyEntry(container) {
                     </div>
                     <div>
                         <label>Bazar</label>
-                        <!-- Keep simple input for Bazar as it handles larger numbers better, or use stepper? Let's use simple input for money -->
-                        <div class="input-with-icon">
-                            <input type="number" min="0" placeholder="0" class="input-field member-bazar-input" data-id="${m.id}" style="padding-left:10px;">
+                        <!-- Smart Inline Calculator Input for Bazar with Unified Stepper Design -->
+                        <div class="stepper-control stepper-bazar">
+                            <input type="text" inputmode="tel" placeholder="0" class="stepper-input member-bazar-input calc-enabled" data-id="${m.id}" style="text-align: left; padding-left: 14px; font-family: 'Segoe UI', monospace; font-size: 1.05rem;">
+                            <button type="button" class="stepper-btn" onclick="appendPlus(this)" title="Add (+) to calculate sum">
+                                <span class="material-icons-round" style="font-size: 1.25rem;">add</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -51,16 +84,67 @@ function renderDailyEntry(container) {
     `;
     container.innerHTML = html;
 
-    // Advanced Enter Key Navigation for Entry Form
-    const inputs = Array.from(container.querySelectorAll('input[type="number"]'));
+    // Advanced Enter Key Navigation for Entry Form (including calculated fields)
+    const inputs = Array.from(container.querySelectorAll('input[type="number"], .calc-enabled'));
     inputs.forEach((input, index) => {
+        
+        // If it's the custom calculator field, we evaluate it on leaving
+        if (input.classList.contains('calc-enabled')) {
+            input.addEventListener('blur', function() {
+                this.value = window.evaluateMath(this.value);
+            });
+        }
+
         input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
+            // Meals Hotkeys: Keys '+' and '-'
+            if (input.classList.contains('member-meal-input')) {
+                const id = input.dataset.id;
+                if (e.key === '+') {
+                    e.preventDefault();
+                    window.updateStepper(id, 'meal', 1);
+                    const btn = input.nextElementSibling;
+                    if(btn) { btn.classList.add('active-sim'); setTimeout(()=>btn.classList.remove('active-sim'), 100); }
+                    return;
+                }
+                if (e.key === '-') {
+                    e.preventDefault();
+                    window.updateStepper(id, 'meal', -1);
+                    const btn = input.previousElementSibling;
+                    if(btn) { btn.classList.add('active-sim'); setTimeout(()=>btn.classList.remove('active-sim'), 100); }
+                    return;
+                }
+            }
+
+            // Bazar Hotkey: Key '+'
+            if (input.classList.contains('member-bazar-input') && input.classList.contains('calc-enabled')) {
+                if (e.key === '+') {
+                    e.preventDefault();
+                    let val = input.value.trim();
+                    if (val && !/[+\-*/]$/.test(val)) {
+                        val = window.evaluateMath(val);
+                        input.value = val + ' + ';
+                    }
+                    const btn = input.nextElementSibling;
+                    if(btn) { btn.classList.add('active-sim'); setTimeout(()=>btn.classList.remove('active-sim'), 100); }
+                    return;
+                }
+            }
+
+            if (e.key === 'Enter' || e.key === '=') {
                 e.preventDefault();
+                
+                // If it's a calc-enabled field, immediately compute on enter
+                if (input.classList.contains('calc-enabled')) {
+                    input.value = window.evaluateMath(input.value);
+                }
+
+                // If user just pressed '=', compute but stay in the field
+                if (e.key === '=') return;
+
                 const nextInput = inputs[index + 1];
                 if (nextInput) {
                     nextInput.focus();
-                    nextInput.select();
+                    if(nextInput.select) nextInput.select();
                 } else {
                     // Trigger visual click on save button
                     const saveBtn = container.querySelector('.btn-inline-save');
@@ -240,7 +324,9 @@ function saveEntry() {
     });
 
     document.querySelectorAll('.member-bazar-input').forEach(input => {
-        const val = parseInt(input.value);
+        // Double check evaluation in case they click save while still typing
+        const evaluatedVal = window.evaluateMath(input.value);
+        const val = parseInt(evaluatedVal);
         if (val > 0) bazar[input.dataset.id] = val;
     });
 

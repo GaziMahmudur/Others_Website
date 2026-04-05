@@ -51,7 +51,7 @@ function renderDashboard(container) {
         <div class="surface-card surface-card-interactive row-pop">
             <div class="section-title">
                 <span>Balance Overview</span>
-                <span class="material-icons-round" style="font-size: 16px; cursor: pointer;" onclick="showBalanceInfo()">info</span>
+                <span class="material-icons-round" style="font-size: 1.15rem; cursor: pointer;" onclick="showBalanceInfo()">info</span>
             </div>
             <div class="table-container">
                 <table class="balance-table">

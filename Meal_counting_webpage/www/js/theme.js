@@ -1,14 +1,14 @@
 // App Theme Definitions
 // Add or modify colors and themes here!
 
-// Text Size Definitions
-const TEXT_SIZES = {
-    xxs: '12px',
-    xs: '13px',
-    s: '14px', // Default
-    l: '15px',
-    xl: '16px',
-    xxl: '18px'
+// Display Scale Definitions (UI Zooming for all components)
+const DISPLAY_SCALES = {
+    xxs: '0.8',
+    xs:  '0.9',
+    s:   '1.0', // Default
+    l:   '1.1',
+    xl:  '1.2',
+    xxl: '1.3'
 };
 
 // Windows Standard Colors
