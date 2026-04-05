@@ -125,7 +125,7 @@ function renderSettings(container, expandedId = null) {
                         <span class="material-icons-round about-icon">person</span>
                         <div class="about-text">
                             <div class="about-label">Developer</div>
-                            <div class="about-value">Gazi Mahmudur</div>
+                            <div class="about-value">Developer Gazi Shuvo</div>
                         </div>
                     </div>
                     
@@ -135,6 +135,27 @@ function renderSettings(container, expandedId = null) {
                             <div class="about-label">Auto-Backup</div>
                             <div class="about-value">Persistent Backup Active</div>
                             <div class="about-desc">Your data survives app uninstalls. Backup is saved in the Documents folder.</div>
+                        </div>
+                    </div>
+
+                    <div class="about-detail-row" onclick="shareAppLink()" style="cursor: pointer;">
+                        <span class="material-icons-round about-icon" style="color:var(--primary-color)">share</span>
+                        <div class="about-text">
+                            <div class="about-label">Share App</div>
+                            <div class="about-value">Sharing is caring!</div>
+                            <div class="about-desc">Share the download link to help others update or install.</div>
+                        </div>
+                    </div>
+
+                    <div class="about-detail-row">
+                        <span class="material-icons-round about-icon" style="color: #ff9800;">system_update</span>
+                        <div class="about-text">
+                            <div class="about-label">How to Update?</div>
+                            <div class="about-value" style="font-size: 0.8rem; margin-top: 4px;">
+                                1. Download the new APK from the website.<br>
+                                2. Share the APK file with friends.<br>
+                                3. Open the shared APK to update instantly!
+                            </div>
                         </div>
                     </div>
 
@@ -155,7 +176,7 @@ function renderSettings(container, expandedId = null) {
                         <span class="material-icons-round about-icon">update</span>
                         <div class="about-text">
                             <div class="about-label">Update Status</div>
-                            <div class="about-value">Up to date</div>
+                            <div class="about-value">Version ${APP_VERSION} (Up to date)</div>
                         </div>
                     </div>
                 </div>
@@ -553,3 +574,38 @@ window.ColorPicker = {
 };
 
 
+async function shareAppLink() {
+    try {
+        const isNative = window.Capacitor && window.Capacitor.isNativePlatform();
+        const shareUrl = 'https://gazimahmudur.github.io/Funny_Codes/'; // Based on the repo name GaziMahmudur/Funny_Codes
+        
+        if (isNative) {
+            const { Share } = window.Capacitor.Plugins;
+            await Share.share({
+                title: 'Mess Manager App',
+                text: 'Checkout this awesome Mess Manager app! Download and update from here:',
+                url: shareUrl,
+                dialogTitle: 'Share with friends'
+            });
+        } else {
+            // Web Share API fallback
+            if (navigator.share) {
+                await navigator.share({
+                    title: 'Mess Manager App',
+                    text: 'Checkout this awesome Mess Manager app!',
+                    url: shareUrl
+                });
+            } else {
+                // Clipboard fallback
+                await navigator.clipboard.writeText(shareUrl);
+                showModal({
+                    title: 'Link Copied',
+                    message: 'Download link copied to clipboard. Share it with your friends!',
+                    type: 'alert'
+                });
+            }
+        }
+    } catch (e) {
+        console.error("Sharing failed", e);
+    }
+}

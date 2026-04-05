@@ -125,7 +125,7 @@ function renderSettings(container, expandedId = null) {
                         <span class="material-icons-round about-icon">person</span>
                         <div class="about-text">
                             <div class="about-label">Developer</div>
-                            <div class="about-value">Gazi Mahmudur</div>
+                            <div class="about-value">Developer Gazi Shuvo</div>
                         </div>
                     </div>
                     
