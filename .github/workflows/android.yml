@@ -30,11 +30,14 @@ jobs:
           cache: 'npm'
           cache-dependency-path: Meal_counting_webpage/package-lock.json
 
+      - name: List files (Debug)
+        run: ls -R
+
       - name: Install Dependencies
         run: npm install
 
       - name: Capacitor Sync
-        run: npx cap sync android --verbose
+        run: ./node_modules/.bin/cap sync android --verbose
 
       - name: Build Android Debug APK
         run: |
@@ -47,7 +50,7 @@ jobs:
         if: success()
         with:
           name: MealManager-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: Meal_counting_webpage/android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Update APK in Apps Folder
         if: success()
@@ -57,5 +60,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add ../apps/MealManager.apk
-          git commit -m "chore: Update MealManager APK [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: Update MealManager APK [skip actions]" || echo "No changes to commit"
           git push
