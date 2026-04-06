@@ -1,6 +1,6 @@
 // Core Application Logic & State
 
-const APP_VERSION = '1.0.5'; // Incrementing version
+const APP_VERSION = '1.0.6'; // Incrementing version
 
 const STATE = {
     members: [], // Start empty

@@ -26,7 +26,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: Meal_counting_webpage/package-lock.json
 
@@ -42,9 +42,20 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --stacktrace
 
-      - name: Upload APK
+      - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: MealManager-APK
-          path: Meal_counting_webpage/android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Update APK in Apps Folder
+        if: success()
+        run: |
+          mkdir -p ../apps
+          cp android/app/build/outputs/apk/debug/app-debug.apk ../apps/MealManager.apk
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add ../apps/MealManager.apk
+          git commit -m "chore: Update MealManager APK [skip ci]" || echo "No changes to commit"
+          git push
